@@ -14,10 +14,10 @@ function toggle() {
 </script>
 
 <template>
-  <div class="font-sans antialiased">
+  <div class="font-sans antialiased px-24">
     <!-- We have removed flex-wrap -->
     <nav
-      class="flex items-center justify-between flex-wrap md:flex-nowrap bg-teal p-6"
+      class="flex items-center justify-between flex-wrap md:flex-nowrap pt-6"
     >
       <div class="flex items-center flex-no-shrink text-black mr-6">
         <!-- <img src="src/assets/book-stack.png" class="w-4 h-4" /> -->
@@ -67,19 +67,16 @@ function toggle() {
       </div>
       <div class="md:flex md:justify-end space-y-4 md:space-y-0 space-x-0 md:space-x-4" :class="open ? 'block' : 'hidden'">
         <!-- The block makes it to appear one after another -->
-        <a
-          href="#"
+        <router-link to="/"
           class="no-underline block text-sm px-4 py-2 leading-none border rounded-full text-white bg-indigo-700 hover:border-transparent hover:text-white hover:bg-indigo-700 mt-4 md:mt-0"
-          >Login</a
-        >
-        <a
-          href="#"
+          >Login</router-link>
+        <router-link to="/auth"
           class="no-underline block text-sm px-4 py-2 leading-none border rounded-full text-indigo-700 border-indigo-700 hover:border-transparent hover:text-white hover:bg-indigo-700 mt-4 md:mt-0"
-          >Signup</a
-        >
+          >Signup</router-link>
       </div>
     </nav>
   </div>
+  <router-view />
 </template>
 
 <style scoped></style>
