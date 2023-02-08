@@ -68,8 +68,7 @@ watchEffect(() => {
 <template>
   <div class="font-sans antialiased px-24">
    Killing it outhere
-
-      <div>
+    <div>
       <div v-if="token">The token {{token}}</div>
       <div v-if="authStatus">The authStatus {{authStatus }}</div>
       <div v-if="loading">Loading...</div>
@@ -79,11 +78,12 @@ watchEffect(() => {
           {{ vowel.name }} {{ vowel.description }}
         </li>
       </ul>
-     <button @click="getData()">GetData</button>
-     <button @click="signIn()">signIn</button>
-     <button @click="registerUser()">Register</button>
-    </div>
+      <button @click="getData()">GetData</button>
+      <button @click="signIn()">signIn</button>
+      <button @click="registerUser()">Register</button>
+   </div>
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+</style>

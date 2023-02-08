@@ -1,17 +1,36 @@
 /** @type {import('tailwindcss/tailwind-config').TailwindConfig} */
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const defaultTheme = require('tailwindcss/defaultTheme');
+// const defaultTheme = require('tailwindcss/defaultTheme');
 
 module.exports = {
   purge: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
   theme: {
+    screens: {
+      '2xl': { max: '1535px' },
+      // => @media (max-width: 1535px) { ... }
+
+      xl: { max: '1279px' },
+      // => @media (max-width: 1279px) { ... }
+
+      lg: { max: '1023px' },
+      // => @media (max-width: 1023px) { ... }
+
+      md: { max: '767px' },
+      // => @media (max-width: 767px) { ... }
+
+      sm: { max: '639px' },
+      // => @media (max-width: 639px) { ... }
+    },
     extend: {
       colors: {
         orange: '#ED7D4D',
         'mustard-yellow': '#EACA53',
         blue: '#3F8CC6',
-        'deep-purple': '#695098',
+        'deep-purple': {
+          100: '#69509810',
+          DEFAULT: '#695098',
+        },
         red: '#ED7264',
       },
       maxWidth: {
@@ -35,6 +54,11 @@ module.exports = {
       },
       spacing: {
         150: '150px',
+      },
+      fontFamily: {
+        sans: ['-apple-system', 'BlinkMacSystemFont'],
+        body: ['"Open Sans"'],
+        mono: ['ui-monospace', 'SFMono-Regular'],
       },
     },
   },

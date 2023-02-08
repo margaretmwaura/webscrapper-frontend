@@ -15,7 +15,7 @@ function toggle() {
 
 <template>
   <div class="font-sans antialiased
-  sm:px-4 md:px-12 lg:px-24 xl:px-24 2xl:px-24">
+  sm:px-4 md:px-24 lg:px-24 xl:px-24 2xl:px-24">
     <!-- We have removed flex-wrap -->
     <nav
       class="flex items-center justify-between 

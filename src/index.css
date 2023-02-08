@@ -5,3 +5,44 @@
 body {
   background-color: white;
 }
+
+@media only screen and (max-width: 1535px) {
+  body {
+    margin: 0px 50px 0px 50px;
+  }
+  h1 {
+    font-size: 60px;
+  }
+}
+@media only screen and (max-width: 1279px) {
+  body {
+    margin: 0px 10px 0px 10px;
+  }
+  h1 {
+    font-size: 60px;
+  }
+}
+@media only screen and (max-width: 1023px) {
+  body {
+    margin: 0px 30px 0px 30px;
+  }
+  h1 {
+    font-size: 60px;
+  }
+}
+@media only screen and (max-width: 767px) {
+  body {
+    margin: 0px 10px 0px 10px;
+  }
+  h1 {
+    font-size: 60px;
+  }
+}
+@media only screen and (max-width: 639px) {
+  body {
+    margin: 0px 5px 0px 5px;
+  }
+  h1 {
+    font-size: 42px;
+  }
+}
