@@ -28,13 +28,11 @@ function signIn(){
     <div class="bg-slate-50 w-full mx-auto h-auto flex flex-wrap mt-4">
       <div class="sm:w-full md:w-full lg:w-full xl:w-1/2 2xl:w-1/2 
       sm:pt-8 md:pt-24 lg:pt-24 xl:pt-24 2xl:pt-24">
-         <!-- justify-center items-center -->
          <div class="flex justify-center items-center">
           <div class="flex flex-col max-w-500">
             <h1 class="font-bold tracking-wide leading-tight">
                 Online learning you can access anywhere easily
             </h1>
-            <!-- FIXME: This is altering responsiveness fix it -->
             <div class="box"></div>
             <!-- Check on how to define horizontal and vertical radius in tailwind -->
             <!-- <div class="w-[500px] h-12 border-solid border-4 border-transparent border-t-amber-300
@@ -43,7 +41,6 @@ function signIn(){
             </div> -->
             <p class="font-light">a Solution for easy and flexible online learning, you can study
               anywhere through this platform</p>
-            <!-- FIXME: For the below two flexes resolve the space-x-8 alignment in small screens -->
             <div class="sm:space-x-2 md:space-x-8 lg:space-x-8 xl:space-x-8 2xl:space-x-8 
             flex flex-row flex-wrap items-end pt-10 space-y-8">
                 <button class="bg-indigo-700 text-white rounded-full px-16 py-4" @click="signIn()">Get Started</button>
@@ -89,7 +86,8 @@ function signIn(){
               </div>
              </div>
              <!-- FIXME: Hide this in extra-small screens -->
-             <div class="bubble bubble-bottom-left px-4 absolute bottom-0 top-10 right-12"><p class="">It's Amazing</p></div>
+             <div class="bubble bubble-bottom-left px-4 absolute bottom-0 top-10 right-12
+             sm:hidden md:block lg:block xl:block 2xl:block"><p class="">It's Amazing</p></div>
           </div>
           <div class="flex mt-14 relative">      
             <div class="rounded-[50%] w-14 h-14 bg-red"></div>
@@ -144,6 +142,120 @@ function signIn(){
         </div>
       </div>
     </div>
+    <div class="flex flex-wrap">
+      <div class="flex relative mt-20">
+        <div class="flex absolute h-96 w-48 bg-slate-50 left-cirle"></div>
+        <div class="flex relative flex flex-wrap mt-10 pt-24
+        sm:px-24 md:px-24 lg:px-10 xl:px-10 2xl:px-24 
+        sm:space-y-12 md:space-y-12 lg:space-y-12 xl:space-y-0 2xl:space-y-0">
+          <div class="flex flex-col sm:w-full md:w-1/3 lg:w-1/3 xl:w-1/3 2xl:w-1/3 space-y-6
+          sm:hidden md:hidden lg:hidden xl:block 2xl:block">
+            <p class="text-5xl font-medium pr-6 tracking-normal leading-tight font-['Gill_Sans']">
+              Why online learning method
+            </p>
+            <p class="font-light">Study online teaches important time management skills which makes it easier to find
+              a good work-study balance
+            </p>
+            <div class="flex flex-row pt-4">
+            <button class="bg-indigo-700 text-white rounded-full px-16 py-4" @click="signIn()">Get Started</button>
+            </div>
+          </div>
+          <div class="flex flex-col sm:w-full md:w-full lg:w-full xl:w-1/3 2xl:w-1/3 space-y-12 
+          sm:pl-0 md:pl-20 lg:pl-170 xl:pl-20 2xl:pl-20 
+          sm:pr-0 md:pr-20 lg:pr-170 xl:pr-0 2xl:pr-0">
+            <div>
+              <div class="flex justify-center items-center bg-deep-purple-100 h-20 w-20 rounded-[50%] ">
+                <img src="/clock.png" class="object-contain h-12 w-12"/>
+              </div>
+              <p class="text-3xl font-normal tracking-normal leading-tight font-['Gill_Sans']">Flexible time</p>
+              <p class="font-thin">Online education allow teachers and students to set their own pace of learning
+                and there is added flexibility in setting a schedule that fits everyone's agenda
+              </p>
+            </div>
+            <div>
+              <div class="flex justify-center items-center bg-deep-purple-100 h-20 w-20 rounded-[50%] ">
+                <img src="/clock.png" class="object-contain h-12 w-12"/>
+              </div>
+              <p class="text-3xl font-normal tracking-normal leading-tight font-['Gill_Sans']">Flexible time</p>
+              <p class="font-thin">Online education allow teachers and students to set their own pace of learning
+                and there is added flexibility in setting a schedule that fits everyone's agenda
+              </p>
+            </div>
+          </div>
+          <div class="flex flex-col sm:w-full md:w-full lg:w-full xl:w-1/3 2xl:w-1/3 space-y-12 
+          sm:pl-0 md:pl-20 lg:pl-170 xl:pl-20 2xl:pl-20
+          sm:pr-0 md:pr-20 lg:pr-170 xl:pr-0 2xl:pr-0">
+            <div>
+              <div class="flex justify-center items-center bg-deep-purple-100 h-20 w-20 rounded-[50%] ">
+                  <img src="/protactor.png" class="object-contain h-12 w-12 rotate-90"/>
+              </div>
+              <p class="text-3xl font-normal tracking-normal leading-tight font-['Gill_Sans']">Certificate</p>
+              <p class="font-thin">Online education allow teachers and students to set their own pace of learning
+                and there is added flexibility in setting a schedule that fits everyone's agenda
+              </p>
+            </div>
+            <div>
+              <div class="flex justify-center items-center bg-deep-purple-100 h-20 w-20 rounded-[50%] ">
+                  <img src="/protactor.png" class="object-contain h-12 w-12 rotate-90"/>
+              </div>
+              <p class="text-3xl font-normal tracking-normal leading-tight font-['Gill_Sans']">Certificate</p>
+              <p class="font-thin">Online education allow teachers and students to set their own pace of learning
+                and there is added flexibility in setting a schedule that fits everyone's agenda
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flex flex-wrap mt-10 pt-24
+        sm:px-24 md:px-24 lg:px-10 xl:px-10 2xl:px-24 
+        sm:space-y-12 md:space-y-12 lg:space-y-12 xl:space-y-0 2xl:space-y-0">
+          <div class="flex flex-col sm:w-full md:w-full lg:w-full xl:w-1/3 2xl:w-1/3 space-y-6
+          sm:pl-0 md:pl-20 lg:pl-170 xl:pl-0 2xl:pl-0
+          sm:pr-0 md:pr-20 lg:pr-170 xl:pr-0 2xl:pr-0">
+            <h3 class="font-medium pr-6 tracking-normal leading-tight font-['Gill_Sans']">
+              Benefits of Online Learning
+            </h3>
+            <p class="font-light">
+              Since it can be accessed easily children can carry out the learning process in the 
+              bedroom or to other places where the atmosphere is more comfortable
+            </p>
+            <div class="sm:space-y-2 md:space-y-8 lg:space-y-8 xl:space-y-8 2xl:space-y-8 
+              flex flex-col w-full mt-4">
+                <div class="flex flex-row space-x-2">
+                  <div class="rounded-full bg-mustard-yellow w-10 h-10 flex justify-center items-center text-white text-sm">
+                    <font-awesome-icon icon="fa-solid fa-check" size="lg" />
+                  </div>
+                  <p class="font-medium text-sm flex items-center">Experienced mentor</p>   
+                </div>
+                <div class="flex flex-row space-x-2">
+                  <div class="rounded-full bg-mustard-yellow w-10 h-10 flex justify-center items-center text-white text-sm">
+                    <font-awesome-icon icon="fa-solid fa-check" size="lg"/>
+                  </div>
+                  <p class="font-medium text-sm flex items-center">Quality Videos</p> 
+                </div>
+                <div class="flex flex-row space-x-2">
+                  <div class="rounded-full bg-mustard-yellow w-10 h-10 flex justify-center items-center text-white text-sm">
+                    <font-awesome-icon icon="fa-solid fa-check" size="lg"/>
+                  </div>
+                  <p class="font-medium text-sm flex items-center"> Affordable Prices</p>    
+                </div>
+            </div> 
+          </div>
+          <div class="flex relative items-end sm:w-full md:w-full lg:w-full xl:w-2/3 2xl:w-2/3
+              sm:pl-0 md:pl-0 lg:pl-0 xl:pl-12 2xl:pl-12">
+            <div class="flex relative sm:left-0 md:left-4 lg:left-4 xl:left-4 2xl:left-4 top-4 ">
+                <div class="flex absolute smallhidden bg-slate-50 h-64 w-64 rounded-full -top-2"></div>
+                <div class="bg-slate-100 flex relative justify-center overflow-hidden p-10 rounded-full w-full h-full">
+                  <img src="/online_learning.png" class="object-contain h-full"/>
+                </div>
+                <div class="border-solid border border-slate-800 w-full h-full rounded-full absolute bottom-2 left-2"></div>
+                <div class="flex absolute h-12 w-12 bg-deep-purple rounded-full top-0 right-0 smallhidden"></div>
+                <div class="flex absolute h-4 w-4 bg-mustard-yellow rounded-full absolute bottom-44 -right-10 smallhidden"></div> 
+                <div class="flex absolute h-2/6 w-1/6 bg-red rounded-full absolute bottom-6 -right-4 -z-10 rotate-90 smallhidden"></div> 
+            </div>
+          </div>
+      </div>
+   </div>
 </template>
 
 <style scoped>

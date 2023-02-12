@@ -13,6 +13,12 @@ body {
   h1 {
     font-size: 60px;
   }
+  h3 {
+    font-size: 48px;
+  }
+  .smallhidden {
+    display: block !important;
+  }
 }
 @media only screen and (max-width: 1279px) {
   body {
@@ -20,6 +26,12 @@ body {
   }
   h1 {
     font-size: 60px;
+  }
+  h3 {
+    font-size: 48px;
+  }
+  .smallhidden {
+    display: block !important;
   }
 }
 @media only screen and (max-width: 1023px) {
@@ -29,6 +41,12 @@ body {
   h1 {
     font-size: 60px;
   }
+  h3 {
+    font-size: 48px;
+  }
+  .smallhidden {
+    display: block !important;
+  }
 }
 @media only screen and (max-width: 767px) {
   body {
@@ -36,6 +54,12 @@ body {
   }
   h1 {
     font-size: 60px;
+  }
+  h3 {
+    font-size: 48px;
+  }
+  .smallhidden {
+    display: block !important;
   }
 }
 @media only screen and (max-width: 639px) {
@@ -45,4 +69,14 @@ body {
   h1 {
     font-size: 42px;
   }
+  h3 {
+    font-size: 30px;
+  }
+  .smallhidden {
+    display: none !important;
+  }
 }
+
+/* The @mixin directive lets you create CSS code that is to be reused throughout the website.
+
+The @include directive is created to let you use (include) the mixin. */

@@ -54,12 +54,17 @@ module.exports = {
       },
       spacing: {
         150: '150px',
+        160: '160px',
+        170: '170px',
       },
       fontFamily: {
         sans: ['-apple-system', 'BlinkMacSystemFont'],
         body: ['"Open Sans"'],
         mono: ['ui-monospace', 'SFMono-Regular'],
       },
+    },
+    container: {
+      center: true,
     },
   },
   plugins: [
