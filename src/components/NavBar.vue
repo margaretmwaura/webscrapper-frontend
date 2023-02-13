@@ -1,15 +1,20 @@
 <script setup>
 import { ref } from 'vue';
+import Modal from "./Auth.vue";
 
 defineProps({
   msg: String,
 });
 
 let open = ref(true);
-
+let isVisible = ref(false)
 // functions that mutate state and trigger updates
 function toggle() {
   open.value = !open.value;
+}
+
+function showModal(){
+  isVisible.value = !isVisible.value
 }
 </script>
 
@@ -76,24 +81,27 @@ function toggle() {
               </a>
             </div>
         </div>
-        <div class="sm:space-x-0 md:space-x-2 lg:space-x-2 xl:space-x-2 2xl:space-x-2
-          sm:space-y-2 md:space-y-0 lg:space-y-0 xl:space-y-0 2xl:space-y-0 mt-2">
-            <!-- The block makes it to appear one after another -->
-            <router-link to="/"
+        <div class="flex sm:space-x-0 md:space-x-2 lg:space-x-2 xl:space-x-2 2xl:space-x-2
+          sm:space-y-2 md:space-y-0 lg:space-y-0 xl:space-y-0 2xl:space-y-0 mt-2
+          inline-block">
+            <!-- FIXME: The block makes it to appear one after another -->
+            <!-- sm:block md:inline lg:inline xl:inline 2xl:inline -->
+            <button
+              v-on:click="showModal()"
               class="no-underline
-              sm:block md:inline lg:inline xl:inline 2xl:inline
               text-sm px-4 py-2 leading-none border rounded-full text-white bg-indigo-700
               hover:border-transparent hover:text-white hover:bg-indigo-700"
-              >Login</router-link>
-            <router-link to="/about"
+              >Login</button>
+            <button
               class="no-underline
-              sm:block md:inline lg:inline xl:inline 2xl:inline
+              
               text-sm px-4 py-2 leading-none border rounded-full text-indigo-700 border-indigo-700 
               hover:border-transparent hover:text-white hover:bg-indigo-700"
-              >Signup</router-link>
+              >Signup</button>
         </div>
       </div>
     </nav>
+    <Modal v-show="isVisible"></Modal>
   </div>
   <!-- <router-view /> -->
 </template>

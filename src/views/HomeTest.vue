@@ -206,7 +206,7 @@ function signIn(){
           </div>
         </div>
       </div>
-      <div class="flex flex-wrap mt-10 pt-24
+       <div class="flex flex-wrap mt-10 pt-24
         sm:px-24 md:px-24 lg:px-10 xl:px-10 2xl:px-24 
         sm:space-y-12 md:space-y-12 lg:space-y-12 xl:space-y-0 2xl:space-y-0">
           <div class="flex flex-col sm:w-full md:w-full lg:w-full xl:w-1/3 2xl:w-1/3 space-y-6
@@ -245,7 +245,7 @@ function signIn(){
               sm:pl-0 md:pl-0 lg:pl-0 xl:pl-12 2xl:pl-12">
             <div class="flex relative sm:left-0 md:left-4 lg:left-4 xl:left-4 2xl:left-4 top-4 ">
                 <div class="flex absolute smallhidden bg-slate-50 h-64 w-64 rounded-full -top-2"></div>
-                <div class="bg-slate-100 flex relative justify-center overflow-hidden p-10 rounded-full w-full h-full">
+                <div class="bg-slate-100 flex relative justify-center overflow-hidden p-10 rounded-full w-full h-5/6">
                   <img src="/online_learning.png" class="object-contain h-full"/>
                 </div>
                 <div class="border-solid border border-slate-800 w-full h-full rounded-full absolute bottom-2 left-2"></div>
@@ -254,8 +254,60 @@ function signIn(){
                 <div class="flex absolute h-2/6 w-1/6 bg-red rounded-full absolute bottom-6 -right-4 -z-10 rotate-90 smallhidden"></div> 
             </div>
           </div>
-      </div>
-   </div>
+       </div>
+       <div class="flex relative mt-32">
+          <div class="flex absolute mt-24">
+              <div class="trapezoid"></div>
+              <div class="h-96 w-48 bg-slate-50 left-cirle"></div>
+          </div>
+          <div class="flex relative flex-wrap
+          sm:px-24 md:px-24 lg:px-10 xl:px-10 2xl:px-24 
+          sm:space-y-12 md:space-y-12 lg:space-y-12 xl:space-y-0 2xl:space-y-0">
+            <div class="flex sm:w-full md:w-1/2 lg:w-1/2 xl:w-1/2 2xl:w-1/2">
+                <div class="flex relative sm:left-0 md:left-4 lg:left-4 xl:left-4 2xl:left-4 top-4 ">
+                  <div class="border-solid border border-slate-800 w-full h-5/6 rounded-full absolute top-4"></div>
+                  <div class="flex relative justify-center overflow-hidden rounded-full w-full h-5/6">
+                    <img src="/greenery.jpeg" class="object-contain h-full"/>
+                  </div>
+                  <div class="flex absolute justify-center items-center text-white
+                  h-28 w-28 bg-deep-purple rounded-full -top-2 -right-12">
+                      <font-awesome-icon icon="fa-solid fa-quote-left" size="2xl" />
+                  </div>
+                  <div class="flex absolute -bottom-3 -right-4 space-x-2">
+                    <div class="flex justify-center items-center text-deep-purple h-12 w-12 bg-zinc-50 rounded-full">
+                      <font-awesome-icon icon="fa-solid fa-arrow-left" size="xl" />
+                    </div>
+                    <div class="flex justify-center items-center text-deep-purple h-12 w-12 bg-zinc-50 rounded-full">
+                      <font-awesome-icon icon="fa-solid fa-arrow-right" size="xl" />
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <div class="flex flex-col sm:w-full md:w-1/2 lg:w-1/2 xl:w-1/2 2xl:w-1/2 space-y-6 pl-12 pr-12">
+              <h3 class="font-medium pr-6 tracking-normal leading-tight font-['Gill_Sans']">
+                What students say about us
+              </h3>
+              <p class="text-3xl font-normal tracking-normal leading-tight font-['Gill_Sans']">Help me and improve my 
+                productivity activities</p>
+              <p class="font-light">
+                One of the advantages of online learning at home is that the learning process
+                cam be accessed easily just by using a smartphone, computer or laptop
+                that is connected to the internet network
+              </p>
+              <div class="flex flex-row space-x-4">
+                <div class="flex relative justify-center overflow-hidden rounded-full w-12 h-12 pt-2 bg-mustard-yellow">
+                      <img src="woman.png" class="object-contain h-full "/>
+                </div>
+                <div class="flex flex-col">
+                  <p class="font-light">Jessica Andra</p>
+                  <p class="font-thin">Student</p>
+                           
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
 </template>
 
 <style scoped>
@@ -327,5 +379,12 @@ function signIn(){
   border-radius: 0 12rem 12rem 0;
 }
 
-
+.trapezoid {
+  border-bottom: 10px solid transparent;
+  border-Top: 10px solid transparent;
+  border-right: 50px solid theme("colors.slate.50");;
+  height: 384px;
+       /* border-radius: 0 12rem 12rem 0; */
+       /* width: 10px */
+}
 </style>

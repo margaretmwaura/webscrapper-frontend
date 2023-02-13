@@ -15,12 +15,15 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 /* import specific icons */
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faQuoteLeft } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 import { createPinia } from 'pinia';
 import { firebaseAmin } from './firebase';
 
 /* add icons to the library */
-library.add(faPlay, faCheck);
+library.add(faPlay, faCheck, faQuoteLeft, faArrowRight, faArrowLeft);
 const app = createApp({
   setup() {
     provide(DefaultApolloClient, apolloClient);

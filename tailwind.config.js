@@ -62,6 +62,9 @@ module.exports = {
         body: ['"Open Sans"'],
         mono: ['ui-monospace', 'SFMono-Regular'],
       },
+      boxShadow: {
+        DEFAULT: '0px 5px 50px 0px rgba(0, 0, 0, 0.2)',
+      },
     },
     container: {
       center: true,
