@@ -18,12 +18,13 @@ import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { faQuoteLeft } from '@fortawesome/free-solid-svg-icons';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 import { createPinia } from 'pinia';
 import { firebaseAmin } from './firebase';
 
 /* add icons to the library */
-library.add(faPlay, faCheck, faQuoteLeft, faArrowRight, faArrowLeft);
+library.add(faPlay, faCheck, faQuoteLeft, faArrowRight, faArrowLeft, faTimes);
 const app = createApp({
   setup() {
     provide(DefaultApolloClient, apolloClient);

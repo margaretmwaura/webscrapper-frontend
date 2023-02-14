@@ -8,14 +8,19 @@ defineProps({
 
 let open = ref(true);
 let isVisible = ref(false)
+let authFunction = ref("")
 // functions that mutate state and trigger updates
 function toggle() {
   open.value = !open.value;
 }
 
-function showModal(){
+function showModal(authType){
   isVisible.value = !isVisible.value
+  authFunction.value = authType
 }
+
+function close(){isVisible.value = false}
+
 </script>
 
 <template>
@@ -87,21 +92,21 @@ function showModal(){
             <!-- FIXME: The block makes it to appear one after another -->
             <!-- sm:block md:inline lg:inline xl:inline 2xl:inline -->
             <button
-              v-on:click="showModal()"
+              v-on:click="showModal('login')"
               class="no-underline
               text-sm px-4 py-2 leading-none border rounded-full text-white bg-indigo-700
               hover:border-transparent hover:text-white hover:bg-indigo-700"
               >Login</button>
             <button
+              v-on:click="showModal('signup')"
               class="no-underline
-              
               text-sm px-4 py-2 leading-none border rounded-full text-indigo-700 border-indigo-700 
               hover:border-transparent hover:text-white hover:bg-indigo-700"
               >Signup</button>
         </div>
       </div>
     </nav>
-    <Modal v-show="isVisible"></Modal>
+    <Modal v-show="isVisible" :authType="authFunction" @closeModal="close"></Modal>
   </div>
   <!-- <router-view /> -->
 </template>
