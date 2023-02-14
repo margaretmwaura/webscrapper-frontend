@@ -19,6 +19,8 @@ import { faQuoteLeft } from '@fortawesome/free-solid-svg-icons';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
+import { faEnvelope } from '@fortawesome/free-regular-svg-icons';
 
 import { createPinia } from 'pinia';
 import { firebaseAmin } from './firebase';
@@ -34,7 +36,16 @@ import { firebaseAmin } from './firebase';
 // });
 
 /* add icons to the library */
-library.add(faPlay, faCheck, faQuoteLeft, faArrowRight, faArrowLeft, faTimes);
+library.add(
+  faPlay,
+  faCheck,
+  faQuoteLeft,
+  faArrowRight,
+  faArrowLeft,
+  faTimes,
+  faUser,
+  faEnvelope
+);
 const app = createApp({
   setup() {
     provide(DefaultApolloClient, apolloClient);
