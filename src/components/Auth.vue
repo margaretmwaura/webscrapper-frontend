@@ -1,7 +1,11 @@
 <script>
 // const props = defineProps(['authType'])
+import Signup from './Singup.vue'
 export default{
   name : 'Auth',
+  components: {
+    Signup
+  },
   setup(props, context){
     function closeModal(){
       context.emit('closeModal', true)
@@ -20,20 +24,12 @@ export default{
    outline-none overflow-x-hidden overflow-y-auto fixed inset-0 
    bg-black bg-opacity-25 backdrop-blur-sm
    flex justify-center items-center z-50">
-      <div className="bg-white mx-auto flex items-center flex-col px-2 py-8 text-center w-96 rounded-lg">
-          <button
-          className="text-primary-400 text-lg font-light place-self-end mr-8"
-        >
+      <div className="bg-white mx-auto flex items-center flex-col px-2 py-8 w-96 rounded-lg">
+        <button className="text-primary-400 text-lg font-light place-self-end mr-8">
           <font-awesome-icon icon="fa-solid fa-times" size="xl"  @click="closeModal"/>
         </button>
-        <form
-          className="p-2 rounded leading-loose"
-          ref={form}
-          id="#contact-us"
-          onSubmit={sendEmail}
-        >
-         <p>{{authType}}</p>
-        </form>
+        <div v-show="authType === 'login'"> Login</div>
+        <div v-show="authType === 'signup'"> <Signup></Signup></div>
       </div>
    </div>
 </template>
