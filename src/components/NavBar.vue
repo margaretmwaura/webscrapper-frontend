@@ -1,25 +1,62 @@
-<script setup>
+<script>
+
+// Learning lesson is that a prop value can only be changed by using toRefs and watching it
+// so as to update another ref
+// 1.e
+//  let authType = toRef(props, 'authType')
+//  let authAction = ref("")
+//  watch(authType, (value) => {
+//     console.log("Value change" + value)
+//     authAction.value = value;
+//  });
+//   Define this last part outside of setup
+//  props: ['authType']
 import { ref } from 'vue';
-import Modal from "./Auth.vue";
+import Signup from './Singup.vue'
+import Login from './Login.vue'
 
-defineProps({
-  msg: String,
-});
+export default{
 
-let open = ref(true);
-let isVisible = ref(false)
-let authFunction = ref("")
-// functions that mutate state and trigger updates
-function toggle() {
-  open.value = !open.value;
+  name : 'NavBar',
+  components: {
+    Signup,
+    Login
+  },
+
+  setup(props, context){
+
+  let open = ref(true);
+  let isVisible = ref(false)
+  let authFunction = ref("")
+  // functions that mutate state and trigger updates
+  function toggle() {
+    open.value = !open.value;
+  }
+
+  function showModal(authType){
+    isVisible.value = true
+    console.log("Opening modal with value " + authType)
+    authFunction.value = authType
+  }
+
+  function close(){
+    isVisible.value = false
+  }
+
+  function switchAuth(value){
+    authFunction.value = value
+    console.log("We will be editting the display value" + value)
+  }
+
+  return{
+    open,
+    isVisible,
+    authFunction,
+    showModal,
+    close,
+    switchAuth
+  }}
 }
-
-function showModal(authType){
-  isVisible.value = !isVisible.value
-  authFunction.value = authType
-}
-
-function close(){isVisible.value = false}
 
 </script>
 
@@ -92,13 +129,13 @@ function close(){isVisible.value = false}
             <!-- FIXME: The block makes it to appear one after another -->
             <!-- sm:block md:inline lg:inline xl:inline 2xl:inline -->
             <button
-              v-on:click="showModal('login')"
+              v-on:click="showModal('Login')"
               class="no-underline
               text-sm px-4 py-2 leading-none border rounded-full text-white bg-indigo-700
               hover:border-transparent hover:text-white hover:bg-indigo-700"
               >Login</button>
             <button
-              v-on:click="showModal('signup')"
+              v-on:click="showModal('Signup')"
               class="no-underline
               text-sm px-4 py-2 leading-none border rounded-full text-indigo-700 border-indigo-700 
               hover:border-transparent hover:text-white hover:bg-indigo-700"
@@ -106,7 +143,7 @@ function close(){isVisible.value = false}
         </div>
       </div>
     </nav>
-    <Modal v-show="isVisible" :authType="authFunction" @closeModal="close"></Modal>
+    <component :is="authFunction" v-show="isVisible" @closeModal="close" @switchAction="switchAuth"></component>
   </div>
   <!-- <router-view /> -->
 </template>
