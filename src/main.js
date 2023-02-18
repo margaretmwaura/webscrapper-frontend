@@ -13,27 +13,14 @@ import { apolloClient } from './apolloClient';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 /* import specific icons */
-import { faPlay } from '@fortawesome/free-solid-svg-icons';
-import { faCheck } from '@fortawesome/free-solid-svg-icons';
-import { faQuoteLeft } from '@fortawesome/free-solid-svg-icons';
-import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import { faUser } from '@fortawesome/free-solid-svg-icons';
-import { faEnvelope } from '@fortawesome/free-regular-svg-icons';
+import { faPlay,faCheck,faQuoteLeft,faArrowRight,faArrowLeft,
+   faTimes, faUser } from '@fortawesome/free-solid-svg-icons';
+
+
+import { faEnvelope, faEye, faEyeSlash } from '@fortawesome/free-regular-svg-icons';
 
 import { createPinia } from 'pinia';
 import { firebaseAmin } from './firebase';
-
-// import 'vuetify/styles';
-// import { createVuetify } from 'vuetify';
-// import * as components from 'vuetify/components';
-// import * as directives from 'vuetify/directives';
-
-// const vuetify = createVuetify({
-//   components,
-//   directives,
-// });
 
 /* add icons to the library */
 library.add(
@@ -44,7 +31,9 @@ library.add(
   faArrowLeft,
   faTimes,
   faUser,
-  faEnvelope
+  faEnvelope,
+  faEye,
+  faEyeSlash
 );
 const app = createApp({
   setup() {

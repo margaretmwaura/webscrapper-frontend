@@ -1,17 +1,37 @@
 <script>
-
+import { ref } from 'vue';
 export default{
   name : 'Signup',
   setup(props, context){
+    let showPassword = ref(false)
+    let showConfirmPassword = ref(false)
+    let passwordType = ref("text")
+    let confirmPasswordType = ref("text")
+
     function switchToSignIn(){
       context.emit('switchAction', "Login")
     }
     function closeModal(){
       context.emit('closeModal', true) 
     }
+
+    function shouldShowPassword(condition){
+      showPassword.value = condition
+      passwordType.value = condition ? "text" :  "password"
+    }
+
+    function shouldShowConfirmPassword(condition){
+      showConfirmPassword.value = condition
+      confirmPasswordType.value = condition ? "text" :  "password"
+    }
     return{
       switchToSignIn,
-      closeModal
+      closeModal,
+      shouldShowPassword,
+      shouldShowConfirmPassword,
+      confirmPasswordType,
+      showPassword,
+      passwordType
     }
   },
 }
@@ -33,7 +53,7 @@ export default{
             <font-awesome-icon icon="fa-solid fa-times" size="xl"  @click="closeModal()"/>
         </button>
       </div>
-      <div className="flex flex-col w-full py-14">
+      <div className="flex flex-col w-full py-4">
         <div className="flex flex-col space-y-4">
             <p class="font-bold text-3xl">Create an Account Today</p>
             <p class="font-light">Get started with your 8 day trial</p>
@@ -50,15 +70,23 @@ export default{
                 <font-awesome-icon icon="fa-regular fa-envelope" />
             </div>
             <!-- TODO: Add toggle icons and functionality for the passwords -->
-            <div className="flex border-b border-teal-500 py-1">
-              <input v-model="password" placeholder="..." type="password" 
+            <div className="flex border-b border-teal-500 py-1 text-teal-500">
+              <input v-model="password" placeholder="..." :type="passwordType" 
                 className="appearance-none bg-transparent border-none w-full 
                 text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none">
+                <font-awesome-icon  v-if="showPassword" icon="fa-regular fa-eye-slash"
+                 v-on:click="shouldShowPassword(false)"/>
+                <font-awesome-icon v-else icon="fa-regular fa-eye" 
+                v-on:click="shouldShowPassword(true)"/>
             </div>
-            <div className="flex border-b border-teal-500 py-1">
-              <input v-model="password" placeholder="..." type="password" 
+            <div className="flex border-b border-teal-500 py-1 text-teal-500">
+              <input v-model="confirmPassword" placeholder="..." :type="confirmPasswordType" 
                 className="appearance-none bg-transparent border-none w-full 
                 text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none">
+                <font-awesome-icon  v-if="showConfirmPassword" icon="fa-regular fa-eye-slash"
+                 v-on:click="shouldShowConfirmPassword(false)"/>
+                <font-awesome-icon v-else icon="fa-regular fa-eye" 
+                v-on:click="shouldShowConfirmPassword(true)"/>
             </div>
         </div>
         <button class="mt-12 bg-indigo-700 text-white rounded-full px-16 py-2" @click="signIn()">Get Started</button>

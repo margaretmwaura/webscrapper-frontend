@@ -264,7 +264,7 @@ function signIn(){
           sm:px-24 md:px-24 lg:px-10 xl:px-10 2xl:px-24 
           sm:space-y-12 md:space-y-12 lg:space-y-12 xl:space-y-0 2xl:space-y-0">
             <div class="flex sm:w-full md:w-1/2 lg:w-1/2 xl:w-1/2 2xl:w-1/2">
-                <div class="flex relative sm:left-0 md:left-4 lg:left-4 xl:left-4 2xl:left-4 top-4 ">
+                <div class="flex relative  top-4 ">
                   <div class="border-solid border border-slate-800 w-full h-5/6 rounded-full absolute top-4"></div>
                   <div class="flex relative justify-center overflow-hidden rounded-full w-full h-5/6">
                     <img src="/greenery.jpeg" class="object-contain h-full"/>
