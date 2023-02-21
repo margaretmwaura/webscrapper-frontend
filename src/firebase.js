@@ -20,4 +20,4 @@ const firebaseConfig = {
 // Initialize Firebase
 const admin = firebase.initializeApp(firebaseConfig);
 
-export const firebaseAmin = admin;
+export const firebaseAdmin = admin;

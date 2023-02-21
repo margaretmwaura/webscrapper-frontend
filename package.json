@@ -22,7 +22,8 @@
     "graphql-tag": "^2.12.6",
     "pinia": "^2.0.29",
     "vue": "^3.2.41",
-    "vue-router": "^4.0.13"
+    "vue-router": "^4.0.13",
+    "vuetify": "^3.1.4"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^3.2.0",
