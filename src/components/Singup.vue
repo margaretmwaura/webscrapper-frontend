@@ -64,12 +64,6 @@ export default{
       console.log("We have completed successfully")
     })
 
-    async function signUp(){
-      await logInWithEmailAndPassword()
-      console.log("we have finished with auth")
-      await register()
-    }
-
     function switchToSignIn(){
       context.emit('switchAction', "Login")
     }
@@ -88,16 +82,15 @@ export default{
       confirmPasswordType.value = condition ? "text" :  "password"
     }
 
-    function logInWithEmailAndPassword() {
-         signInWithEmailAndPassword(auth,"mwauramargaret1@gmail.com", "Aswift07")
-        .then((userCredential) => {
-          authStatus = 'Authorized'
-          // authToken = currentUser().getIdToken(true)
-          console.log(userCredential.user.accessToken)
-          localStorage.setItem('authToken', userCredential.user.accessToken);
-        }).catch((err) => {
-          console.log(err)
-        })
+    function signUp(){
+      console.log("Email is " + email.value + " and the password is " + password.value)
+      createUserWithEmailAndPassword(auth, email.value, password.value )
+      .then((userCredential) => {
+        console.log(userCredential.user.accessToken)
+        localStorage.setItem('authToken', userCredential.user.accessToken);
+      }).catch((err) => {
+        console.log(err)
+      })
     }
 
     function signOut() {
