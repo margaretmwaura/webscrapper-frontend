@@ -8,7 +8,7 @@ import HomeTest from './views/HomeTest.vue'
 
 <template>
   <NavBar/>
-  <HomeTest/>
+  <!-- <HomeTest/> -->
   <!-- <Landing/> -->
 </template>
 

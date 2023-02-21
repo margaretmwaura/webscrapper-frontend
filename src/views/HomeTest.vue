@@ -13,7 +13,7 @@ function toggle() {
 }
 
 function signIn(){
-  router.push({ path: 'auth' })
+  router.push({ path: 'Home' })
 }
 
 

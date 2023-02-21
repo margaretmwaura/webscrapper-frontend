@@ -83,7 +83,6 @@ export default{
     }
 
     function signUp(){
-      console.log("Email is " + email.value + " and the password is " + password.value)
       createUserWithEmailAndPassword(auth, email.value, password.value )
       .then((userCredential) => {
         console.log(userCredential.user.accessToken)
