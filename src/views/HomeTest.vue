@@ -24,7 +24,7 @@ function signIn(){
 1. In the large screen the last column is out of the banner by a few centimeters
 3. There is quite a space between the colums in the large screen 
 4. The issue on having to specify for each and every responsiveness-->
-
+  <div class="landing">
     <div class="bg-slate-50 w-full mx-auto h-auto flex flex-wrap mt-4">
       <div class="sm:w-full md:w-full lg:w-full xl:w-1/2 2xl:w-1/2 
       sm:pt-8 md:pt-24 lg:pt-24 xl:pt-24 2xl:pt-24">
@@ -308,6 +308,7 @@ function signIn(){
           </div>
         </div>
     </div>
+  </div>
 </template>
 
 <style scoped>

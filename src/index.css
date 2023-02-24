@@ -7,7 +7,7 @@ body {
 }
 
 @media only screen and (max-width: 1535px) {
-  body {
+  .landing {
     margin: 0px 50px 0px 50px;
   }
   h1 {
@@ -21,7 +21,7 @@ body {
   }
 }
 @media only screen and (max-width: 1279px) {
-  body {
+  .landing {
     margin: 0px 10px 0px 10px;
   }
   h1 {
@@ -35,7 +35,7 @@ body {
   }
 }
 @media only screen and (max-width: 1023px) {
-  body {
+  .landing {
     margin: 0px 30px 0px 30px;
   }
   h1 {
@@ -49,7 +49,7 @@ body {
   }
 }
 @media only screen and (max-width: 767px) {
-  body {
+  .landing {
     margin: 0px 10px 0px 10px;
   }
   h1 {
@@ -63,7 +63,7 @@ body {
   }
 }
 @media only screen and (max-width: 639px) {
-  body {
+  .landing {
     margin: 0px 5px 0px 5px;
   }
   h1 {
