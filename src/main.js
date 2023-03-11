@@ -4,6 +4,8 @@ import router from './router';
 import App from './App.vue';
 import './index.css';
 
+import * as te from 'tw-elements';
+
 import VueSidebarMenu from 'vue-sidebar-menu';
 // import 'custom-var.scss';
 import 'vue-sidebar-menu/dist/vue-sidebar-menu.css';
@@ -15,6 +17,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 /* import the fontawesome core */
 import { library } from '@fortawesome/fontawesome-svg-core';
+
 import {
   faPlay,
   faCheck,
@@ -23,14 +26,16 @@ import {
   faArrowLeft,
   faTimes,
   faUser,
-  // faUserGraduate,
+  faUserGraduate,
+  faSearch,
+  faClock,
 } from '@fortawesome/free-solid-svg-icons';
 
 import {
   faEnvelope,
   faEye,
   faEyeSlash,
-  // faUserGraduate,
+  faCalendar,
 } from '@fortawesome/free-regular-svg-icons';
 
 /* add icons to the library */
@@ -44,8 +49,11 @@ library.add(
   faUser,
   faEnvelope,
   faEye,
-  faEyeSlash
-  // faUserGraduate
+  faEyeSlash,
+  faUserGraduate,
+  faCalendar,
+  faSearch,
+  faClock
 );
 
 import { DefaultApolloClient } from '@vue/apollo-composable';

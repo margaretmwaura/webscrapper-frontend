@@ -77,6 +77,41 @@ body {
   }
 }
 
+/* https://stackoverflow.com/questions/632100/apply-css-style-to-child-elements */
+div.vsm_expanded li.vsm--item {
+  margin-top: 20px;
+  margin-left: 30px;
+  width: 80%;
+}
+
+div.vsm_collapsed li.vsm--item {
+  margin-top: 40px;
+  margin-left: 5px;
+}
+
+.v-sidebar-menu.vsm_white-theme .vsm--link {
+  color: #808080 !important;
+}
+
+.v-sidebar-menu.vsm_white-theme .vsm--link_hover {
+  color: #262626 !important;
+}
+
+.v-sidebar-menu.vsm_white-theme .vsm--link_level-1 .vsm--icon {
+  background-color: #ffffff !important;
+  height: 20px;
+  width: 20px;
+}
+
+/* 
+.v-sidebar-menu.vsm--link_level-1 {
+  margin-left: 50px !important;
+} */
+/* This changes the text color might need it */
+/* .v-sidebar-menu.vsm_white-theme .vsm--link {
+  color: #872b52;
+} */
+
 /* The @mixin directive lets you create CSS code that is to be reused throughout the website.
 
 The @include directive is created to let you use (include) the mixin. */

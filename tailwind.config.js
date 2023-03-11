@@ -4,6 +4,11 @@
 // const defaultTheme = require('tailwindcss/defaultTheme');
 
 module.exports = {
+  mode: 'jit',
+  content: [
+    './src/**/*.{html,js}',
+    './node_modules/tw-elements/dist/js/**/*.js',
+  ],
   purge: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
   theme: {
     screens: {
@@ -31,7 +36,10 @@ module.exports = {
           100: '#69509810',
           DEFAULT: '#695098',
         },
+        'light-blue': '#F0F8FF50',
+        'lighter-blue': '#F0F8FF',
         red: '#ED7264',
+        'uranian-blue': '#AFDBF580',
       },
       maxWidth: {
         320: '320px',
@@ -75,5 +83,6 @@ module.exports = {
     // require('./src/plugins/scrollbar.js'),
     // require('@tailwindcss/line-clamp'),
     // require('@tailwindcss/aspect-ratio'),
+    require('tw-elements/dist/plugin'),
   ],
 };
