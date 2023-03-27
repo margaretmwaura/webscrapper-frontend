@@ -5,12 +5,15 @@ import firebase from 'firebase/compat/app';
 import gql from 'graphql-tag'
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import {firebaseAdmin} from './../firebase'
+import { useRouter } from 'vue-router';
+import { toast } from 'vue3-toastify';
 
 export default{
   name : 'Signup',
   setup(props, context){
     const auth = getAuth(firebaseAdmin);
-
+    const router = useRouter()
+    
     let name = ref("")
     let email = ref("")
     let authStatus = ref("")
@@ -88,6 +91,10 @@ export default{
       .then((userCredential) => {
         console.log(userCredential.user.accessToken)
         localStorage.setItem('authToken', userCredential.user.accessToken);
+        toast.success('Signup is successful 🎊', {
+          autoClose: 500,    
+          onClose: () => router.push({ path: 'home' }),
+        });
       }).catch((err) => {
         console.log(err)
       })
@@ -136,7 +143,7 @@ export default{
             <div class="rounded-full bg-indigo-700 w-6 h-6 flex justify-center"><p class="text-white font-bold">L</p></div>
             <span class="font-semibold text-xl tracking-wider pl-2 text-indigo-700">Bonjour!</span>
         </div>
-        <button className="text-primary-400 text-lg font-light place-self-end">
+        <button className="text-indigo-700 text-lg font-light place-self-end">
             <font-awesome-icon icon="fa-solid fa-times" size="xl"  @click="closeModal()"/>
         </button>
       </div>

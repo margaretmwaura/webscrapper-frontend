@@ -25,7 +25,7 @@ const menu = [
             component: Header
           },
           {
-            href: '',
+            href: '/home',
             title: 'Dashboard',
             icon: {
                element: 'font-awesome-icon',

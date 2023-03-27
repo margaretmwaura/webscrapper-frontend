@@ -102,7 +102,8 @@ div.vsm_collapsed li.vsm--item {
   height: 20px;
   width: 20px;
 }
-
+.v-sidebar-menu.vsm_white-theme .vsm--link_level-1.vsm--link_active .vsm--icon {
+  color: #262626 !important;}
 /* 
 .v-sidebar-menu.vsm--link_level-1 {
   margin-left: 50px !important;

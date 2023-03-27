@@ -6,6 +6,8 @@ import './index.css';
 
 import * as te from 'tw-elements';
 
+import 'vue3-toastify/dist/index.css';
+
 import VueSidebarMenu from 'vue-sidebar-menu';
 // import 'custom-var.scss';
 import 'vue-sidebar-menu/dist/vue-sidebar-menu.css';
@@ -29,6 +31,7 @@ import {
   faUserGraduate,
   faSearch,
   faClock,
+  faPaperclip,
 } from '@fortawesome/free-solid-svg-icons';
 
 import {
@@ -53,7 +56,8 @@ library.add(
   faUserGraduate,
   faCalendar,
   faSearch,
-  faClock
+  faClock,
+  faPaperclip
 );
 
 import { DefaultApolloClient } from '@vue/apollo-composable';

@@ -1,13 +1,23 @@
 <script>
-
+import { ref } from 'vue';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import {firebaseAdmin} from './../firebase'
+import { useRouter } from 'vue-router';
+import { toast } from 'vue3-toastify';
 
 export default{
   name : 'Login',
   setup(props, context){
-    const auth = getAuth(firebaseAdmin);
+    const auth = getAuth(firebaseAdmin)
+    const router = useRouter()
 
+    let showPassword = ref(false)
+    let passwordType = ref("password")
+
+    function shouldShowPassword(condition){
+      showPassword.value = condition
+      passwordType.value = condition ? "text" :  "password"
+    }
     function switchToSignup(){
       console.log("switch to signup")
       context.emit('switchAction', "Signup")
@@ -15,20 +25,29 @@ export default{
     function closeModal(){
       context.emit('closeModal', true) 
     }
-
     function logInWithEmailAndPassword() {
       signInWithEmailAndPassword(auth,"mwauramargaret1@gmail.com", "Aswift07")
       .then((userCredential) => {
         console.log(userCredential.user.accessToken)
         localStorage.setItem('authToken', userCredential.user.accessToken);
+        // context.emit('closeModal', true) 
+        toast.success('Login is successful 🎊', {
+          autoClose: 500,    
+          onClose: () => router.push({ path: 'home' }),
+        });    
       }).catch((err) => {
         console.log(err)
       })
     }
+
     return{
+      shouldShowPassword,
       switchToSignup,
       logInWithEmailAndPassword,
-      closeModal
+      closeModal,
+
+      showPassword,
+      passwordType
     }
   },
 }
@@ -45,7 +64,7 @@ export default{
               <div class="rounded-full bg-indigo-700 w-6 h-6 flex justify-center"><p class="text-white font-bold">L</p></div>
               <span class="font-semibold text-xl tracking-wider pl-2 text-indigo-700">Bonjour!</span>
           </div>
-          <button className="text-primary-400 text-lg font-light place-self-end">
+          <button className="text-indigo-700 text-lg font-light place-self-end">
               <font-awesome-icon icon="fa-solid fa-times" size="xl"  @click="closeModal()"/>
           </button>
         </div>
@@ -60,10 +79,14 @@ export default{
                   <font-awesome-icon icon="fa-regular fa-envelope" />
               </div>
               <!-- TODO: Add toggle icons and functionality for the passwords -->
-              <div className="flex border-b border-teal-500 py-1">
-                <input v-model="password" placeholder="..." type="password" 
+              <div className="flex border-b border-teal-500 py-1 text-teal-500">
+                <input v-model="password" placeholder="..." :type="passwordType"
                   className="appearance-none bg-transparent border-none w-full 
                   text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none">
+                <font-awesome-icon  v-if="showPassword" icon="fa-regular fa-eye-slash"
+                 v-on:click="shouldShowPassword(false)"/>
+                <font-awesome-icon v-else icon="fa-regular fa-eye" 
+                v-on:click="shouldShowPassword(true)"/>
               </div>
           </div>
           <button class="mt-12 bg-indigo-700 text-white rounded-full px-16 py-2" @click="logInWithEmailAndPassword()">Login</button>
