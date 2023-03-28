@@ -192,10 +192,9 @@ let show = ref(false)
           class= "!visible hidden flex flex-col h-full p-6" 
           data-te-collapse-item
           data-te-collapse-horizontal
-          style="width: 300px;"
           id="collapseWidthExample">
           <div
-            class="flex-1 max-w-sm rounded-lg bg-white">
+            class="flex-1 max-w-sm rounded-lg bg-white"  style="width: 250px">
               <div class="flex mt-6"><button class="bg-indigo-100 text-indigo-700 rounded-lg text-sm px-1 py-1">Pro</button></div>   
               <div class="mt-4">
                 <p class="text-3xl font-medium tracking-normal leading-tight font-['Gill_Sans']">Mobile Design</p>
