@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
+import NavBar from './../components/NavBar.vue'
 const router = useRouter()
 
 defineProps({
@@ -13,7 +14,8 @@ function toggle() {
 }
 
 function signIn(){
-  router.push({ path: 'auth' })
+// Remember for this function to move to home there must be a token of authentication
+  router.push({ path: 'Home' })
 }
 
 
@@ -24,7 +26,8 @@ function signIn(){
 1. In the large screen the last column is out of the banner by a few centimeters
 3. There is quite a space between the colums in the large screen 
 4. The issue on having to specify for each and every responsiveness-->
-
+  <NavBar/>
+  <div class="landing">
     <div class="bg-slate-50 w-full mx-auto h-auto flex flex-wrap mt-4">
       <div class="sm:w-full md:w-full lg:w-full xl:w-1/2 2xl:w-1/2 
       sm:pt-8 md:pt-24 lg:pt-24 xl:pt-24 2xl:pt-24">
@@ -39,40 +42,40 @@ function signIn(){
             rounded-[180%] rounded-tl-[100px] rounded-tr-[100px] rounded-br-0 rounded-bl-0
             ">
             </div> -->
-            <p class="font-light">a Solution for easy and flexible online learning, you can study
+             <p class="font-light">a Solution for easy and flexible online learning, you can study
               anywhere through this platform</p>
-            <div class="sm:space-x-2 md:space-x-8 lg:space-x-8 xl:space-x-8 2xl:space-x-8 
-            flex flex-row flex-wrap items-end pt-10 space-y-8">
-                <button class="bg-indigo-700 text-white rounded-full px-16 py-4" @click="signIn()">Get Started</button>
-                <div class="flex flex-row items-end space-x-4">
-                <div class="rounded-full bg-amber-300 w-10 h-10 flex justify-center items-center text-white mb-2">
-                  <font-awesome-icon icon="fa-solid fa-play" />
-                </div>
-                <p class="font-medium pb-4">Play Video</p>
-                </div>
-            </div>
-            <div class="sm:space-x-2 md:space-x-8 lg:space-x-8 xl:space-x-8 2xl:space-x-8 
-            flex flex-wrap flex-row w-full items-end space-y-8 mt-4
-            sm:pb-0 md:pb-0 lg:pb-0 xl:pb-10 2xl:pb-10">
-              <div class="flex flex-row space-x-2">
-                <div class="rounded-full bg-indigo-700 w-4 h-4 flex justify-center items-center text-white text-sm">
-                  <font-awesome-icon icon="fa-solid fa-check" size="xs" />
-                </div>
-                <p class="font-medium text-sm">Experienced mentor</p>   
+              <div class="sm:space-x-2 md:space-x-8 lg:space-x-8 xl:space-x-8 2xl:space-x-8 
+              flex flex-row flex-wrap items-end pt-10 space-y-8">
+                  <button class="bg-indigo-700 text-white rounded-full px-16 py-4" @click="signIn()">Get Started</button>
+                  <div class="flex flex-row items-end space-x-4">
+                  <div class="rounded-full bg-amber-300 w-10 h-10 flex justify-center items-center text-white mb-2">
+                    <font-awesome-icon icon="fa-solid fa-play" />
+                  </div>
+                  <p class="font-medium pb-4">Play Video</p>
+                  </div>
               </div>
-              <div class="flex flex-row space-x-2">
-                <div class="rounded-full bg-indigo-700 w-4 h-4 flex justify-center items-center text-white text-sm">
-                  <font-awesome-icon icon="fa-solid fa-check" size="xs"/>
+              <div class="sm:space-x-2 md:space-x-8 lg:space-x-8 xl:space-x-8 2xl:space-x-8 
+              flex flex-wrap flex-row w-full items-end space-y-8 mt-4
+              sm:pb-0 md:pb-0 lg:pb-0 xl:pb-10 2xl:pb-10">
+                <div class="flex flex-row space-x-2">
+                  <div class="rounded-full bg-indigo-700 w-4 h-4 flex justify-center items-center text-white text-sm">
+                    <font-awesome-icon icon="fa-solid fa-check" size="xs" />
+                  </div>
+                  <p class="font-medium text-sm">Experienced mentor</p>   
                 </div>
-                <p class="font-medium text-sm">Quality Videos</p> 
-              </div>
-              <div class="flex flex-row space-x-2">
-                <div class="rounded-full bg-indigo-700 w-4 h-4 flex justify-center items-center text-white text-sm">
-                  <font-awesome-icon icon="fa-solid fa-check" size="xs"/>
+                <div class="flex flex-row space-x-2">
+                  <div class="rounded-full bg-indigo-700 w-4 h-4 flex justify-center items-center text-white text-sm">
+                    <font-awesome-icon icon="fa-solid fa-check" size="xs"/>
+                  </div>
+                  <p class="font-medium text-sm">Quality Videos</p> 
                 </div>
-                <p class="font-medium text-sm"> Affordable Prices</p>    
-              </div>
-            </div> 
+                <div class="flex flex-row space-x-2">
+                  <div class="rounded-full bg-indigo-700 w-4 h-4 flex justify-center items-center text-white text-sm">
+                    <font-awesome-icon icon="fa-solid fa-check" size="xs"/>
+                  </div>
+                  <p class="font-medium text-sm"> Affordable Prices</p>    
+                </div>
+              </div> 
           </div>
          </div>
       </div>
@@ -308,6 +311,7 @@ function signIn(){
           </div>
         </div>
     </div>
+  </div>
 </template>
 
 <style scoped>

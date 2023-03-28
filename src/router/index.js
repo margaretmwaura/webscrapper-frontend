@@ -1,24 +1,44 @@
 import { createWebHistory, createRouter } from 'vue-router';
-import Home from './../views/Home.vue';
-// import Auth from './../views/Auth.vue';
-import HomeTest from './../views/HomeTest.vue';
+import SidebarMenu from './../views/SideBarMenu.vue';
+import Home from './../views/HomeTest.vue';
 
+// TODO: Renaming home to landing and SideBar to Home
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: HomeTest,
+    name: 'Landing',
+    component: () => import('./../views/HomeTest.vue'),
   },
-  // {
-  //   path: '/auth',
-  //   name: 'Auth',
-  //   component: Auth,
-  // },
+  {
+    path: '/home',
+    // name: 'home',
+    component: () => import('./../views/SideBarMenu.vue'),
+    children: [
+      {
+        path: '',
+        name: 'home',
+        component: () => import('./../views/Dashboard.vue'),
+      },
+      {
+        path: '/calendar',
+        name: 'calendar',
+        component: () => import('./../views/Calendar.vue'),
+      },
+    ],
+  },
 ];
 
-const router = createRouter({
+let router = createRouter({
   history: createWebHistory(),
   routes,
+});
+
+let token = localStorage.getItem('authToken');
+
+router.beforeEach((to, from, next) => {
+  console.log(token);
+  if (to.name !== 'Landing' && !token) next({ name: 'Landing' });
+  else next();
 });
 
 export default router;
