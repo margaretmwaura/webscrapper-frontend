@@ -173,6 +173,8 @@ let show = ref(false)
          </div>
       </div>
       <!-- FIXME: Why specifying h-full on the parent column does not work properly -->
+      <!-- https://stackoverflow.com/questions/63412303/how-to-make-div-fill-full-height-of-parent-in-tailwind -->
+      <!-- Above is the guide I am following -->
       <div class="flex flex-col sm:hidden md:hidden lg:hidden xl:hidden 2xl:block ">
         <div class="flex justify-end mt-4">
           <p class="mb-4">
