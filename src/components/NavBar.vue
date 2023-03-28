@@ -145,7 +145,6 @@ export default{
     </nav>
     <component :is="authFunction" v-show="isVisible" @closeModal="close" @switchAction="switchAuth"></component>
   </div>
-  <!-- <router-view /> -->
 </template>
 
 <style scoped></style>

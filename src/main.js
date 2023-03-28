@@ -4,22 +4,22 @@ import router from './router';
 import App from './App.vue';
 import './index.css';
 
-import { DefaultApolloClient } from '@vue/apollo-composable';
+import * as te from 'tw-elements';
 
-/* import the fontawesome core */
-import { library } from '@fortawesome/fontawesome-svg-core';
-import {
-  ApolloClient,
-  createHttpLink,
-  InMemoryCache,
-  ApolloLink,
-  from,
-} from '@apollo/client/core';
+import 'vue3-toastify/dist/index.css';
+
+import VueSidebarMenu from 'vue-sidebar-menu';
+// import 'custom-var.scss';
+import 'vue-sidebar-menu/dist/vue-sidebar-menu.css';
+
+import { createPinia } from 'pinia';
 
 /* import font awesome icon component */
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-/* import specific icons */
+/* import the fontawesome core */
+import { library } from '@fortawesome/fontawesome-svg-core';
+
 import {
   faPlay,
   faCheck,
@@ -28,15 +28,19 @@ import {
   faArrowLeft,
   faTimes,
   faUser,
+  faUserGraduate,
+  faSearch,
+  faClock,
+  faPaperclip,
 } from '@fortawesome/free-solid-svg-icons';
 
 import {
   faEnvelope,
   faEye,
   faEyeSlash,
+  faCalendar,
+  faBarChart,
 } from '@fortawesome/free-regular-svg-icons';
-
-import { createPinia } from 'pinia';
 
 /* add icons to the library */
 library.add(
@@ -49,8 +53,24 @@ library.add(
   faUser,
   faEnvelope,
   faEye,
-  faEyeSlash
+  faEyeSlash,
+  faUserGraduate,
+  faCalendar,
+  faSearch,
+  faClock,
+  faPaperclip,
+  faBarChart
 );
+
+import { DefaultApolloClient } from '@vue/apollo-composable';
+
+import {
+  ApolloClient,
+  createHttpLink,
+  InMemoryCache,
+  ApolloLink,
+  from,
+} from '@apollo/client/core';
 
 const httpLink = createHttpLink({
   // You should use an absolute URL here
@@ -85,12 +105,12 @@ const app = createApp({
   setup() {
     provide(DefaultApolloClient, apolloClient);
   },
-
   render: () => h(App),
 });
 
 app.use(createPinia());
 app.use(router);
+app.use(VueSidebarMenu);
 // app.use(vuetify);
 
 app.component('font-awesome-icon', FontAwesomeIcon).mount('#app');
