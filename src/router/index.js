@@ -11,7 +11,7 @@ const routes = [
   },
   {
     path: '/home',
-    // name: 'Home',
+    // name: 'home',
     component: () => import('./../views/SideBarMenu.vue'),
     children: [
       {

@@ -39,6 +39,7 @@ import {
   faEye,
   faEyeSlash,
   faCalendar,
+  faBarChart,
 } from '@fortawesome/free-regular-svg-icons';
 
 /* add icons to the library */
@@ -57,7 +58,8 @@ library.add(
   faCalendar,
   faSearch,
   faClock,
-  faPaperclip
+  faPaperclip,
+  faBarChart
 );
 
 import { DefaultApolloClient } from '@vue/apollo-composable';

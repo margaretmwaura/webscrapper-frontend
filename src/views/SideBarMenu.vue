@@ -75,13 +75,6 @@ const menu = [
 </template>
 
 <style scoped>
-  .expanded {
-    padding-left: 350px;
-  }
-
-  .collapsed {
-    padding-left: 80px;
-  }
 
 </style>
 
