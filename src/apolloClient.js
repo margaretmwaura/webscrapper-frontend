@@ -1,10 +1,16 @@
 // apolloClient.ts
 import { ApolloClient, InMemoryCache, HttpLink } from '@apollo/client/core';
 // FIXME: Change this to be using the bearer token format
+// Validate the use of store is correct
 function getHeaders() {
   const headers = {};
-  if (localStorage.getItem('authtoken')) {
-    headers['authtoken'] = localStorage.getItem('authtoken');
+
+  const store = useAuthStore();
+
+  if (store) {
+    headers['authtoken'] = store.token;
+  } else {
+    headers['authtoken'] = '';
   }
   headers['Content-Type'] = 'application/json';
   return headers;

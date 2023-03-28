@@ -14,6 +14,8 @@ import 'vue-sidebar-menu/dist/vue-sidebar-menu.css';
 
 import { createPinia } from 'pinia';
 
+const pinia = createPinia();
+
 /* import font awesome icon component */
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
@@ -108,9 +110,9 @@ const app = createApp({
   render: () => h(App),
 });
 
-app.use(createPinia());
+app.use(pinia);
 app.use(router);
 app.use(VueSidebarMenu);
-// app.use(vuetify);
-
 app.component('font-awesome-icon', FontAwesomeIcon).mount('#app');
+
+// app.use(vuetify);

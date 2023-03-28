@@ -1,56 +1,44 @@
-<script>
+<script setup>
 import { ref } from 'vue';
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import {firebaseAdmin} from './../firebase'
 import { useRouter } from 'vue-router';
 import { toast } from 'vue3-toastify';
+import { useAuthStore } from './../stores/authStore'
+import { storeToRefs } from 'pinia';
 
-export default{
-  name : 'Login',
-  setup(props, context){
-    const auth = getAuth(firebaseAdmin)
-    const router = useRouter()
+const router = useRouter()
+const store = useAuthStore()
+const { authStatus } = storeToRefs(store);
 
-    let showPassword = ref(false)
-    let passwordType = ref("password")
+let showPassword = ref(false)
+let passwordType = ref("password")
 
-    function shouldShowPassword(condition){
-      showPassword.value = condition
-      passwordType.value = condition ? "text" :  "password"
-    }
-    function switchToSignup(){
-      console.log("switch to signup")
-      context.emit('switchAction', "Signup")
-    }
-    function closeModal(){
-      context.emit('closeModal', true) 
-    }
-    function logInWithEmailAndPassword() {
-      signInWithEmailAndPassword(auth,"mwauramargaret1@gmail.com", "Aswift07")
-      .then((userCredential) => {
-        console.log(userCredential.user.accessToken)
-        localStorage.setItem('authToken', userCredential.user.accessToken);
-        // context.emit('closeModal', true) 
-        toast.success('Login is successful 🎊', {
-          autoClose: 500,    
-          onClose: () => router.push({ path: 'home' }),
-        });    
-      }).catch((err) => {
-        console.log(err)
-      })
-    }
-
-    return{
-      shouldShowPassword,
-      switchToSignup,
-      logInWithEmailAndPassword,
-      closeModal,
-
-      showPassword,
-      passwordType
-    }
-  },
+function shouldShowPassword(condition){
+  showPassword.value = condition
+  passwordType.value = condition ? "text" :  "password"
 }
+function switchToSignup(){
+  console.log("switch to signup")
+  context.emit('switchAction', "Signup")
+}
+function closeModal(){
+  context.emit('closeModal', true) 
+}
+function logInWithEmailAndPassword() {
+  store.signin().then(() => {
+    console.log("result " + authStatus.value)
+    if(authStatus.value === 'Authorized'){
+      toast.success('Login is successful 🎊', {
+        autoClose: 1000,
+        onClose: () => router.push({ path: 'home' }),
+      });
+    }else{
+      toast.error('Login failed 🙍', {
+        autoClose: 1000,
+      });
+    }
+  })
+}
+
 </script>
 
 <template>

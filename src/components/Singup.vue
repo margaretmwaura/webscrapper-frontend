@@ -85,6 +85,7 @@ export default{
       confirmPasswordType.value = condition ? "text" :  "password"
     }
 
+// Should call await function to register user on db
     function signUp(){
       console.log(email.value, password.value)
       createUserWithEmailAndPassword(auth, email.value, password.value )

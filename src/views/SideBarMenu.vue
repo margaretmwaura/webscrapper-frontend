@@ -31,8 +31,19 @@ const menu = [
                element: 'font-awesome-icon',
                attributes: {
                 // Then under icon.attributes, specify the icon to use
-                icon: 'fa-user-graduate'
+                icon: 'fa-regular fa-bar-chart'
                 
+               }
+             }
+          },
+          {
+            href: '/learning',
+            title: 'Learning',
+            icon: {
+               element: 'font-awesome-icon',
+               attributes: {
+                // Then under icon.attributes, specify the icon to use
+                icon: 'fa-user-graduate'             
                }
              }
           },
