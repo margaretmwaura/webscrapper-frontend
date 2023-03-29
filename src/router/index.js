@@ -41,9 +41,6 @@ let router = createRouter({
 router.beforeEach((to, from, next) => {
   const store = useAuthStore();
   const { token } = storeToRefs(store);
-
-  console.log('route ' + token.value);
-  console.log(to.name);
   if (to.name !== 'Landing' && !token.value) next({ name: 'Landing' });
   else next();
 });

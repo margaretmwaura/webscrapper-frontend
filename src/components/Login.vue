@@ -7,7 +7,7 @@ import { storeToRefs } from 'pinia';
 
 const router = useRouter()
 const store = useAuthStore()
-const { authStatus } = storeToRefs(store);
+const { authStatus, token } = storeToRefs(store);
 
 let showPassword = ref(false)
 let passwordType = ref("password")
@@ -26,6 +26,8 @@ function closeModal(){
 function logInWithEmailAndPassword() {
   store.signin().then(() => {
     console.log("result " + authStatus.value)
+    localStorage.setItem('authToken', token.value);
+    console.log("success", localStorage.getItem('authToken'))
     if(authStatus.value === 'Authorized'){
       toast.success('Login is successful 🎊', {
         autoClose: 1000,
