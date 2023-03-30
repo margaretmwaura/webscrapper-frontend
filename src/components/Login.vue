@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref , defineEmits} from 'vue';
 import { useRouter } from 'vue-router';
 import { toast } from 'vue3-toastify';
 import { useAuthStore } from './../stores/authStore'
@@ -8,6 +8,8 @@ import { storeToRefs } from 'pinia';
 const router = useRouter()
 const store = useAuthStore()
 const { authStatus, token } = storeToRefs(store);
+
+const emit = defineEmits(['switchAction', 'closeModal'])
 
 let showPassword = ref(false)
 let passwordType = ref("password")
@@ -18,10 +20,10 @@ function shouldShowPassword(condition){
 }
 function switchToSignup(){
   console.log("switch to signup")
-  context.emit('switchAction', "Signup")
+  emit('switchAction', "Signup")
 }
 function closeModal(){
-  context.emit('closeModal', true) 
+  emit('closeModal', true) 
 }
 function logInWithEmailAndPassword() {
   store.signin().then(() => {
