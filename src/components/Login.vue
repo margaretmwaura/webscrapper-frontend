@@ -13,6 +13,7 @@ const emit = defineEmits(['switchAction', 'closeModal'])
 
 let showPassword = ref(false)
 let passwordType = ref("password")
+let isLoginDisabled = ref(false)
 
 function shouldShowPassword(condition){
   showPassword.value = condition
@@ -25,19 +26,21 @@ function switchToSignup(){
 function closeModal(){
   emit('closeModal', true) 
 }
+
+// FIXME: Only can call login once if the call has already being made
 function logInWithEmailAndPassword() {
+  isLoginDisabled.value = true
   store.signin().then(() => {
-    console.log("result " + authStatus.value)
     localStorage.setItem('authToken', token.value);
-    console.log("success", localStorage.getItem('authToken'))
     if(authStatus.value === 'Authorized'){
       toast.success('Login is successful 🎊', {
         autoClose: 1000,
-        onClose: () => router.push({ path: 'home' }),
+        onClose: () => {isLoginDisabled.value = false, router.push({ path: 'home' })},
       });
     }else{
       toast.error('Login failed 🙍', {
         autoClose: 1000,
+        onClose: () => {isLoginDisabled.value = false},
       });
     }
   })
@@ -81,7 +84,9 @@ function logInWithEmailAndPassword() {
                 v-on:click="shouldShowPassword(true)"/>
               </div>
           </div>
-          <button class="mt-12 bg-indigo-700 text-white rounded-full px-16 py-2" @click="logInWithEmailAndPassword()">Login</button>
+          <button class="mt-12 bg-indigo-700 text-white rounded-full px-16 py-2 disabled:opacity-25" 
+          @click="logInWithEmailAndPassword()"
+          :disabled="isLoginDisabled">Login</button>
           <p class="font-light text-sm mt-4 text-center">Don't have an account? <span class="font-medium" 
           @click="switchToSignup()">Create one 😃</span></p>
         </div>

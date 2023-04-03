@@ -32,8 +32,10 @@ import {
   faUser,
   faUserGraduate,
   faSearch,
-  faClock,
   faPaperclip,
+  faArrowUp,
+  faWaveSquare,
+  faVolumeUp,
 } from '@fortawesome/free-solid-svg-icons';
 
 import {
@@ -42,6 +44,7 @@ import {
   faEyeSlash,
   faCalendar,
   faBarChart,
+  faClock,
 } from '@fortawesome/free-regular-svg-icons';
 
 /* add icons to the library */
@@ -61,7 +64,10 @@ library.add(
   faSearch,
   faClock,
   faPaperclip,
-  faBarChart
+  faBarChart,
+  faArrowUp,
+  faWaveSquare,
+  faVolumeUp
 );
 
 import { DefaultApolloClient } from '@vue/apollo-composable';

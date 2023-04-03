@@ -71,7 +71,7 @@ const menu = [
   <!-- :class="{ 'collapsed' : toggle ,  'expanded': !toggle}"  -->
   <div
    :class="[ toggle ? 'collapsed' : 'expanded']"
-   class="h-full bg-light-blue pt-10 pr-10"
+   class="h-full pt-10 pr-10"
   >
     <router-view/>
   </div>

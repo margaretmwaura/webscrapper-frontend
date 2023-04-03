@@ -21,6 +21,7 @@
     "firebase": "^9.15.0",
     "graphql": "^16.6.0",
     "graphql-tag": "^2.12.6",
+    "moment": "^2.29.4",
     "nprogress": "^0.2.0",
     "pinia": "^2.0.29",
     "sass": "^1.58.3",
