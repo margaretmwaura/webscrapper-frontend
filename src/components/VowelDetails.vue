@@ -1,8 +1,10 @@
 <script setup>
 import { objectPick } from '@vueuse/core';
 import { ref, computed, watchEffect } from 'vue';
+import VowelSound from './VowelSound.vue'
 
 let click = ref(false)
+let playSound = ref(false)
 
 defineProps({
   vowel: Object,
@@ -13,19 +15,15 @@ function sleep (time) {
   return new Promise((resolve) => setTimeout(resolve, time));
 }
 
-const playSound = (sound) => {
-  click.value = true
-  if(sound) {
-    var audio = new Audio(sound);
-    audio.play();
-    // Usage!
-    sleep(500).then(() => {
-    // Do something after the sleep!
-     click.value = false
-    });
-    
-  }
+function openModal(){
+  playSound.value = !playSound.value
+  console.log(playSound.value)
 }
+
+function closeModal(){
+  playSound.value = !playSound.value
+}
+
 </script>
 
 <template>
@@ -36,10 +34,10 @@ const playSound = (sound) => {
             <span class="italic font-light text-base text-slate-700">({{vowel.description.split(' ')[0]}})</span>
           </p>
           <button class="flex justify-center items-center text-indigo-700 h-12 w-12 bg-indigo-100 rounded-full" 
-          @click="playSound(vowel.filename)">
-            <font-awesome-icon icon="fa-solid fa-play" size="xl" v-show="!click" />
-            <font-awesome-icon icon="fa-solid fa-volume-up" size="xl" v-show="click" />
+          @click="openModal">
+           <font-awesome-icon icon="fa-solid fa-music" size="xl" v-show="!click" />
           </button>
+          <VowelSound v-show="playSound" @close="closeModal"/>
       </div>   
       <div class="flex w-full flex-row font-thin text-base text-slate-700 space-x-2">
         <div class="flex"> 

@@ -36,6 +36,8 @@ import {
   faArrowUp,
   faWaveSquare,
   faVolumeUp,
+  faBookOpen,
+  faMusic,
 } from '@fortawesome/free-solid-svg-icons';
 
 import {
@@ -67,7 +69,9 @@ library.add(
   faBarChart,
   faArrowUp,
   faWaveSquare,
-  faVolumeUp
+  faVolumeUp,
+  faBookOpen,
+  faMusic
 );
 
 import { DefaultApolloClient } from '@vue/apollo-composable';

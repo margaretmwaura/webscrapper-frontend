@@ -143,6 +143,7 @@ export default{
         </div>
       </div>
     </nav>
+    <!-- https://vuejs.org/guide/essentials/component-basics.html#dynamic-components -->
     <component :is="authFunction" v-show="isVisible" @closeModal="close" @switchAction="switchAuth"></component>
   </div>
 </template>
