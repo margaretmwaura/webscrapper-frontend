@@ -19,6 +19,8 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 import { apolloClient } from './apolloClient';
 
+import Particles from 'vue3-particles';
+
 /* import the fontawesome core */
 import { library } from '@fortawesome/fontawesome-svg-core';
 
@@ -85,6 +87,7 @@ const app = createApp({
   render: () => h(App),
 });
 
+app.use(Particles);
 app.use(pinia);
 app.use(router);
 app.use(VueSidebarMenu);

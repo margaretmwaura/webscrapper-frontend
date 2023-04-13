@@ -3,17 +3,14 @@ import { objectPick } from '@vueuse/core';
 import { ref, computed, watchEffect } from 'vue';
 import VowelSound from './VowelSound.vue'
 
-let click = ref(false)
-let playSound = ref(false)
+const emit = defineEmits(['throwConfetti'])
 
 defineProps({
   vowel: Object,
 });
 
-// sleep time expects milliseconds
-function sleep (time) {
-  return new Promise((resolve) => setTimeout(resolve, time));
-}
+let click = ref(false)
+let playSound = ref(false)
 
 function openModal(){
   playSound.value = !playSound.value
@@ -22,6 +19,11 @@ function openModal(){
 
 function closeModal(){
   playSound.value = !playSound.value
+  throwConfetti()
+}
+
+function throwConfetti(){
+  emit('throwConfetti', true) 
 }
 
 </script>
@@ -37,7 +39,7 @@ function closeModal(){
           @click="openModal">
            <font-awesome-icon icon="fa-solid fa-music" size="xl" v-show="!click" />
           </button>
-          <VowelSound v-show="playSound" @close="closeModal"/>
+          <VowelSound v-show="playSound" @close="closeModal" :vowel="vowel"/>
       </div>   
       <div class="flex w-full flex-row font-thin text-base text-slate-700 space-x-2">
         <div class="flex"> 
@@ -51,6 +53,15 @@ function closeModal(){
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+#tsparticles {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+</style>
 
 
