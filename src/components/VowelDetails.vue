@@ -17,13 +17,15 @@ function openModal(){
   console.log(playSound.value)
 }
 
-function closeModal(){
+function closeModal(score){
   playSound.value = !playSound.value
-  throwConfetti()
+
+  if(score > 50)
+    throwConfetti()
 }
 
 function throwConfetti(){
-  emit('throwConfetti', true) 
+  emit('throwConfetti') 
 }
 
 </script>

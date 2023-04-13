@@ -72,7 +72,7 @@ export default{
     }
 
     function closeModal(){
-      context.emit('closeModal', true) 
+      context.emit('closeModal') 
     }
 
     function shouldShowPassword(condition){

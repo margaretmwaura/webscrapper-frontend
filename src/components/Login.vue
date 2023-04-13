@@ -24,7 +24,7 @@ function switchToSignup(){
   emit('switchAction', "Signup")
 }
 function closeModal(){
-  emit('closeModal', true) 
+  emit('closeModal') 
 }
 
 // FIXME: Only can call login once if the call has already being made

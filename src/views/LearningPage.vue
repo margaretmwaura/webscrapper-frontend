@@ -25,7 +25,12 @@ const vowels = computed(() => result.value?.getVowels ?? [])
 
 const todaysDate = moment(new Date()).format('MMMM Do YYYY, h:mm a');
 
-const showConfettiComponent = () => showConfetti.value = true
+const showConfettiComponent = () => {
+  showConfetti.value = true
+  setTimeout(() => {
+    showConfetti.value = false
+  }, 5000)
+}
 
 </script>
 

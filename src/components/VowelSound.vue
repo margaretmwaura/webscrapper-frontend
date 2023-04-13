@@ -9,8 +9,9 @@ const props = defineProps({
 
 let click = ref(false)
 
+// FIXME: The value we are passing here will be computed value
 function close(){
-  emit('close', true) 
+  emit('close', 80) 
 }
 
 // sleep time expects milliseconds
