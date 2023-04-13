@@ -1,5 +1,6 @@
 import { createApp, provide, h } from 'vue';
 import router from './router';
+import { createI18n } from 'vue-i18n';
 // import './style.css';
 import App from './App.vue';
 import './index.css';
@@ -20,6 +21,8 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { apolloClient } from './apolloClient';
 
 import Particles from 'vue3-particles';
+
+import { FRENCH_TRANSLATIONS } from './translations/fr';
 
 /* import the fontawesome core */
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -78,11 +81,30 @@ library.add(
 
 import { DefaultApolloClient } from '@vue/apollo-composable';
 
+const TRANSLATIONS = {
+  fr: FRENCH_TRANSLATIONS,
+};
+
+// 2. Create i18n instance with options
+const i18n = createI18n({
+  allowComposition: true,
+  legacy: false,
+  locale: 'fr', // set locale
+  fallbackLocale: 'fr', // set fallback locale
+  messages: TRANSLATIONS,
+  enableLegacy: false,
+  runtimeOnly: false,
+  compositionOnly: false,
+  fullInstall: true,
+});
+
 const pinia = createPinia();
 
 const app = createApp({
   setup() {
     provide(DefaultApolloClient, apolloClient);
+    // const { t } = VueI18n.useI18n(); // call `useI18n`, and spread `t` from  `useI18n` returning
+    // return { t };
   },
   render: () => h(App),
 });
@@ -90,6 +112,7 @@ const app = createApp({
 app.use(Particles);
 app.use(pinia);
 app.use(router);
+app.use(i18n);
 app.use(VueSidebarMenu);
 app.component('font-awesome-icon', FontAwesomeIcon).mount('#app');
 

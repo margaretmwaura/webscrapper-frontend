@@ -4,6 +4,7 @@ import {useQuery, useMutation} from '@vue/apollo-composable'
 import moment from 'moment'
 import VowelDetails from './../components/VowelDetails.vue'
 import Confetti from './../components/Confetti.vue'
+import Loader from './../components/Loader.vue'
 import gql from 'graphql-tag'
 
 let showConfetti = ref(false)
@@ -23,6 +24,7 @@ const { result } = useQuery(getVowels)
 
 const vowels = computed(() => result.value?.getVowels ?? [])
 
+const isDataFetched = computed(() => vowels.value.length > 0)
 const todaysDate = moment(new Date()).format('MMMM Do YYYY, h:mm a');
 
 const showConfettiComponent = () => {
@@ -40,10 +42,13 @@ const showConfettiComponent = () => {
     <img src="/abc.png" class="object-contain h-10 w-10 "/>
     <p class="text-3xl font-semibold tracking-wide leading-loose">The Alphabets Dashboard</p>
     <p class="text-xl font-normal"> <font-awesome-icon icon="fa-regular fa-clock" size="sm"/> {{ todaysDate }}</p>
-    <div class="grid grid-cols-3 gap-4 mt-10">
-     <div v-for="vowel in vowels" :key="vowel" >
-       <VowelDetails :vowel="vowel" @throwConfetti="showConfettiComponent"/>
+    <div class="grid grid-cols-3 gap-4 mt-10" v-show="isDataFetched">
+      <div v-for="vowel in vowels" :key="vowel" >
+          <VowelDetails :vowel="vowel" @throwConfetti="showConfettiComponent"/>
+      </div>
     </div>
+    <div v-show="!isDataFetched" class="flex justify-center items-center space-x-6 h-96">
+        <Loader/>
     </div>
   </div>
   <Confetti v-show="showConfetti"/>

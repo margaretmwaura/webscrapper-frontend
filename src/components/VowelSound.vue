@@ -1,6 +1,8 @@
 <script setup>
 import { ref, computed, watchEffect, defineEmits } from 'vue';
 
+import numberToWords from 'number-to-words';
+
 const emit = defineEmits(['close'])
 
 const props = defineProps({
@@ -8,9 +10,11 @@ const props = defineProps({
 });
 
 let click = ref(false)
+let count = ref(0)
 
 // FIXME: The value we are passing here will be computed value
 function close(){
+  count.value = 0
   emit('close', 80) 
 }
 
@@ -31,6 +35,7 @@ const playSound = () => {
     });
     
   }
+  count.value++
 }
 </script>
 
@@ -39,18 +44,31 @@ const playSound = () => {
    outline-none overflow-x-hidden overflow-y-auto fixed inset-0 
    bg-black bg-opacity-25 backdrop-blur-sm
    flex justify-center items-center z-50">
-    <div className="bg-white flex flex-col px-4 py-4 w-96 rounded-lg">
+    <div className="bg-white flex flex-col px-4 py-4 w-96 rounded-lg space-y-4">
       <div className="flex justify-between">
-        <div class="flex items-center flex-no-shrink text-black mr-6">
-            <div class="rounded-full bg-indigo-700 w-6 h-6 flex justify-center"><p class="text-white font-bold">L</p></div>
-            <span class="font-semibold text-xl tracking-wider pl-2 text-indigo-700">Bonjour!</span>
+        <div class="flex items-center flex-no-shrink text-black mr-6" v-show="count === 0">
+            <div class="rounded-full bg-uranian-blue w-6 h-6 flex justify-center"><p class="text-white font-bold ">✊</p></div>
+            <span class="font-semibold text-xl tracking-wider pl-2 text-indigo-700">{{ $t(numberToWords.toWords(count))}}</span>
+        </div>
+        <div class="flex items-center flex-no-shrink text-black mr-6" v-show="count === 1">
+            <div class="rounded-full bg-uranian-blue w-6 h-6 flex justify-center"><p class="text-white font-bold text-lg">☝️</p></div>
+            <span class="font-semibold text-xl tracking-wider pl-2 text-indigo-700">{{$t(numberToWords.toWords(count))}}</span>
+        </div>
+        <div class="flex items-center flex-no-shrink text-black mr-6" v-show="count === 2">
+            <div class="rounded-full bg-uranian-blue w-6 h-6 flex justify-center"><p class="text-white font-bold text-lg">✌️</p></div>
+            <span class="font-semibold text-xl tracking-wider pl-2 text-indigo-700">{{$t(numberToWords.toWords(count))}}</span>
         </div>
         <button className="text-indigo-700 text-lg font-light place-self-end">
             <font-awesome-icon icon="fa-solid fa-times" size="xl"  @click="close()"/>
         </button>
       </div>
-      <div className="flex flex-col w-full text-indigo-700">
-        <button class="flex justify-center items-center text-indigo-700 h-12 w-12" 
+      <div className="flex justify-between w-full text-indigo-700">
+        <div class="flex items-end">
+          <p class="font-bold text-2xl text-slate-700">{{vowel.name}} 
+            <span class="italic font-light text-base text-slate-700">({{vowel.description.split(' ')[0]}})</span>
+          </p>
+        </div>
+        <button class="flex justify-center items-end text-indigo-700" 
           @click="playSound">
           <font-awesome-icon icon="fa-solid fa-play" size="xl" v-show="!click" />
           <font-awesome-icon icon="fa-solid fa-volume-up" size="xl" v-show="click" />
