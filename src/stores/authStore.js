@@ -3,8 +3,15 @@ import { defineStore } from 'pinia';
 // import firebase from 'firebase/compat/app';
 // import 'firebase/compat/auth';
 import { useLocalStorage } from '@vueuse/core';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+} from 'firebase/auth';
 import { firebaseAdmin } from './../firebase';
+import { provideApolloClient } from '@vue/apollo-composable';
+
+provideApolloClient(apolloClient);
 
 const auth = getAuth(firebaseAdmin);
 
@@ -23,6 +30,7 @@ export const useAuthStore = defineStore({
         'Aswift07'
       )
         .then(async userCredential => {
+          console.log(userCredential.user);
           console.log('Login' + userCredential.user.accessToken);
           this.token = userCredential.user.accessToken;
           this.authStatus = 'Authorized';
@@ -31,11 +39,12 @@ export const useAuthStore = defineStore({
           console.log(err);
         });
     },
-    async registerUser() {
-      await firebase
-        .auth()
-        .createUserWithEmailAndPassword('gladysnjeri@gmail.com', 'password')
+    async registerUser(args) {
+      console.log(args);
+      await createUserWithEmailAndPassword(auth, args.email, args.password)
         .then(userCredential => {
+          // TODO:
+          // call the mutation to create user on db
           const user = userCredential;
           console.log(user);
         })

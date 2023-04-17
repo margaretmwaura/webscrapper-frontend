@@ -1,23 +1,22 @@
 <script>
 import { ref } from 'vue';
 import {useQuery, useMutation} from '@vue/apollo-composable'
-import firebase from 'firebase/compat/app';
 import gql from 'graphql-tag'
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
-import {firebaseAdmin} from './../firebase'
 import { useRouter } from 'vue-router';
 import { toast } from 'vue3-toastify';
+import { useAuthStore } from './../stores/authStore'
+import { storeToRefs } from 'pinia';
 
 export default{
   name : 'Signup',
   setup(props, context){
-    const auth = getAuth(firebaseAdmin);
     const router = useRouter()
+    const store = useAuthStore()
+    const { authStatus, token } = storeToRefs(store);
     
     let name = ref("")
     let email = ref("")
-    let authStatus = ref("")
-    let authToken = ref("")
+    let isSignupDisabled = ref(false)
 
     let showPassword = ref(false)
     let passwordType = ref("password")
@@ -87,26 +86,26 @@ export default{
 
 // Should call await function to register user on db
     function signUp(){
-      console.log(email.value, password.value)
-      createUserWithEmailAndPassword(auth, email.value, password.value )
-      .then((userCredential) => {
-        console.log(userCredential.user.accessToken)
-        localStorage.setItem('authToken', userCredential.user.accessToken);
-        toast.success('Signup is successful 🎊', {
-          autoClose: 500,    
-          onClose: () => router.push({ path: 'home' }),
-        });
-      }).catch((err) => {
-        console.log(err)
-      })
-    }
-
-    function signOut() {
-      firebase.auth().signOut().then(() => {
-        this.authStatus = 'Unauthorized'
-      }).catch((err) => {
-        this.authStatus = err
-      })
+      let data = {
+        name: name.value,
+        email: email.value,
+        password : password.value
+      }
+      store.registerUser(data).then(async () => {
+        localStorage.setItem('authToken', token.value);
+        if(authStatus.value === 'Authorized'){
+          await register()
+          toast.success('Signup is successful 🎊', {
+            autoClose: 1000,
+            onClose: () => {isSignupDisabled.value = false, router.push({ path: 'home' })},
+          });
+        }else{
+          toast.error('Signup failed 🙍', {
+            autoClose: 1000,
+            onClose: () => {isSignupDisabled.value = false},
+          });
+        }
+     })
     }
 
     return{
@@ -122,11 +121,12 @@ export default{
       password,
       name,
       email,
+      store,
 
       showConfirmPassword,
       confirmPasswordType,
       confirmPassword,
-      
+      isSignupDisabled
     }
   },
 }
@@ -144,7 +144,7 @@ export default{
             <div class="rounded-full bg-indigo-700 w-6 h-6 flex justify-center"><p class="text-white font-bold">L</p></div>
             <span class="font-semibold text-xl tracking-wider pl-2 text-indigo-700">Bonjour!</span>
         </div>
-        <button className="text-indigo-700 text-lg font-light place-self-end">
+        <button className="text-indigo-700 text-lg font-light place-self-end" :disabled="isSignupDisabled">
             <font-awesome-icon icon="fa-solid fa-times" size="xl"  @click="closeModal()"/>
         </button>
       </div>

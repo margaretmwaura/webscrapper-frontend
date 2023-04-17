@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, watchEffect } from 'vue';
-import {useQuery, useMutation} from '@vue/apollo-composable'
+import {useQuery} from '@vue/apollo-composable'
 import moment from 'moment'
 import VowelDetails from './../components/VowelDetails.vue'
 import Confetti from './../components/Confetti.vue'
