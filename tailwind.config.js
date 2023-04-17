@@ -36,7 +36,7 @@ module.exports = {
           100: '#69509810',
           DEFAULT: '#695098',
         },
-        'light-blue': '#F0F8FF50',
+        'light-blue': '#F0F8FF70',
         'lighter-blue': '#F0F8FF',
         red: '#ED7264',
         'uranian-blue': '#AFDBF580',

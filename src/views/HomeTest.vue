@@ -42,7 +42,7 @@ function signIn(){
             rounded-[180%] rounded-tl-[100px] rounded-tr-[100px] rounded-br-0 rounded-bl-0
             ">
             </div> -->
-             <p class="font-light">a Solution for easy and flexible online learning, you can study
+            <p class="font-light">a Solution for easy and flexible online learning, you can study
               anywhere through this platform</p>
               <div class="sm:space-x-2 md:space-x-8 lg:space-x-8 xl:space-x-8 2xl:space-x-8 
               flex flex-row flex-wrap items-end pt-10 space-y-8">
@@ -309,7 +309,7 @@ function signIn(){
               </div>
             </div>
           </div>
-        </div>
+       </div>
     </div>
   </div>
 </template>

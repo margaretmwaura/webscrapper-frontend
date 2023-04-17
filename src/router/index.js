@@ -1,6 +1,6 @@
 import { createWebHistory, createRouter } from 'vue-router';
-import SidebarMenu from './../views/SideBarMenu.vue';
-import Home from './../views/HomeTest.vue';
+import { storeToRefs } from 'pinia';
+import { useAuthStore } from '../stores/authStore';
 
 // TODO: Renaming home to landing and SideBar to Home
 const routes = [
@@ -20,6 +20,11 @@ const routes = [
         component: () => import('./../views/Dashboard.vue'),
       },
       {
+        path: '/learning',
+        name: 'learning',
+        component: () => import('./../views/LearningPage.vue'),
+      },
+      {
         path: '/calendar',
         name: 'calendar',
         component: () => import('./../views/Calendar.vue'),
@@ -33,11 +38,10 @@ let router = createRouter({
   routes,
 });
 
-let token = localStorage.getItem('authToken');
-
 router.beforeEach((to, from, next) => {
-  console.log(token);
-  if (to.name !== 'Landing' && !token) next({ name: 'Landing' });
+  const store = useAuthStore();
+  const { token } = storeToRefs(store);
+  if (to.name !== 'Landing' && !token.value) next({ name: 'Landing' });
   else next();
 });
 
