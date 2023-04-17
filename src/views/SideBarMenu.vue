@@ -31,8 +31,19 @@ const menu = [
                element: 'font-awesome-icon',
                attributes: {
                 // Then under icon.attributes, specify the icon to use
-                icon: 'fa-user-graduate'
+                icon: 'fa-regular fa-bar-chart'
                 
+               }
+             }
+          },
+          {
+            href: '/learning',
+            title: 'Learning',
+            icon: {
+               element: 'font-awesome-icon',
+               attributes: {
+                // Then under icon.attributes, specify the icon to use
+                icon: 'fa-user-graduate'             
                }
              }
           },
@@ -60,7 +71,7 @@ const menu = [
   <!-- :class="{ 'collapsed' : toggle ,  'expanded': !toggle}"  -->
   <div
    :class="[ toggle ? 'collapsed' : 'expanded']"
-   class="h-full bg-light-blue pt-10 pr-10"
+   class="h-full pt-10 pr-10"
   >
     <router-view/>
   </div>

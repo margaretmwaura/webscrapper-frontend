@@ -5,9 +5,6 @@ import Landing from './views/Home.vue'
 import { useRouter } from 'vue-router';
 import { computed  } from 'vue';
 import SideBarMenu from './views/SideBarMenu.vue';
-import HomeTest from './views/HomeTest.vue';
-
-let token = localStorage.getItem('authToken');
 
 let routeName = computed(() => {
   return useRouter().currentRoute.value.name;

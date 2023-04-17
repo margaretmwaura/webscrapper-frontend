@@ -1,5 +1,6 @@
 import { createApp, provide, h } from 'vue';
 import router from './router';
+import { createI18n } from 'vue-i18n';
 // import './style.css';
 import App from './App.vue';
 import './index.css';
@@ -17,6 +18,12 @@ import { createPinia } from 'pinia';
 /* import font awesome icon component */
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
+import { apolloClient } from './apolloClient';
+
+import Particles from 'vue3-particles';
+
+import { FRENCH_TRANSLATIONS } from './translations/fr';
+
 /* import the fontawesome core */
 import { library } from '@fortawesome/fontawesome-svg-core';
 
@@ -30,8 +37,12 @@ import {
   faUser,
   faUserGraduate,
   faSearch,
-  faClock,
   faPaperclip,
+  faArrowUp,
+  faWaveSquare,
+  faVolumeUp,
+  faBookOpen,
+  faMusic,
 } from '@fortawesome/free-solid-svg-icons';
 
 import {
@@ -40,6 +51,7 @@ import {
   faEyeSlash,
   faCalendar,
   faBarChart,
+  faClock,
 } from '@fortawesome/free-regular-svg-icons';
 
 /* add icons to the library */
@@ -59,47 +71,34 @@ library.add(
   faSearch,
   faClock,
   faPaperclip,
-  faBarChart
+  faBarChart,
+  faArrowUp,
+  faWaveSquare,
+  faVolumeUp,
+  faBookOpen,
+  faMusic
 );
 
 import { DefaultApolloClient } from '@vue/apollo-composable';
 
-import {
-  ApolloClient,
-  createHttpLink,
-  InMemoryCache,
-  ApolloLink,
-  from,
-} from '@apollo/client/core';
+const TRANSLATIONS = {
+  fr: FRENCH_TRANSLATIONS,
+};
 
-const httpLink = createHttpLink({
-  // You should use an absolute URL here
-  uri: 'http://localhost:5000/graphql',
+// 2. Create i18n instance with options
+const i18n = createI18n({
+  allowComposition: true,
+  legacy: false,
+  locale: 'fr', // set locale
+  fallbackLocale: 'fr', // set fallback locale
+  messages: TRANSLATIONS,
+  enableLegacy: false,
+  runtimeOnly: false,
+  compositionOnly: false,
+  fullInstall: true,
 });
 
-let token = localStorage.getItem('authToken');
-
-const additiveLink = from([
-  new ApolloLink((operation, forward) => {
-    operation.setContext(({ headers }) => ({
-      headers: {
-        ...headers,
-        authtoken: token ? token : null,
-      },
-    }));
-    return forward(operation); // Go to the next link in the chain. Similar to `next` in Express.js middleware.
-  }),
-  httpLink,
-]);
-
-// Cache implementation
-const cache = new InMemoryCache();
-
-// Create the apollo client
-const apolloClient = new ApolloClient({
-  link: additiveLink,
-  cache,
-});
+const pinia = createPinia();
 
 const app = createApp({
   setup() {
@@ -108,9 +107,11 @@ const app = createApp({
   render: () => h(App),
 });
 
-app.use(createPinia());
+app.use(Particles);
+app.use(pinia);
 app.use(router);
+app.use(i18n);
 app.use(VueSidebarMenu);
-// app.use(vuetify);
-
 app.component('font-awesome-icon', FontAwesomeIcon).mount('#app');
+
+// app.use(vuetify);
