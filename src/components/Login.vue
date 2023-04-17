@@ -1,56 +1,51 @@
-<script>
-import { ref } from 'vue';
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import {firebaseAdmin} from './../firebase'
+<script setup>
+import { ref , defineEmits} from 'vue';
 import { useRouter } from 'vue-router';
 import { toast } from 'vue3-toastify';
+import { useAuthStore } from './../stores/authStore'
+import { storeToRefs } from 'pinia';
 
-export default{
-  name : 'Login',
-  setup(props, context){
-    const auth = getAuth(firebaseAdmin)
-    const router = useRouter()
+const router = useRouter()
+const store = useAuthStore()
+const { authStatus, token } = storeToRefs(store);
 
-    let showPassword = ref(false)
-    let passwordType = ref("password")
+const emit = defineEmits(['switchAction', 'closeModal'])
 
-    function shouldShowPassword(condition){
-      showPassword.value = condition
-      passwordType.value = condition ? "text" :  "password"
-    }
-    function switchToSignup(){
-      console.log("switch to signup")
-      context.emit('switchAction', "Signup")
-    }
-    function closeModal(){
-      context.emit('closeModal', true) 
-    }
-    function logInWithEmailAndPassword() {
-      signInWithEmailAndPassword(auth,"mwauramargaret1@gmail.com", "Aswift07")
-      .then((userCredential) => {
-        console.log(userCredential.user.accessToken)
-        localStorage.setItem('authToken', userCredential.user.accessToken);
-        // context.emit('closeModal', true) 
-        toast.success('Login is successful 🎊', {
-          autoClose: 500,    
-          onClose: () => router.push({ path: 'home' }),
-        });    
-      }).catch((err) => {
-        console.log(err)
-      })
-    }
+let showPassword = ref(false)
+let passwordType = ref("password")
+let isLoginDisabled = ref(false)
 
-    return{
-      shouldShowPassword,
-      switchToSignup,
-      logInWithEmailAndPassword,
-      closeModal,
-
-      showPassword,
-      passwordType
-    }
-  },
+function shouldShowPassword(condition){
+  showPassword.value = condition
+  passwordType.value = condition ? "text" :  "password"
 }
+function switchToSignup(){
+  console.log("switch to signup")
+  emit('switchAction', "Signup")
+}
+function closeModal(){
+  emit('closeModal') 
+}
+
+// FIXME: Only can call login once if the call has already being made
+function logInWithEmailAndPassword() {
+  isLoginDisabled.value = true
+  store.signin().then(() => {
+    localStorage.setItem('authToken', token.value);
+    if(authStatus.value === 'Authorized'){
+      toast.success('Login is successful 🎊', {
+        autoClose: 1000,
+        onClose: () => {isLoginDisabled.value = false, router.push({ path: 'home' })},
+      });
+    }else{
+      toast.error('Login failed 🙍', {
+        autoClose: 1000,
+        onClose: () => {isLoginDisabled.value = false},
+      });
+    }
+  })
+}
+
 </script>
 
 <template>
@@ -89,7 +84,9 @@ export default{
                 v-on:click="shouldShowPassword(true)"/>
               </div>
           </div>
-          <button class="mt-12 bg-indigo-700 text-white rounded-full px-16 py-2" @click="logInWithEmailAndPassword()">Login</button>
+          <button class="mt-12 bg-indigo-700 text-white rounded-full px-16 py-2 disabled:opacity-25" 
+          @click="logInWithEmailAndPassword()"
+          :disabled="isLoginDisabled">Login</button>
           <p class="font-light text-sm mt-4 text-center">Don't have an account? <span class="font-medium" 
           @click="switchToSignup()">Create one 😃</span></p>
         </div>
