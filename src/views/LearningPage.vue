@@ -6,8 +6,10 @@ import VowelDetails from './../components/VowelDetails.vue'
 import Confetti from './../components/Confetti.vue'
 import Loader from './../components/Loader.vue'
 import gql from 'graphql-tag'
+import Success from './../components/Success.vue'
 
 let showConfetti = ref(false)
+let showSuccessModal = ref(false)
 
 const getVowels = gql`
    query {
@@ -27,11 +29,24 @@ const vowels = computed(() => result.value?.getVowels ?? [])
 const isDataFetched = computed(() => vowels.value.length > 0)
 const todaysDate = moment(new Date()).format('MMMM Do YYYY, h:mm a');
 
-const showConfettiComponent = () => {
-  showConfetti.value = true
-  setTimeout(() => {
-    showConfetti.value = false
-  }, 5000)
+const showConfettiComponent = (score) => {
+  if(score > 50){
+    showConfetti.value = true
+    showSuccessModal.value = true
+    setTimeout(() => {
+      showConfetti.value = false
+      showSuccessModal.value = false
+    }, 3000)
+  }else{
+    showSuccessModal.value = true
+    setTimeout(() => {
+      showSuccessModal.value = false
+    }, 3000)
+  }
+}
+
+const closeModal = () => {
+  showSuccessModal.value = !showSuccessModal.value
 }
 
 </script>
@@ -52,6 +67,17 @@ const showConfettiComponent = () => {
     </div>
   </div>
   <Confetti v-show="showConfetti"/>
+  <Transition>
+    <Success v-show="showSuccessModal" @close="closeModal"/>
+  </Transition>
 </template>
 
-<style scoped></style>
+<style scoped>
+.v-leave-active {
+  transition: opacity 1s ease;
+}
+
+.v-leave-to {
+  opacity: 0;
+}
+</style>

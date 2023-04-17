@@ -1,6 +1,5 @@
 <script setup>
-import { ref, computed, watchEffect, defineEmits } from 'vue';
-
+import { ref, computed, watch, defineEmits } from 'vue';
 import numberToWords from 'number-to-words';
 
 const emit = defineEmits(['close'])
@@ -11,6 +10,10 @@ const props = defineProps({
 
 let click = ref(false)
 let count = ref(0)
+
+// let showSuccessModal = computed(() => {
+//   return count.value > 2
+// })
 
 // FIXME: The value we are passing here will be computed value
 function close(){
@@ -37,6 +40,13 @@ const playSound = () => {
   }
   count.value++
 }
+
+watch(count, (newCount) => {
+   if(newCount >= 3)
+    setTimeout(() => {
+      close()
+    }, 700)
+});
 </script>
 
 <template>
@@ -55,6 +65,10 @@ const playSound = () => {
             <span class="font-semibold text-xl tracking-wider pl-2 text-indigo-700">{{$t(numberToWords.toWords(count))}}</span>
         </div>
         <div class="flex items-center flex-no-shrink text-black mr-6" v-show="count === 2">
+            <div class="rounded-full bg-uranian-blue w-6 h-6 flex justify-center"><p class="text-white font-bold text-lg">✌️</p></div>
+            <span class="font-semibold text-xl tracking-wider pl-2 text-indigo-700">{{$t(numberToWords.toWords(count))}}</span>
+        </div>
+         <div class="flex items-center flex-no-shrink text-black mr-6" v-show="count === 3">
             <div class="rounded-full bg-uranian-blue w-6 h-6 flex justify-center"><p class="text-white font-bold text-lg">✌️</p></div>
             <span class="font-semibold text-xl tracking-wider pl-2 text-indigo-700">{{$t(numberToWords.toWords(count))}}</span>
         </div>

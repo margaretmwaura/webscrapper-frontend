@@ -2,8 +2,8 @@
 import { objectPick } from '@vueuse/core';
 import { ref, computed, watchEffect } from 'vue';
 import VowelSound from './VowelSound.vue'
-
 const emit = defineEmits(['throwConfetti'])
+
 
 defineProps({
   vowel: Object,
@@ -19,13 +19,11 @@ function openModal(){
 
 function closeModal(score){
   playSound.value = !playSound.value
-
-  if(score > 50)
-    throwConfetti()
+  throwConfetti(score)
 }
 
-function throwConfetti(){
-  emit('throwConfetti') 
+function throwConfetti(score){
+  emit('throwConfetti', score) 
 }
 
 </script>
@@ -50,8 +48,9 @@ function throwConfetti(){
         <div class="flex">
           <!-- <font-awesome-icon icon="fa-solid fa-wave-square" size="sm"/>  -->
           <p> <span class="font-normal"> ave </span> is <span class="underline underline-offset-8"> 24% </span>  </p></div>
-      </div>  
+      </div> 
     </div>
+
   </div>
 </template>
 

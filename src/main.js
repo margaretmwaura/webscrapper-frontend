@@ -103,8 +103,6 @@ const pinia = createPinia();
 const app = createApp({
   setup() {
     provide(DefaultApolloClient, apolloClient);
-    // const { t } = VueI18n.useI18n(); // call `useI18n`, and spread `t` from  `useI18n` returning
-    // return { t };
   },
   render: () => h(App),
 });
