@@ -31,6 +31,7 @@ const registerMutation = gql`
   }
 `;
 
+// TODO: Check on how to properly reset store values
 export const useAuthStore = defineStore({
   id: 'authStore',
   state: () => ({
@@ -42,7 +43,7 @@ export const useAuthStore = defineStore({
   getters: {},
   actions: {
     async registerUser(data) {
-      this.authStatus = 'UnAuthorized';
+      this.resetStoreValues();
       const {
         mutate: register,
         onError,
@@ -87,6 +88,7 @@ export const useAuthStore = defineStore({
         });
     },
     async signin() {
+      this.resetStoreValues();
       return signInWithEmailAndPassword(
         auth,
         'mwauramargaret1@gmail.com',
@@ -100,7 +102,12 @@ export const useAuthStore = defineStore({
           this.authStatus = 'UnAuthorized';
         });
     },
-
+    async resetStoreValues() {
+      this.authStatus = 'UnAuthorized';
+      this.token = '';
+      this.error = '';
+      this.user = '';
+    },
     async unSetError() {
       this.error = '';
     },

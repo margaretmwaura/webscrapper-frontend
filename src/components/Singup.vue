@@ -10,7 +10,7 @@ export default{
   setup(props, context){
     const router = useRouter()
     const store = useAuthStore()
-    const { authStatus, token, error } = storeToRefs(store);
+    const { authStatus, token, error, user } = storeToRefs(store);
     
     let name = ref("")
     let email = ref("")
@@ -55,6 +55,7 @@ export default{
         password : password.value
       }
       store.registerUser(data).then(async () => {
+        isSignupDisabled.value = true
         localStorage.setItem('authToken', token.value);
         if(authStatus.value === 'Authorized'){
           toast.success('Signup is successful 🎊', {
@@ -106,7 +107,7 @@ export default{
             <div class="rounded-full bg-indigo-700 w-6 h-6 flex justify-center"><p class="text-white font-bold">L</p></div>
             <span class="font-semibold text-xl tracking-wider pl-2 text-indigo-700">Bonjour!</span>
         </div>
-        <button className="text-indigo-700 text-lg font-light place-self-end" :disabled="isSignupDisabled">
+        <button className="text-indigo-700 text-lg font-light place-self-end">
             <font-awesome-icon icon="fa-solid fa-times" size="xl"  @click="closeModal()"/>
         </button>
       </div>
@@ -146,7 +147,7 @@ export default{
                 v-on:click="shouldShowConfirmPassword(true)"/>
             </div>
         </div>
-        <button class="mt-12 bg-indigo-700 text-white rounded-full px-16 py-2" @click="signUp()">Get Started</button>
+        <button class="mt-12 bg-indigo-700 text-white rounded-full px-16 py-2 disabled:opacity-25" @click="signUp()" :disabled="isSignupDisabled">Get Started</button>
         <p class="font-light text-sm mt-4 text-center">Already have an account? <span class="font-medium" 
         @click="switchToSignIn()">Proceed to login</span></p>
       </div>
