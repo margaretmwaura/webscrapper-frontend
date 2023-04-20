@@ -1,7 +1,5 @@
 <script>
 import { ref } from 'vue';
-import {useQuery, useMutation} from '@vue/apollo-composable'
-import gql from 'graphql-tag'
 import { useRouter } from 'vue-router';
 import { toast } from 'vue3-toastify';
 import { useAuthStore } from './../stores/authStore'
@@ -12,7 +10,7 @@ export default{
   setup(props, context){
     const router = useRouter()
     const store = useAuthStore()
-    const { authStatus, token } = storeToRefs(store);
+    const { authStatus, token, error } = storeToRefs(store);
     
     let name = ref("")
     let email = ref("")
@@ -30,41 +28,6 @@ export default{
     // 1. Make sure to add the sanity data checks
     // 2. The signup function will not look like these, we will have to add the correct version
     //  , now we are only testing how to add headers
-
-    const registerMutation = gql`
-        mutation RegisterUser (
-          $input : RegisterUser!
-        ){
-          registerUser(input: $input){
-             ... on CreateError{
-                message
-             }
-            ... on RegisterSuccessful{
-               token
-             }
-          }
-    }`;
-
-    const {mutate: register, onError, onDone} = useMutation(registerMutation , () => {
-      return {
-        variables: {
-            input : {
-              firstName : name.value,
-              lastName: name.value,
-              email: email.value,
-              password: password.value
-            }   
-        },
-    }})
-
-    onError((error) => {
-      console.log("There was an error")
-      console.log(error.message)
-    })
-
-    onDone(() => {
-      console.log("We have completed successfully")
-    })
 
     function switchToSignIn(){
       context.emit('switchAction', "Login")
@@ -94,17 +57,17 @@ export default{
       store.registerUser(data).then(async () => {
         localStorage.setItem('authToken', token.value);
         if(authStatus.value === 'Authorized'){
-          await register()
           toast.success('Signup is successful 🎊', {
             autoClose: 1000,
             onClose: () => {isSignupDisabled.value = false, router.push({ path: 'home' })},
           });
         }else{
-          toast.error('Signup failed 🙍', {
+          toast.error('Signup failed 🙍 ' + error.value, {
             autoClose: 1000,
             onClose: () => {isSignupDisabled.value = false},
           });
         }
+        store.unSetError()
      })
     }
 
@@ -114,7 +77,6 @@ export default{
       shouldShowPassword,
       shouldShowConfirmPassword,
       signUp,
-      register,
 
       showPassword,
       passwordType,
