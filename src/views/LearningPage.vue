@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, watchEffect } from 'vue';
-import {useQuery, useMutation} from '@vue/apollo-composable'
+import {useQuery} from '@vue/apollo-composable'
 import moment from 'moment'
 import VowelDetails from './../components/VowelDetails.vue'
 import Confetti from './../components/Confetti.vue'
@@ -11,6 +11,7 @@ import Success from './../components/Success.vue'
 let showConfetti = ref(false)
 let showSuccessModal = ref(false)
 
+// TODO: This should eventually be moved to store
 const getVowels = gql`
    query {
      getVowels {
