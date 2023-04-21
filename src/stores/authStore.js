@@ -10,6 +10,8 @@ import { provideApolloClient } from '@vue/apollo-composable';
 import { useMutation } from '@vue/apollo-composable';
 import { apolloClient } from './../apolloClient';
 import gql from 'graphql-tag';
+import { useQuery } from '@vue/apollo-composable';
+import { computed } from 'vue';
 
 provideApolloClient(apolloClient);
 
@@ -30,7 +32,14 @@ const registerMutation = gql`
     }
   }
 `;
-
+const getUser = gql`
+  query {
+    getUser {
+      firstname
+      email
+    }
+  }
+`;
 // TODO: Check on how to properly reset store values
 export const useAuthStore = defineStore({
   id: 'authStore',
@@ -87,7 +96,7 @@ export const useAuthStore = defineStore({
           this.error = error.message;
         });
     },
-    async signin() {
+    async signin(data) {
       this.resetStoreValues();
       return signInWithEmailAndPassword(
         auth,
@@ -97,9 +106,11 @@ export const useAuthStore = defineStore({
         .then(async userCredential => {
           this.token = userCredential.user.accessToken;
           this.authStatus = 'Authorized';
+          await this.getUserFromDB('mwauramargaret1@gmail.com');
         })
-        .catch(err => {
+        .catch(error => {
           this.authStatus = 'UnAuthorized';
+          this.error = error.message;
         });
     },
     async resetStoreValues() {
@@ -108,8 +119,23 @@ export const useAuthStore = defineStore({
       this.error = '';
       this.user = '';
     },
-    async unSetError() {
-      this.error = '';
+    async getUserFromDB(email) {
+      const { result } = useQuery(
+        gql`
+          query ($email: String!) {
+            getUser(email: $email) {
+              firstName
+              email
+            }
+          }
+        `,
+        {
+          email: email,
+        }
+      );
+      this.user = computed(() =>
+        result.value?.getUser ? result.value?.getUser : null
+      );
     },
   },
 });

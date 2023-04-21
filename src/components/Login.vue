@@ -7,7 +7,7 @@ import { storeToRefs } from 'pinia';
 
 const router = useRouter()
 const store = useAuthStore()
-const { authStatus, token } = storeToRefs(store);
+const { authStatus, token, error } = storeToRefs(store);
 
 const emit = defineEmits(['switchAction', 'closeModal'])
 
@@ -38,7 +38,7 @@ function logInWithEmailAndPassword() {
         onClose: () => {isLoginDisabled.value = false, router.push({ path: 'home' })},
       });
     }else{
-      toast.error('Login failed 🙍', {
+      toast.error('Login failed 🙍' + error.value, {
         autoClose: 1000,
         onClose: () => {isLoginDisabled.value = false},
       });

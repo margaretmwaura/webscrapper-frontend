@@ -10,7 +10,7 @@ export default{
   setup(props, context){
     const router = useRouter()
     const store = useAuthStore()
-    const { authStatus, token, error, user } = storeToRefs(store);
+    const { authStatus, token, error } = storeToRefs(store);
     
     let name = ref("")
     let email = ref("")
@@ -68,7 +68,6 @@ export default{
             onClose: () => {isSignupDisabled.value = false},
           });
         }
-        store.unSetError()
      })
     }
 

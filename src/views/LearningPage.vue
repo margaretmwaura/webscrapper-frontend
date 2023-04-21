@@ -11,6 +11,7 @@ import Success from './../components/Success.vue'
 let showConfetti = ref(false)
 let showSuccessModal = ref(false)
 
+// TODO: This should eventually be moved to store
 const getVowels = gql`
    query {
      getVowels {
