@@ -2,12 +2,17 @@
 import VueJsProgress from 'vue-js-progress';
 import { CollapseTransition } from "@ivanv/vue-collapse-transition"
 import { ref, computed, watchEffect } from 'vue';
+import { useAuthStore } from './../../src/stores/authStore'
+import { storeToRefs } from 'pinia';
 
 defineProps({
   msg: String,
 });
 
 let show = ref(false)
+const store = useAuthStore()
+const { user } = storeToRefs(store);
+
 </script>
 
 <template>
@@ -17,7 +22,7 @@ let show = ref(false)
         <!-- TODO: Spacing is not uniform for the small screens -->
          <div class="flex flex-wrap justify-between space-y-8">
             <div class="mt-4">
-              <p class="text-4xl font-medium tracking-normal leading-tight font-['Gill_Sans']">Hi, Alysia</p>
+              <p class="text-4xl font-medium tracking-normal leading-tight font-['Gill_Sans']">Hi, {{user.firstName}}</p>
             </div>
             <div class="space-x-4 mt-4">
               <font-awesome-icon icon="fa-solid fa-search" />
