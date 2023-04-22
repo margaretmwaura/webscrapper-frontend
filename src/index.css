@@ -20,10 +20,10 @@ body {
     display: block !important;
   }
   .expanded {
-    padding-left: 350px;
+    padding-left: 280px;
   }
   .collapsed {
-    padding-left: 80px;
+    padding-left: 60px;
   }
 }
 @media only screen and (max-width: 1279px) {
@@ -40,10 +40,10 @@ body {
     display: block !important;
   }
   .expanded {
-    padding-left: 350px;
+    padding-left: 280px;
   }
   .collapsed {
-    padding-left: 80px;
+    padding-left: 60px;
   }
 }
 @media only screen and (max-width: 1023px) {

@@ -36,6 +36,7 @@ module.exports = {
           100: '#69509810',
           DEFAULT: '#695098',
         },
+        'lightest-blue': '#F0F8FF90',
         'light-blue': '#F0F8FF70',
         'lighter-blue': '#F0F8FF',
         red: '#ED7264',

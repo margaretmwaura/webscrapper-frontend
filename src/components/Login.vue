@@ -14,6 +14,8 @@ const emit = defineEmits(['switchAction', 'closeModal'])
 let showPassword = ref(false)
 let passwordType = ref("password")
 let isLoginDisabled = ref(false)
+let email = ref('')
+let password = ref('')
 
 function shouldShowPassword(condition){
   showPassword.value = condition
@@ -30,7 +32,7 @@ function closeModal(){
 // FIXME: Only can call login once if the call has already being made
 function logInWithEmailAndPassword() {
   isLoginDisabled.value = true
-  store.signin().then(() => {
+  store.signin({email: email.value, password: password.value}).then(() => {
     localStorage.setItem('authToken', token.value);
     if(authStatus.value === 'Authorized'){
       toast.success('Login is successful 🎊', {

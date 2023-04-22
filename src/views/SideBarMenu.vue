@@ -59,6 +59,18 @@ const menu = [
                }
              }
           },
+           {
+            href: '/notes',
+            title: 'Notes',
+            icon: {
+               element: 'font-awesome-icon',
+               attributes: {
+                // Then under icon.attributes, specify the icon to use
+                icon: 'fa-solid fa-book-open'
+                
+               }
+             }
+          },
 ]
 
 
@@ -71,8 +83,9 @@ const menu = [
   <!-- :class="{ 'collapsed' : toggle ,  'expanded': !toggle}"  -->
   <div
    :class="[ toggle ? 'collapsed' : 'expanded']"
-   class="h-full pt-10 pr-10"
+   class="h-full w-full "
   >
+  <!-- pt-10 pr-10 -->
     <router-view/>
   </div>
   <sidebar-menu 
