@@ -43,6 +43,7 @@ import {
   faVolumeUp,
   faBookOpen,
   faMusic,
+  faEllipsis,
 } from '@fortawesome/free-solid-svg-icons';
 
 import {
@@ -76,7 +77,8 @@ library.add(
   faWaveSquare,
   faVolumeUp,
   faBookOpen,
-  faMusic
+  faMusic,
+  faEllipsis
 );
 
 import { DefaultApolloClient } from '@vue/apollo-composable';

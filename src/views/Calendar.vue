@@ -1,9 +1,11 @@
 <script setup>
-import { ref, computed, watchEffect } from 'vue';
+import { ref, computed, watchEffect, onMounted } from 'vue';
+
 
 defineProps({
   msg: String,
 });
+
 </script>
 
 <template>

@@ -41,6 +41,8 @@ module.exports = {
         'lighter-blue': '#F0F8FF',
         red: '#ED7264',
         'uranian-blue': '#AFDBF580',
+        'snow-white': '#F6F6F6',
+        'millenial-pink': '#FFD1DC',
       },
       maxWidth: {
         320: '320px',
