@@ -76,6 +76,9 @@ module.exports = {
       boxShadow: {
         DEFAULT: '0px 5px 50px 0px rgba(0, 0, 0, 0.2)',
       },
+      height: {
+        1: '1px',
+      },
     },
     container: {
       center: true,
