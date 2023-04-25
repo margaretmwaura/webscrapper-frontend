@@ -53,7 +53,7 @@ const closeModal = () => {
 </script>
 
 <template>
-  <div class="flex flex-col w-full mb-10">
+  <div class="flex flex-col w-full mb-10 pl-10 pt-10 pr-10">
     <!-- TODO: Fix this using moment js -->
     <img src="/abc.png" class="object-contain h-10 w-10 "/>
     <p class="text-3xl font-semibold tracking-wide leading-loose">The Alphabets Dashboard</p>
