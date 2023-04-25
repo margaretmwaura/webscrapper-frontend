@@ -48,15 +48,15 @@ export default{
     getDailyQuotes()
   })
 
-    return{
-        dailyQuotes,
-        isVisible,
-        action,
-       
-        showModal,
-        close,
-        getDailyQuotes
-  }}
+  return{
+    dailyQuotes,
+    isVisible,
+    action,
+    
+    showModal,
+    close,
+    getDailyQuotes
+}}
 }
 </script>
 
