@@ -2,6 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+
+/* https://stackoverflow.com/questions/69276276/why-tailwind-list-style-type-is-not-working */
+@layer base {
+  ul, ol {
+    list-style: circle;
+    list-style-position: inside;
+    margin: 0;
+    padding: 0;
+  }
+  li::marker {
+    font-size: 1.5rem;
+  }
+}
+
 body {
   background-color: white;
 }
@@ -20,10 +34,10 @@ body {
     display: block !important;
   }
   .expanded {
-    padding-left: 350px;
+    padding-left: 280px;
   }
   .collapsed {
-    padding-left: 80px;
+    padding-left: 60px;
   }
 }
 @media only screen and (max-width: 1279px) {
@@ -40,10 +54,10 @@ body {
     display: block !important;
   }
   .expanded {
-    padding-left: 350px;
+    padding-left: 280px;
   }
   .collapsed {
-    padding-left: 80px;
+    padding-left: 60px;
   }
 }
 @media only screen and (max-width: 1023px) {

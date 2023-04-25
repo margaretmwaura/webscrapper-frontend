@@ -25,6 +25,11 @@ const routes = [
         component: () => import('./../views/LearningPage.vue'),
       },
       {
+        path: '/notes',
+        name: 'Notes',
+        component: () => import('./../views/Notes.vue'),
+      },
+      {
         path: '/calendar',
         name: 'calendar',
         component: () => import('./../views/Calendar.vue'),

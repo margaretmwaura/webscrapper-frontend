@@ -17,7 +17,7 @@ const { user } = storeToRefs(store);
 
 <template>
   <div>
-    <div class="flex flex-row w-full space-x-4">
+    <div class="flex flex-row w-full space-x-4 pl-10 pt-10 pr-10">
       <div class="flex flex-col flex-grow h-full">
         <!-- TODO: Spacing is not uniform for the small screens -->
          <div class="flex flex-wrap justify-between space-y-8">

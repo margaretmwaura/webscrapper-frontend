@@ -98,11 +98,7 @@ export const useAuthStore = defineStore({
     },
     async signin(data) {
       this.resetStoreValues();
-      return signInWithEmailAndPassword(
-        auth,
-        'mwauramargaret1@gmail.com',
-        'Aswift07'
-      )
+      return signInWithEmailAndPassword(auth, data.email, data.password)
         .then(async userCredential => {
           this.token = userCredential.user.accessToken;
           this.authStatus = 'Authorized';

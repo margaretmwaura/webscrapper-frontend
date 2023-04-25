@@ -36,10 +36,13 @@ module.exports = {
           100: '#69509810',
           DEFAULT: '#695098',
         },
+        'lightest-blue': '#F0F8FF90',
         'light-blue': '#F0F8FF70',
         'lighter-blue': '#F0F8FF',
         red: '#ED7264',
         'uranian-blue': '#AFDBF580',
+        'snow-white': '#F6F6F6',
+        'millenial-pink': '#FFD1DC',
       },
       maxWidth: {
         320: '320px',
@@ -72,6 +75,9 @@ module.exports = {
       },
       boxShadow: {
         DEFAULT: '0px 5px 50px 0px rgba(0, 0, 0, 0.2)',
+      },
+      height: {
+        1: '1px',
       },
     },
     container: {
