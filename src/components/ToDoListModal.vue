@@ -1,12 +1,13 @@
 <script>
 import { onMounted, ref } from 'vue';
-
+import { useNotesStore } from './../stores/notesStore'
 
 export default{
   name : 'ToDoListModal',
   setup(props, context){
+
+    const store = useNotesStore()
     
-    let todoListItems = ref(['Add to your to do list', ' '])
     let previousLength = ref(0);
     let textarea = ref(null)
     let toDoList = ref('')
@@ -14,7 +15,6 @@ export default{
     function closeModal(){
       context.emit('closeModal') 
     }
-
 
 // https://codepen.io/andrewgarrison/pen/vqqmMv?editors=1010
     function handleInput(event){
@@ -37,14 +37,14 @@ export default{
       previousLength.value = newLength;
     }
 
-    function saveToDoList(){
+    async function saveToDoList(){
       let todolists = toDoList.value.split("\u20DD")
       let nonEmptyToDoList = todolists.filter(e => typeof e === 'string' && e !== '')
-      let cleanedToDoList = nonEmptyToDoList.map((toDoListItem) => {
-          return toDoListItem.trim().replace(/(\r\n|\n|\r)/gm,"")
+      let formattedToDoList = nonEmptyToDoList.map((toDoListItem) => {
+          return {"name": toDoListItem.trim().replace(/(\r\n|\n|\r)/gm,"")}
       })
 
-      // TODO: Call the saveToDoList mutation
+      await store.createToDoList(formattedToDoList)
     }
 
     onMounted(() =>{
@@ -53,7 +53,6 @@ export default{
 
     return{
       textarea,
-      todoListItems,
       toDoList,
       handleInput,
       closeModal,

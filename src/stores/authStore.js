@@ -115,6 +115,8 @@ export const useAuthStore = defineStore({
       this.error = '';
       this.user = '';
     },
+
+    // FIXME: This should use the query defined above
     async getUserFromDB(email) {
       const { result } = useQuery(
         gql`
