@@ -1,28 +1,26 @@
-<script>
+<script setup>
 import { ref, computed, watchEffect, onMounted } from 'vue';
 import { CollapseTransition } from "@ivanv/vue-collapse-transition"
 import axios from 'axios'
 import NotesModal from './../components/NotesModal.vue'
 import ToDoListModal from './../components/ToDoListModal.vue'
+import { useNotesStore } from './../stores/notesStore'
+import { storeToRefs } from 'pinia';
+import { useQuery } from '@vue/apollo-composable';
+import gql from 'graphql-tag';
 
-
-export default{
-
-  name : 'Notes',
-  components: {
-    ToDoListModal,
-    NotesModal
-  },
-
-  setup(props, context){
+  const store = useNotesStore()
+  let { todoLists } = storeToRefs(store);
+  // let todoLists = computed(() => store.todoLists);
 
 
   let dailyQuotes = ref([])
   let isVisible = ref(false)
   let action = ref("")
+  let todoListsItems = ref([])
 
 
-  function getDailyQuotes(){
+  async function getDailyQuotes(){
     axios.get('https://zenquotes.io/api/quotes/')
     .then(function (response) {
       dailyQuotes.value = response.data.slice(0, 3)
@@ -42,22 +40,31 @@ export default{
     isVisible.value = false
   }
 
+  async function getToDoList(){
+    await store.getTodoList()
+    const { result } = useQuery(
+        gql`
+          query {
+            getTodoList {
+              id
+              todoListItems {
+                id
+                itemName
+                statusName
+              }
+            }
+          }
+        `
+      );
+      todoListsItems.value = computed(() =>
+        result.value?.getTodoList ? result.value?.getTodoList : 'Nothing pal'
+      );
+      console.log(todoListsItems);
+  }
 
-  onMounted(() => {
-    console.log("we are here")
-    getDailyQuotes()
-  })
+   getDailyQuotes()
+  getToDoList()
 
-  return{
-    dailyQuotes,
-    isVisible,
-    action,
-    
-    showModal,
-    close,
-    getDailyQuotes
-}}
-}
 </script>
 
 <template>
@@ -102,7 +109,9 @@ export default{
                 data-te-collapse-item
                 data-te-collapse-horizontal
                 id="collapseWidthExample">
-                <div class="flex-1 max-w-sm rounded-lg"  style="width: 180px"></div>
+                <div class="flex-1 max-w-sm rounded-lg"  style="width: 180px">
+                  <p>{{todoListsItems}}</p>
+                </div>
               </div>
           </div>
        </div>

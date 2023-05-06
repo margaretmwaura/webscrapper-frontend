@@ -18,7 +18,7 @@ const createToDoListMutation = gql`
 export const useNotesStore = defineStore({
   id: 'notesStore',
   state: () => ({
-    todoList: useLocalStorage('todoList', {}),
+    todoLists: ' ',
   }),
   getters: {},
   actions: {
@@ -40,6 +40,24 @@ export const useNotesStore = defineStore({
       onDone(result => {});
 
       await createToDo();
+    },
+    async getTodoList() {
+      const { result } = useQuery(
+        gql`
+          query {
+            getTodoList {
+              id
+              todoListItems {
+                id
+                itemName
+                statusName
+              }
+            }
+          }
+        `
+      );
+      this.todoLists = computed(() => result.value);
+      console.log(this.todoLists);
     },
   },
 });
