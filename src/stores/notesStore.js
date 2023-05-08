@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia';
-import { useLocalStorage } from '@vueuse/core';
 import { provideApolloClient } from '@vue/apollo-composable';
 import { useMutation } from '@vue/apollo-composable';
 import { apolloClient } from './../apolloClient';
 import gql from 'graphql-tag';
 import { useQuery } from '@vue/apollo-composable';
 import { computed } from 'vue';
+import { useLocalStorage } from '@vueuse/core';
 
 provideApolloClient(apolloClient);
 
@@ -14,11 +14,10 @@ const createToDoListMutation = gql`
     createToDoList(input: $input)
   }
 `;
-// TODO: Check on how to properly reset store values
 export const useNotesStore = defineStore({
   id: 'notesStore',
   state: () => ({
-    todoLists: ' ',
+    todoLists: useLocalStorage('todoLists', []),
   }),
   getters: {},
   actions: {
@@ -41,8 +40,8 @@ export const useNotesStore = defineStore({
 
       await createToDo();
     },
-    async getTodoList() {
-      const { result } = useQuery(
+    async getTodo() {
+      const { result, onResult } = useQuery(
         gql`
           query {
             getTodoList {
@@ -56,8 +55,33 @@ export const useNotesStore = defineStore({
           }
         `
       );
-      this.todoLists = computed(() => result.value);
-      console.log(this.todoLists);
+
+      return onResult(({ data }) => {
+        console.log('We are in on result function');
+        this.todoLists = data.getTodoList;
+        console.log(this.todoLists);
+      });
+    },
+    async getTheToDoList() {
+      const { onResult } = useQuery(
+        gql`
+          query {
+            getTodoList {
+              id
+              todoListItems {
+                id
+                itemName
+                statusName
+              }
+            }
+          }
+        `,
+        { fetchPolicy: 'network-only' }
+      );
+
+      return onResult(({ data }) => {
+        this.todoLists = data.getTodoList;
+      });
     },
   },
 });
