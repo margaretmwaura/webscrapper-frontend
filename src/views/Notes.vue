@@ -4,7 +4,10 @@ import { CollapseTransition } from "@ivanv/vue-collapse-transition"
 import axios from 'axios'
 import NotesModal from './../components/NotesModal.vue'
 import ToDoListModal from './../components/ToDoListModal.vue'
-
+import { useNotesStore } from './../stores/notesStore'
+import { storeToRefs } from 'pinia';
+import { useQuery } from '@vue/apollo-composable';
+import gql from 'graphql-tag';
 
 export default{
 
@@ -16,13 +19,16 @@ export default{
 
   setup(props, context){
 
+  const store = useNotesStore()
+  let { todoLists } = storeToRefs(store);
 
   let dailyQuotes = ref([])
   let isVisible = ref(false)
   let action = ref("")
+  let todoListsItems = ref([])
 
 
-  function getDailyQuotes(){
+  async function getDailyQuotes(){
     axios.get('https://zenquotes.io/api/quotes/')
     .then(function (response) {
       dailyQuotes.value = response.data.slice(0, 3)
@@ -42,22 +48,32 @@ export default{
     isVisible.value = false
   }
 
+// FIXME: How can this be done better? The store then function is being called before the onResult function is actually called
+// Is it okay calling on Result from component or just go with the store
+  async function getToDoList(){
+    await store.getTheToDoList()  
+  }
 
-  onMounted(() => {
-    console.log("we are here")
+  onMounted(() =>{
+    console.log("mounted")
     getDailyQuotes()
+    getToDoList()
   })
 
   return{
+    store,
+    todoLists,
     dailyQuotes,
     isVisible,
     action,
-    
+    todoListsItems,
+
+    getDailyQuotes,
     showModal,
     close,
-    getDailyQuotes
-}}
-}
+    getToDoList
+  }}
+  }
 </script>
 
 <template>
@@ -102,7 +118,11 @@ export default{
                 data-te-collapse-item
                 data-te-collapse-horizontal
                 id="collapseWidthExample">
-                <div class="flex-1 max-w-sm rounded-lg"  style="width: 180px"></div>
+                 <div class="flex-1 max-w-sm rounded-lg"  style="width: 180px">
+                  <div v-for="todoList in todoLists" :key="todoList" >
+                   <p>{{todoList.id}}</p>
+                 </div>
+                </div>
               </div>
           </div>
        </div>
@@ -188,6 +208,7 @@ export default{
        </div>
     </div>
     <component :is="action" v-show="isVisible" @closeModal="close"></component>
+    
   </div>
 </template>
 

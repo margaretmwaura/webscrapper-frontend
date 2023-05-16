@@ -1,12 +1,13 @@
 <script>
 import { onMounted, ref } from 'vue';
-
+import { useNotesStore } from './../stores/notesStore'
 
 export default{
   name : 'ToDoListModal',
   setup(props, context){
+
+    const store = useNotesStore()
     
-    let todoListItems = ref(['Add to your to do list', ' '])
     let previousLength = ref(0);
     let textarea = ref(null)
     let toDoList = ref('')
@@ -14,7 +15,6 @@ export default{
     function closeModal(){
       context.emit('closeModal') 
     }
-
 
 // https://codepen.io/andrewgarrison/pen/vqqmMv?editors=1010
     function handleInput(event){
@@ -37,14 +37,14 @@ export default{
       previousLength.value = newLength;
     }
 
-    function saveToDoList(){
+    async function saveToDoList(){
       let todolists = toDoList.value.split("\u20DD")
       let nonEmptyToDoList = todolists.filter(e => typeof e === 'string' && e !== '')
-      let cleanedToDoList = nonEmptyToDoList.map((toDoListItem) => {
-          return toDoListItem.trim().replace(/(\r\n|\n|\r)/gm,"")
+      let formattedToDoList = nonEmptyToDoList.map((toDoListItem) => {
+          return {"name": toDoListItem.trim().replace(/(\r\n|\n|\r)/gm,"")}
       })
 
-      // TODO: Call the saveToDoList mutation
+      await store.createToDoList(formattedToDoList)
     }
 
     onMounted(() =>{
@@ -53,7 +53,6 @@ export default{
 
     return{
       textarea,
-      todoListItems,
       toDoList,
       handleInput,
       closeModal,
@@ -69,7 +68,7 @@ export default{
    outline-none overflow-x-hidden overflow-y-auto fixed inset-0 
    bg-black bg-opacity-25 backdrop-blur-sm
    flex justify-center items-center z-50">
-    <div className="bg-white flex flex-col px-8 py-8 w-96 rounded-lg">
+     <div className="bg-white flex flex-col px-8 py-8 w-96 rounded-lg">
       <div className="flex justify-between">
         <div class="flex items-center flex-no-shrink text-black mr-6">
             <div class="rounded-full bg-indigo-700 w-6 h-6 flex justify-center"><p class="text-white font-bold">L</p></div>
@@ -99,8 +98,7 @@ export default{
           @click="saveToDoList()">Save</button>
           <!-- TODO: Set the method to be one for notes and todo lists -->
         </div>
-         <p class="font-light text-sm mt-4 text-center">Wanted to add a new Note? <span class="font-medium" 
-          @click="switchToSignIn()">Switch to Notes</span></p>
+         <p class="font-light text-sm mt-4 text-center">Wanted to add a new Note? <span class="font-medium">Switch to Notes</span></p>
       </div>
     </div>
 </div>
@@ -112,3 +110,5 @@ a{
   list-style-type: circle;
 }
 </style>
+
+  

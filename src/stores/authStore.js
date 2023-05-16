@@ -70,7 +70,11 @@ export const useAuthStore = defineStore({
         };
       });
       onError(error => {
-        this.error = result.data.registerUser.message;
+        if (result && result.data) {
+          this.error = result.data.registerUser.message;
+        } else {
+          this.error = 'Signup was not successful! Please try again later';
+        }
       });
       onDone(result => {
         if (result.data.registerUser.__typename == 'CreateError') {
@@ -115,6 +119,8 @@ export const useAuthStore = defineStore({
       this.error = '';
       this.user = '';
     },
+
+    // FIXME: This should use the query defined above
     async getUserFromDB(email) {
       const { result } = useQuery(
         gql`
