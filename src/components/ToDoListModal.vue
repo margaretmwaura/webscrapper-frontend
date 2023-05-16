@@ -68,7 +68,7 @@ export default{
    outline-none overflow-x-hidden overflow-y-auto fixed inset-0 
    bg-black bg-opacity-25 backdrop-blur-sm
    flex justify-center items-center z-50">
-    <div className="bg-white flex flex-col px-8 py-8 w-96 rounded-lg">
+     <div className="bg-white flex flex-col px-8 py-8 w-96 rounded-lg">
       <div className="flex justify-between">
         <div class="flex items-center flex-no-shrink text-black mr-6">
             <div class="rounded-full bg-indigo-700 w-6 h-6 flex justify-center"><p class="text-white font-bold">L</p></div>
@@ -98,8 +98,7 @@ export default{
           @click="saveToDoList()">Save</button>
           <!-- TODO: Set the method to be one for notes and todo lists -->
         </div>
-         <p class="font-light text-sm mt-4 text-center">Wanted to add a new Note? <span class="font-medium" 
-          @click="switchToSignIn()">Switch to Notes</span></p>
+         <p class="font-light text-sm mt-4 text-center">Wanted to add a new Note? <span class="font-medium">Switch to Notes</span></p>
       </div>
     </div>
 </div>
@@ -111,3 +110,5 @@ a{
   list-style-type: circle;
 }
 </style>
+
+  

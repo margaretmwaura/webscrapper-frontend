@@ -4,7 +4,7 @@ import { useMutation } from '@vue/apollo-composable';
 import { apolloClient } from './../apolloClient';
 import gql from 'graphql-tag';
 import { useQuery } from '@vue/apollo-composable';
-import { computed } from 'vue';
+import { computed, watch } from 'vue';
 import { useLocalStorage } from '@vueuse/core';
 
 provideApolloClient(apolloClient);
@@ -63,7 +63,8 @@ export const useNotesStore = defineStore({
       });
     },
     async getTheToDoList() {
-      const { onResult } = useQuery(
+      console.log('In the todolist');
+      const { onResult, result } = useQuery(
         gql`
           query {
             getTodoList {
@@ -76,10 +77,11 @@ export const useNotesStore = defineStore({
             }
           }
         `,
-        { fetchPolicy: 'network-only' }
+        { fetchPolicy: 'no-cache' }
       );
 
       return onResult(({ data }) => {
+        console.log('we here and we have been called');
         this.todoLists = data.getTodoList;
       });
     },

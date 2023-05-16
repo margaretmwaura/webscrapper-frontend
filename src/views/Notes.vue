@@ -1,4 +1,4 @@
-<script setup>
+<script>
 import { ref, computed, watchEffect, onMounted } from 'vue';
 import { CollapseTransition } from "@ivanv/vue-collapse-transition"
 import axios from 'axios'
@@ -8,6 +8,16 @@ import { useNotesStore } from './../stores/notesStore'
 import { storeToRefs } from 'pinia';
 import { useQuery } from '@vue/apollo-composable';
 import gql from 'graphql-tag';
+
+export default{
+
+  name : 'Notes',
+  components: {
+    ToDoListModal,
+    NotesModal
+  },
+
+  setup(props, context){
 
   const store = useNotesStore()
   let { todoLists } = storeToRefs(store);
@@ -41,12 +51,29 @@ import gql from 'graphql-tag';
 // FIXME: How can this be done better? The store then function is being called before the onResult function is actually called
 // Is it okay calling on Result from component or just go with the store
   async function getToDoList(){
-     await store.getTheToDoList()  
+    await store.getTheToDoList()  
   }
 
-  getDailyQuotes()
-  getToDoList()
+  onMounted(() =>{
+    console.log("mounted")
+    getDailyQuotes()
+    getToDoList()
+  })
 
+  return{
+    store,
+    todoLists,
+    dailyQuotes,
+    isVisible,
+    action,
+    todoListsItems,
+
+    getDailyQuotes,
+    showModal,
+    close,
+    getToDoList
+  }}
+  }
 </script>
 
 <template>
@@ -181,6 +208,7 @@ import gql from 'graphql-tag';
        </div>
     </div>
     <component :is="action" v-show="isVisible" @closeModal="close"></component>
+    
   </div>
 </template>
 

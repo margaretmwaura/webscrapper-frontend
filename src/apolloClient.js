@@ -40,4 +40,9 @@ const cache = new InMemoryCache();
 export const apolloClient = new ApolloClient({
   link: concat(authMiddleware, httpLink),
   cache,
+  defaultOptions: {
+    query: {
+      fetchPolicy: 'no-cache',
+    },
+  },
 });

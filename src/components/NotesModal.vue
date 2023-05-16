@@ -1,6 +1,5 @@
 <script>
 
-
 export default{
   name : 'NotesModal',
   setup(props, context){
