@@ -1,9 +1,4 @@
 <script>
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-import { toast } from 'vue3-toastify';
-import { useAuthStore } from './../stores/authStore'
-import { storeToRefs } from 'pinia';
 
 export default{
   name : 'NotesModal',
@@ -37,7 +32,6 @@ export default{
         </button>
       </div>
       <div className="flex flex-col w-full py-4">
-        <p>NotesModal</p>
         <button class="mt-12 bg-indigo-700 text-white rounded-full px-16 py-2 disabled:opacity-25" @click="signUp()" :disabled="isSignupDisabled">Get Started</button>
         <p class="font-light text-sm mt-4 text-center">Already have an account? <span class="font-medium" 
         @click="switchToSignIn()">Proceed to login</span></p>
