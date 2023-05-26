@@ -11,34 +11,54 @@ import {
   ApolloLink,
   from,
   concat,
+  split,
 } from '@apollo/client/core';
+
+import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
+import { createClient } from 'graphql-ws';
+import { getMainDefinition } from '@apollo/client/utilities';
+
+const wsLink = new GraphQLWsLink(
+  createClient({
+    url: 'ws://localhost:5000/graphql',
+  })
+);
 
 const httpLink = createHttpLink({
   // You should use an absolute URL here
   uri: 'http://localhost:5000/graphql',
 });
 
-const authMiddleware =
-  //  from([
-  new ApolloLink((operation, forward) => {
-    let authToken = localStorage.getItem('authToken');
-    operation.setContext(({ headers }) => ({
-      headers: {
-        ...headers,
-        authtoken: authToken ? authToken : null,
-      },
-    }));
-    return forward(operation); // Go to the next link in the chain. Similar to `next` in Express.js middleware.
-  });
-//   httpLink,
-// ]);
+const authMiddleware = new ApolloLink((operation, forward) => {
+  let authToken = localStorage.getItem('authToken');
+  operation.setContext(({ headers }) => ({
+    headers: {
+      ...headers,
+      authtoken: authToken ? authToken : null,
+    },
+  }));
+  return forward(operation); // Go to the next link in the chain. Similar to `next` in Express.js middleware.
+});
 
-// Cache implementation
+const link = split(
+  // split based on operation type
+  ({ query }) => {
+    const definition = getMainDefinition(query);
+    return (
+      definition.kind === 'OperationDefinition' &&
+      definition.operation === 'subscription'
+    );
+  },
+  wsLink,
+  // httpLink
+  concat(authMiddleware, httpLink)
+);
+
 const cache = new InMemoryCache();
 
 // Create the apollo client
 export const apolloClient = new ApolloClient({
-  link: concat(authMiddleware, httpLink),
+  link: link,
   cache,
   defaultOptions: {
     query: {

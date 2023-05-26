@@ -37,33 +37,9 @@ export const useNotesStore = defineStore({
       });
       onError(error => {});
       onDone(result => {});
-
       await createToDo();
     },
-    async getTodo() {
-      const { result, onResult } = useQuery(
-        gql`
-          query {
-            getTodoList {
-              id
-              todoListItems {
-                id
-                itemName
-                statusName
-              }
-            }
-          }
-        `
-      );
-
-      return onResult(({ data }) => {
-        console.log('We are in on result function');
-        this.todoLists = data.getTodoList;
-        console.log(this.todoLists);
-      });
-    },
     async getTheToDoList() {
-      console.log('In the todolist');
       const { onResult, result } = useQuery(
         gql`
           query {
@@ -79,9 +55,7 @@ export const useNotesStore = defineStore({
         `,
         { fetchPolicy: 'no-cache' }
       );
-
       return onResult(({ data }) => {
-        console.log('we here and we have been called');
         this.todoLists = data.getTodoList;
       });
     },

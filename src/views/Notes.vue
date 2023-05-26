@@ -1,13 +1,13 @@
 <script>
-import { ref, computed, watchEffect, onMounted } from 'vue';
+import { ref, computed, watchEffect, onMounted, watch } from 'vue';
 import { CollapseTransition } from "@ivanv/vue-collapse-transition"
 import axios from 'axios'
 import NotesModal from './../components/NotesModal.vue'
 import ToDoListModal from './../components/ToDoListModal.vue'
 import { useNotesStore } from './../stores/notesStore'
 import { storeToRefs } from 'pinia';
-import { useQuery } from '@vue/apollo-composable';
 import gql from 'graphql-tag';
+import { useSubscription } from "@vue/apollo-composable"
 
 export default{
 
@@ -25,8 +25,27 @@ export default{
   let dailyQuotes = ref([])
   let isVisible = ref(false)
   let action = ref("")
-  let todoListsItems = ref([])
+  let currentTodoList = ref([])
 
+  const { onResult } = useSubscription(gql`
+    subscription Subscription {
+      todoCreated{
+        id,
+        todoListItems {
+          itemName
+        }
+    }
+   }
+  `,
+  null,
+  () => ({
+    fetchPolicy: "no-cache"
+  }))
+
+  onResult(result => {
+    console.log("We are in susbscription")
+    console.log(result.data)
+  })
 
   async function getDailyQuotes(){
     axios.get('https://zenquotes.io/api/quotes/')
@@ -66,7 +85,7 @@ export default{
     dailyQuotes,
     isVisible,
     action,
-    todoListsItems,
+    currentTodoList,
 
     getDailyQuotes,
     showModal,
@@ -119,7 +138,7 @@ export default{
                 data-te-collapse-horizontal
                 id="collapseWidthExample">
                  <div class="flex-1 max-w-sm rounded-lg"  style="width: 180px">
-                  <div v-for="todoList in todoLists" :key="todoList" >
+                  <div v-for="todoList in currentTodoList" :key="todoList" >
                    <p>{{todoList.id}}</p>
                  </div>
                 </div>
