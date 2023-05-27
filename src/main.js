@@ -55,6 +55,7 @@ import {
   faCalendar,
   faBarChart,
   faClock,
+  faEdit,
 } from '@fortawesome/free-regular-svg-icons';
 
 /* add icons to the library */
@@ -82,7 +83,8 @@ library.add(
   faMusic,
   faEllipsis,
   faPlus,
-  faChevronDown
+  faChevronDown,
+  faEdit
 );
 
 import { DefaultApolloClient } from '@vue/apollo-composable';

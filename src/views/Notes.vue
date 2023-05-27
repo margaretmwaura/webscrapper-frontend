@@ -35,6 +35,7 @@ export default{
         id,
         todoListItems {
           itemName
+          statusName
         }
     }
    }
@@ -70,6 +71,22 @@ export default{
     isVisible.value = false
   }
 
+  function isOpen(status){
+     if(status != 'Closed') {
+      return true
+     } else{
+      return false
+     }
+  }
+
+  function isClosed(status){
+     if(status == 'Closed') {
+      return true
+     } else{
+      return false
+     }
+  }
+
 // FIXME: How can this be done better? The store then function is being called before the onResult function is actually called
 // Is it okay calling on Result from component or just go with the store
   async function getToDoList(){
@@ -93,7 +110,9 @@ export default{
     getDailyQuotes,
     showModal,
     close,
-    getToDoList
+    getToDoList,
+    isOpen,
+    isClosed
   }}
   }
 </script>
@@ -141,8 +160,18 @@ export default{
                 data-te-collapse-horizontal
                 id="collapseWidthExample">
                  <div class="flex-1 max-w-sm rounded-lg"  style="width: 280px">
-                  <ol v-for="todoList in currentTodoList" :key="todoList" class="list-circles">
-                   <li>{{todoList.itemName}}</li>
+                  <ol v-for="todoList in currentTodoList" :key="todoList">
+                   <li :class="{open: isOpen(todoList.statusName), closed : isClosed(todoList.statusName)}">
+                    <div class="flex flex-row w-full justify-between">
+                        <div class="flex">
+                          {{todoList.itemName}}
+                        </div>
+                        <div class="flex space-x-2">
+                          <font-awesome-icon icon="fa-regular fa-clock" />
+                          <font-awesome-icon icon="fa-regular fa-edit" />
+                        </div>
+                    </div>
+                  </li>
                  </ol>
                 </div>
               </div>
@@ -240,4 +269,6 @@ export default{
  background-repeat: no-repeat;
  background-size: cover
 }
+li.open {list-style: circle;}
+li.closed {list-style: disc;}
 </style>
