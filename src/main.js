@@ -27,6 +27,9 @@ import { FRENCH_TRANSLATIONS } from './translations/fr';
 /* import the fontawesome core */
 import { library } from '@fortawesome/fontawesome-svg-core';
 
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css';
+
 import {
   faPlay,
   faCheck,
@@ -120,6 +123,7 @@ app.use(pinia);
 app.use(router);
 app.use(i18n);
 app.use(VueSidebarMenu);
+app.component('VueDatePicker', VueDatePicker);
 app.component('font-awesome-icon', FontAwesomeIcon).mount('#app');
 
 // app.use(vuetify);

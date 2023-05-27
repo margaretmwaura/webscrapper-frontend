@@ -7,8 +7,7 @@ import ToDoListModal from './../components/ToDoListModal.vue'
 import TodoItem from './../components/TodoItem.vue'
 import { useNotesStore } from './../stores/notesStore'
 import { storeToRefs } from 'pinia';
-import gql from 'graphql-tag';
-import { useSubscription } from "@vue/apollo-composable"
+
 
 
 export default{
@@ -23,36 +22,13 @@ export default{
   setup(props, context){
 
   const store = useNotesStore()
-  let { todoLists } = storeToRefs(store);
+  let { todoList } = storeToRefs(store);
 
   let dailyQuotes = ref([])
   let isVisible = ref(false)
   let action = ref("")
-  let currentTodoList = ref([])
 
   // FIXME: Confirm is we can move this to the store
-
-  const { onResult } = useSubscription(gql`
-    subscription Subscription {
-      todoCreated{
-        id,
-        todoListItems {
-          itemName
-          statusName
-        }
-    }
-   }
-  `,
-  null,
-  () => ({
-    fetchPolicy: "no-cache"
-  }))
-
-  onResult(result => {
-    console.log("We are in susbscription")
-    console.log(result.data.todoCreated.todoListItems)
-    currentTodoList.value = result.data?.todoCreated?.todoListItems
-  })
 
   async function getDailyQuotes(){
     axios.get('https://zenquotes.io/api/quotes/')
@@ -104,11 +80,10 @@ export default{
 
   return{
     store,
-    todoLists,
+    todoList,
     dailyQuotes,
     isVisible,
     action,
-    currentTodoList,
 
     getDailyQuotes,
     showModal,
@@ -162,9 +137,9 @@ export default{
                 data-te-collapse-item
                 data-te-collapse-horizontal
                 id="collapseWidthExample">
-                 <div class="flex-1 max-w-sm rounded-lg"  style="width: 280px" v-if="currentTodoList">
-                  <ol v-for="todoList in currentTodoList" :key="todoList">
-                   <li :class="{open: isOpen(todoList.statusName), closed : isClosed(todoList.statusName)}">
+                 <div class="flex-1 max-w-sm rounded-lg"  style="width: 280px" v-if="todoList">
+                  <ol v-for="todoListItem in todoList" :key="todoListItem">
+                   <li :class="{open: isOpen(todoListItem.statusName), closed : isClosed(todoListItem.statusName)}">
                       <!-- <div class="flex flex-row w-full justify-between">
                           <div class="flex">
                             {{todoList.itemName}}
@@ -174,7 +149,7 @@ export default{
                             <font-awesome-icon icon="fa-regular fa-edit" />
                           </div>
                       </div> -->
-                     <TodoItem :todoList="todoList"></TodoItem>
+                     <TodoItem :todoList="todoListItem"></TodoItem>
                    </li>
                  </ol>
                 </div>

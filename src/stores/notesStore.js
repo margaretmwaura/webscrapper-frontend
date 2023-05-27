@@ -6,6 +6,7 @@ import gql from 'graphql-tag';
 import { useQuery } from '@vue/apollo-composable';
 import { computed, watch } from 'vue';
 import { useLocalStorage } from '@vueuse/core';
+import { useSubscription } from '@vue/apollo-composable';
 
 provideApolloClient(apolloClient);
 
@@ -17,7 +18,7 @@ const createToDoListMutation = gql`
 export const useNotesStore = defineStore({
   id: 'notesStore',
   state: () => ({
-    todoLists: useLocalStorage('todoLists', []),
+    todoList: useLocalStorage('todoList', []),
     isCreateTodoListSuccessful: useLocalStorage(
       'isCreateTodoListSuccessful',
       false
@@ -53,7 +54,7 @@ export const useNotesStore = defineStore({
       const { onResult } = useQuery(
         gql`
           query {
-            getTodoList {
+            getTodaysToDoList {
               id
               todoListItems {
                 id
@@ -66,7 +67,34 @@ export const useNotesStore = defineStore({
         { fetchPolicy: 'no-cache' }
       );
       return onResult(({ data }) => {
-        this.todoLists = data.getTodoList;
+        console.log(data);
+        this.todoList = data.getTodaysToDoList?.todoListItems;
+        this.todoListSubscription();
+      });
+    },
+    async todoListSubscription() {
+      const { onResult } = useSubscription(
+        gql`
+          subscription Subscription {
+            todoCreated {
+              id
+              todoListItems {
+                itemName
+                statusName
+              }
+            }
+          }
+        `,
+        null,
+        () => ({
+          fetchPolicy: 'no-cache',
+        })
+      );
+
+      onResult(result => {
+        console.log('We are in susbscription');
+        console.log(result.data.todoCreated.todoListItems);
+        this.todoList = result.data?.todoCreated?.todoListItems;
       });
     },
   },
