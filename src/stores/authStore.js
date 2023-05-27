@@ -47,7 +47,7 @@ export const useAuthStore = defineStore({
     token: useLocalStorage('token', ''),
     authStatus: useLocalStorage('authStatus', ''),
     error: useLocalStorage('error', ''),
-    user: useLocalStorage('user', ''),
+    user: useLocalStorage('user', {}),
   }),
   getters: {},
   actions: {
@@ -122,7 +122,7 @@ export const useAuthStore = defineStore({
 
     // FIXME: This should use the query defined above
     async getUserFromDB(email) {
-      const { result } = useQuery(
+      const { onResult } = useQuery(
         gql`
           query ($email: String!) {
             getUser(email: $email) {
@@ -135,9 +135,11 @@ export const useAuthStore = defineStore({
           email: email,
         }
       );
-      this.user = computed(() =>
-        result.value?.getUser ? result.value?.getUser : null
-      );
+      return onResult(({ data }) => {
+        console.log(data);
+        console.log(data.getUser);
+        this.user = data.getUser;
+      });
     },
   },
 });

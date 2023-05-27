@@ -18,6 +18,11 @@ export const useNotesStore = defineStore({
   id: 'notesStore',
   state: () => ({
     todoLists: useLocalStorage('todoLists', []),
+    isCreateTodoListSuccessful: useLocalStorage(
+      'isCreateTodoListSuccessful',
+      false
+    ),
+    errorSavingTodoList: useLocalStorage('errorSavingTodoList', ''),
   }),
   getters: {},
   actions: {
@@ -35,12 +40,17 @@ export const useNotesStore = defineStore({
           },
         };
       });
-      onError(error => {});
-      onDone(result => {});
+      onError(error => {
+        this.errorSavingTodoList = error.message;
+        this.isCreateTodoListSuccessful = false;
+      });
+      onDone(result => {
+        this.isCreateTodoListSuccessful = true;
+      });
       await createToDo();
     },
     async getTheToDoList() {
-      const { onResult, result } = useQuery(
+      const { onResult } = useQuery(
         gql`
           query {
             getTodoList {

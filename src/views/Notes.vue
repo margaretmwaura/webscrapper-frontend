@@ -27,6 +27,8 @@ export default{
   let action = ref("")
   let currentTodoList = ref([])
 
+  // FIXME: Confirm is we can move this to the store
+
   const { onResult } = useSubscription(gql`
     subscription Subscription {
       todoCreated{
@@ -44,7 +46,8 @@ export default{
 
   onResult(result => {
     console.log("We are in susbscription")
-    console.log(result.data)
+    console.log(result.data.todoCreated.todoListItems)
+    currentTodoList.value = result.data?.todoCreated?.todoListItems
   })
 
   async function getDailyQuotes(){
@@ -133,14 +136,14 @@ export default{
                 </p>
               </div>
               <div
-                class= "!visible hidden flex flex-col h-full p-6" 
+                class= "!visible hidden flex flex-col h-full mt-10" 
                 data-te-collapse-item
                 data-te-collapse-horizontal
                 id="collapseWidthExample">
-                 <div class="flex-1 max-w-sm rounded-lg"  style="width: 180px">
-                  <div v-for="todoList in currentTodoList" :key="todoList" >
-                   <p>{{todoList.id}}</p>
-                 </div>
+                 <div class="flex-1 max-w-sm rounded-lg"  style="width: 280px">
+                  <ol v-for="todoList in currentTodoList" :key="todoList" class="list-circles">
+                   <li>{{todoList.itemName}}</li>
+                 </ol>
                 </div>
               </div>
           </div>
