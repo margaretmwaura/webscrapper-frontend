@@ -4,17 +4,20 @@ import { CollapseTransition } from "@ivanv/vue-collapse-transition"
 import axios from 'axios'
 import NotesModal from './../components/NotesModal.vue'
 import ToDoListModal from './../components/ToDoListModal.vue'
+import TodoItem from './../components/TodoItem.vue'
 import { useNotesStore } from './../stores/notesStore'
 import { storeToRefs } from 'pinia';
 import gql from 'graphql-tag';
 import { useSubscription } from "@vue/apollo-composable"
+
 
 export default{
 
   name : 'Notes',
   components: {
     ToDoListModal,
-    NotesModal
+    NotesModal,
+    TodoItem
   },
 
   setup(props, context){
@@ -159,19 +162,20 @@ export default{
                 data-te-collapse-item
                 data-te-collapse-horizontal
                 id="collapseWidthExample">
-                 <div class="flex-1 max-w-sm rounded-lg"  style="width: 280px">
+                 <div class="flex-1 max-w-sm rounded-lg"  style="width: 280px" v-if="currentTodoList">
                   <ol v-for="todoList in currentTodoList" :key="todoList">
                    <li :class="{open: isOpen(todoList.statusName), closed : isClosed(todoList.statusName)}">
-                    <div class="flex flex-row w-full justify-between">
-                        <div class="flex">
-                          {{todoList.itemName}}
-                        </div>
-                        <div class="flex space-x-2">
-                          <font-awesome-icon icon="fa-regular fa-clock" />
-                          <font-awesome-icon icon="fa-regular fa-edit" />
-                        </div>
-                    </div>
-                  </li>
+                      <!-- <div class="flex flex-row w-full justify-between">
+                          <div class="flex">
+                            {{todoList.itemName}}
+                          </div>
+                          <div class="flex space-x-2" v-show="todoList.statusName != 'Closed'">
+                            <font-awesome-icon icon="fa-regular fa-clock" />
+                            <font-awesome-icon icon="fa-regular fa-edit" />
+                          </div>
+                      </div> -->
+                     <TodoItem :todoList="todoList"></TodoItem>
+                   </li>
                  </ol>
                 </div>
               </div>
