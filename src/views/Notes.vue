@@ -27,6 +27,11 @@ export default{
   let dailyQuotes = ref([])
   let isVisible = ref(false)
   let action = ref("")
+  console.log(todoList.value)
+  let isTodoListAdded = computed(() => (todoList.value == 'undefined'
+   || !todoList.value || todoList.value.length <= 0) ? false : true);
+  console.log(isTodoListAdded.value)
+
 
   // FIXME: Confirm is we can move this to the store
 
@@ -84,6 +89,7 @@ export default{
     dailyQuotes,
     isVisible,
     action,
+    isTodoListAdded,
 
     getDailyQuotes,
     showModal,
@@ -119,6 +125,7 @@ export default{
           <div class="flex rounded p-4 bg-millenial-pink">
             <div class="flex justify-end mt-2">
                 <p class="mb-4">
+                  <!-- <span class="animate-ping absolute h-4 w-4 rounded-full bg-sky-400 opacity-75"></span> -->
                   <button
                     type="button"
                     data-te-collapse-init
@@ -126,7 +133,7 @@ export default{
                     data-te-ripple-init
                     data-te-ripple-color="light"
                     aria-expanded="false"
-                    class="text-2xl"
+                    class="text-2xl animate-bounce"
                     aria-controls="collapseWidthExample">
                     📌
                   </button>
@@ -137,21 +144,14 @@ export default{
                 data-te-collapse-item
                 data-te-collapse-horizontal
                 id="collapseWidthExample">
-                 <div class="flex-1 max-w-sm rounded-lg"  style="width: 280px" v-if="todoList">
-                  <ol v-for="todoListItem in todoList" :key="todoListItem">
-                   <li :class="{open: isOpen(todoListItem.statusName), closed : isClosed(todoListItem.statusName)}">
-                      <!-- <div class="flex flex-row w-full justify-between">
-                          <div class="flex">
-                            {{todoList.itemName}}
-                          </div>
-                          <div class="flex space-x-2" v-show="todoList.statusName != 'Closed'">
-                            <font-awesome-icon icon="fa-regular fa-clock" />
-                            <font-awesome-icon icon="fa-regular fa-edit" />
-                          </div>
-                      </div> -->
-                     <TodoItem :todoList="todoListItem"></TodoItem>
-                   </li>
-                 </ol>
+                 <div class="flex-1 max-w-sm rounded-lg"  style="width: 280px" >
+                  <div v-if="isTodoListAdded">
+                    <ol v-for="todoListItem in todoList" :key="todoListItem">
+                    <li :class="{open: isOpen(todoListItem.statusName), closed : isClosed(todoListItem.statusName)}">
+                      <TodoItem :todoList="todoListItem"></TodoItem>
+                    </li>
+                    </ol>
+                 </div>
                 </div>
               </div>
           </div>
@@ -211,14 +211,14 @@ export default{
                   data-te-dropdown-menu-ref>
                   <li>
                     <button
+                     v-if="!isTodoListAdded"
                       class="block w-full whitespace-nowrap bg-transparent px-4 py-2 text-sm 
                       font-normal text-black-700 hover:bg-black-100 
                       active:text-black-800 active:no-underline 
                       disabled:pointer-events-none disabled:bg-transparent
                        disabled:text-black-400 dark:text-black-200 dark:hover:bg-black-600"
                       @click="showModal('ToDoListModal')"
-                      data-te-dropdown-item-ref
-                      >To Do List</button
+                      data-te-dropdown-item-ref>To Do List</button
                     >
                   </li>
                   <li>

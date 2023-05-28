@@ -69,6 +69,7 @@ export const useNotesStore = defineStore({
       return onResult(({ data }) => {
         console.log(data);
         this.todoList = data.getTodaysToDoList?.todoListItems;
+        console.log(this.todoList);
         this.todoListSubscription();
       });
     },
