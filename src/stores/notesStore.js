@@ -58,8 +58,9 @@ export const useNotesStore = defineStore({
               id
               todoListItems {
                 id
-                itemName
-                statusName
+                item_name
+                status_name
+                reminder
               }
             }
           }
@@ -80,8 +81,10 @@ export const useNotesStore = defineStore({
             todoCreated {
               id
               todoListItems {
-                itemName
-                statusName
+                id
+                item_name
+                status_name
+                reminder
               }
             }
           }

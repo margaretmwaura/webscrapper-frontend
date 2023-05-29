@@ -147,7 +147,7 @@ export default{
                  <div class="flex-1 max-w-sm rounded-lg"  style="width: 280px" >
                   <div v-if="isTodoListAdded">
                     <ol v-for="todoListItem in todoList" :key="todoListItem">
-                    <li :class="{open: isOpen(todoListItem.statusName), closed : isClosed(todoListItem.statusName)}">
+                    <li :class="{open: isOpen(todoListItem.status_name), closed : isClosed(todoListItem.status_name)}">
                       <TodoItem :todoList="todoListItem"></TodoItem>
                     </li>
                     </ol>

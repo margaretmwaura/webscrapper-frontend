@@ -35,7 +35,7 @@ const registerMutation = gql`
 const getUser = gql`
   query {
     getUser {
-      firstname
+      first_name
       email
     }
   }
@@ -126,7 +126,7 @@ export const useAuthStore = defineStore({
         gql`
           query ($email: String!) {
             getUser(email: $email) {
-              firstName
+              first_name
               email
             }
           }
