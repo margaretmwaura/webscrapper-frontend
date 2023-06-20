@@ -1,3 +1,4 @@
+//www.apollographql.com/docs/react/data/error-handling/#:~:text=If%20the%20response%20includes%20GraphQL,is%20the%20default%20error%20policy.
 import { defineStore } from 'pinia';
 import { useLocalStorage } from '@vueuse/core';
 import {
@@ -25,7 +26,7 @@ const registerMutation = gql`
       }
       ... on RegisterSuccessful {
         user {
-          firstName
+          first_name
           email
         }
       }
@@ -33,8 +34,8 @@ const registerMutation = gql`
   }
 `;
 const getUser = gql`
-  query {
-    getUser {
+  query ($email: String!) {
+    getUser(email: $email) {
       first_name
       email
     }
@@ -46,6 +47,7 @@ export const useAuthStore = defineStore({
   state: () => ({
     token: useLocalStorage('token', ''),
     authStatus: useLocalStorage('authStatus', ''),
+    // FIXME: This will have to be fixed to be an array , this is to allow for saving of all the errors
     error: useLocalStorage('error', ''),
     user: useLocalStorage('user', {}),
   }),
@@ -61,8 +63,8 @@ export const useAuthStore = defineStore({
         return {
           variables: {
             input: {
-              firstName: data.name,
-              lastName: data.name,
+              first_name: data.name,
+              last_name: data.name,
               email: data.email,
               password: data.password,
             },
@@ -70,8 +72,10 @@ export const useAuthStore = defineStore({
         };
       });
       onError(error => {
-        if (result && result.data) {
-          this.error = result.data.registerUser.message;
+        if (error) {
+          this.error = error.networkError
+            ? error.networkError.result.errors[0].message
+            : error.graphQLErrors[0].message;
         } else {
           this.error = 'Signup was not successful! Please try again later';
         }
@@ -119,22 +123,10 @@ export const useAuthStore = defineStore({
       this.error = '';
       this.user = '';
     },
-
-    // FIXME: This should use the query defined above
     async getUserFromDB(email) {
-      const { onResult } = useQuery(
-        gql`
-          query ($email: String!) {
-            getUser(email: $email) {
-              first_name
-              email
-            }
-          }
-        `,
-        {
-          email: email,
-        }
-      );
+      const { onResult } = useQuery(getUser, {
+        email: email,
+      });
       return onResult(({ data }) => {
         console.log(data);
         console.log(data.getUser);
