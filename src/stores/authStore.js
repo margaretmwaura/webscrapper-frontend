@@ -85,8 +85,6 @@ export const useAuthStore = defineStore({
           this.error = result.data.registerUser.message;
         } else {
           this.user = result.data.registerUser.user;
-          console.log('In On Done');
-          console.log(this.user);
         }
       });
 
@@ -130,8 +128,6 @@ export const useAuthStore = defineStore({
         email: email,
       });
       return onResult(({ data }) => {
-        console.log(data);
-        console.log(data.getUser);
         this.user = data.getUser;
       });
     },

@@ -16,9 +16,10 @@ const selectReminderDate = () => {
 }
 
 const closeModal = (reminderDate) => {
-  console.log(reminderDate)
   showDatePicker.value = false
-  todoReminderDate.value = reminderDate
+  if(reminderDate.value){
+    todoReminderDate.value = reminderDate
+  }
 }
 
 </script>
