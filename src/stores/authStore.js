@@ -85,6 +85,8 @@ export const useAuthStore = defineStore({
           this.error = result.data.registerUser.message;
         } else {
           this.user = result.data.registerUser.user;
+          console.log('In On Done');
+          console.log(this.user);
         }
       });
 
@@ -110,7 +112,7 @@ export const useAuthStore = defineStore({
         .then(async userCredential => {
           this.token = userCredential.user.accessToken;
           this.authStatus = 'Authorized';
-          await this.getUserFromDB('mwauramargaret1@gmail.com');
+          await this.getUserFromDB(data.email);
         })
         .catch(error => {
           this.authStatus = 'UnAuthorized';
