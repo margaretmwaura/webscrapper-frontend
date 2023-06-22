@@ -1,12 +1,21 @@
 <script setup>
-import { ref, computed, watch, defineEmits } from 'vue';
-const emit = defineEmits(['close'])
+// https://vue3datepicker.com/methods-and-events/events/
 
-function closeModal(){
-  emit('close', reminderDate) 
+import { ref, computed, watch, defineEmits } from 'vue';
+const emit = defineEmits(['updateSelectedDate','close'])
+
+let reminderDate = ref()
+
+function sendDate(modelData){
+  console.log(modelData)
+  reminderDate.value = modelData
+  emit('updateSelectedDate', modelData) 
 }
 
-let reminderDate = ref('')
+function closeModal(){
+  emit('close') 
+}
+
 </script>
 
 <template>
@@ -24,7 +33,7 @@ let reminderDate = ref('')
             <font-awesome-icon icon="fa-solid fa-times" size="xl"  @click="closeModal()"/>
         </button>
       </div>
-      <VueDatePicker v-model="reminderDate" />
+      <VueDatePicker :model-value="reminderDate" @update:model-value="sendDate"/>
     </div>
   </div>
 </template>

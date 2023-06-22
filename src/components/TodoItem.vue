@@ -14,25 +14,31 @@ const store = useNotesStore()
 
 let showDatePicker = ref(false)
 let todoReminderDate = ref(props.todoListItem.reminder)
-console.log(todoReminderDate)
+let formattedTodoReminderDate = computed(() => {
+  return todoReminderDate.value ? moment(todoReminderDate.value).format('MMMM Do YYYY, h:mm a') : ''
+})
 
 const selectReminderDate = () => {
   showDatePicker.value = true
 }
 
-const closeReminderDateModal = async (reminderDate) => {
+const closeReminderDateModal = async () => {
   showDatePicker.value = false
-  console.log(reminderDate.value)
-  if(Boolean(reminderDate.value)){
-    console.log("We update value")
-    todoReminderDate.value = reminderDate
-    // Save to the db
-    let data = {
-      reminder: reminderDate.value,
-      id: props.todoListItem.id
+ 
+}
+
+const updateReminderDate = async (reminderDate) => {
+    console.log(reminderDate)
+    if(reminderDate){
+      console.log("We update value")
+      todoReminderDate.value = reminderDate
+      // Save to the db
+      let data = {
+        reminder: reminderDate.value,
+        id: props.todoListItem.id
+      }
+      await updateTodoListItem(data)
     }
-    await updateTodoListItem(data)
-  }
 }
 
 const updateTodoListItem = async (data) => {
@@ -50,12 +56,12 @@ const updateTodoListItem = async (data) => {
         <font-awesome-icon icon="fa-regular fa-clock" @click="selectReminderDate()"/>
         <font-awesome-icon icon="fa-solid fa-check" />
         <font-awesome-icon icon="fa-regular fa-edit " />
-        <DatesModal v-show="showDatePicker" @close="closeReminderDateModal" />
+        <DatesModal v-show="showDatePicker" @updateSelectedDate="updateReminderDate" @close="closeReminderDateModal"/>
       </div>
     </div>
     <!-- FIXME: This should show either the date selected or the reminder that already exists -->
-    <div class="flex" v-show="Boolean(todoReminderDate)">
-        <p v-if="Boolean(todoReminderDate)">{{ moment(todoReminderDate.value).format('MMMM Do YYYY, h:mm a') }}</p>
+    <div class="flex">
+        <p>{{formattedTodoReminderDate}}</p>
     </div>
 </template>
 
