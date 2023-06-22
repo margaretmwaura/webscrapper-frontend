@@ -148,7 +148,7 @@ export default{
                   <div v-if="isTodoListAdded">
                     <ol v-for="todoListItem in todoList" :key="todoListItem">
                     <li :class="{open: isOpen(todoListItem.status_name), closed : isClosed(todoListItem.status_name)}">
-                      <TodoItem :todoList="todoListItem"></TodoItem>
+                      <TodoItem :todoListItem="todoListItem"></TodoItem>
                     </li>
                     </ol>
                  </div>

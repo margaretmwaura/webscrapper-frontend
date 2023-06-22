@@ -3,23 +3,40 @@ import { ref, computed, watchEffect } from 'vue';
 import { toRefs, toRef } from 'vue'
 import DatesModal from './../components/DatesModal.vue'
 import moment from 'moment'
+import { useNotesStore } from './../stores/notesStore'
+
 
 const props =  defineProps({
-  todoList: Object,
+  todoListItem: Object,
 });
 
+const store = useNotesStore()
+
 let showDatePicker = ref(false)
-let todoReminderDate = ref('')
+let todoReminderDate = ref(props.todoListItem.reminder)
+console.log(todoReminderDate)
 
 const selectReminderDate = () => {
   showDatePicker.value = true
 }
 
-const closeModal = (reminderDate) => {
+const closeReminderDateModal = async (reminderDate) => {
   showDatePicker.value = false
-  if(reminderDate.value){
+  console.log(reminderDate.value)
+  if(Boolean(reminderDate.value)){
+    console.log("We update value")
     todoReminderDate.value = reminderDate
+    // Save to the db
+    let data = {
+      reminder: reminderDate.value,
+      id: props.todoListItem.id
+    }
+    await updateTodoListItem(data)
   }
+}
+
+const updateTodoListItem = async (data) => {
+   await store.updateToDoListItem(data)
 }
 
 </script>
@@ -27,19 +44,19 @@ const closeModal = (reminderDate) => {
 <template>
    <div class="flex flex-row w-full justify-between">
       <div class="flex">
-        {{props.todoList.item_name}}
+        {{props.todoListItem.item_name}}
       </div>
-      <div class="flex space-x-2" v-show="props.todoList.status_name != 'Closed'">
+      <div class="flex space-x-2" v-show="props.todoListItem.status_name != 'Closed'">
         <font-awesome-icon icon="fa-regular fa-clock" @click="selectReminderDate()"/>
         <font-awesome-icon icon="fa-solid fa-check" />
         <font-awesome-icon icon="fa-regular fa-edit " />
-        <DatesModal v-show="showDatePicker" @close="closeModal" />
+        <DatesModal v-show="showDatePicker" @close="closeReminderDateModal" />
       </div>
     </div>
     <!-- FIXME: This should show either the date selected or the reminder that already exists -->
-    <div class="flex" v-show="todoReminderDate">
-        {{ moment(todoReminderDate.value).format('MMMM Do YYYY, h:mm a') }}
-      </div>
+    <div class="flex" v-show="Boolean(todoReminderDate)">
+        <p v-if="Boolean(todoReminderDate)">{{ moment(todoReminderDate.value).format('MMMM Do YYYY, h:mm a') }}</p>
+    </div>
 </template>
 
 <style scoped></style>

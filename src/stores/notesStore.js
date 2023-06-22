@@ -15,6 +15,11 @@ const createToDoListMutation = gql`
     createToDoList(input: $input)
   }
 `;
+const updateTodoListItemMutation = gql`
+  mutation updateTodoListItem($input: UpdateTodoListItem!) {
+    updateTodoListItem(input: $input)
+  }
+`;
 export const useNotesStore = defineStore({
   id: 'notesStore',
   state: () => ({
@@ -50,6 +55,34 @@ export const useNotesStore = defineStore({
       });
       await createToDo();
     },
+    async updateToDoListItem(data) {
+      const {
+        mutate: updateTodoListItem,
+        onError,
+        onDone,
+      } = useMutation(updateTodoListItemMutation, () => {
+        return {
+          variables: {
+            input: data,
+          },
+        };
+      });
+      onError(error => {
+        if (error) {
+          console.log(
+            error.networkError
+              ? error.networkError.result.errors[0].message
+              : error.graphQLErrors[0].message
+          );
+        } else {
+          console.log('No error gotten');
+        }
+      });
+      onDone(result => {
+        console.log(result);
+      });
+      await updateTodoListItem();
+    },
     async getTheToDoList() {
       const { onResult } = useQuery(
         gql`
@@ -68,7 +101,6 @@ export const useNotesStore = defineStore({
         { fetchPolicy: 'no-cache' }
       );
       return onResult(({ data }) => {
-        console.log(data);
         this.todoList = data.getTodaysToDoList?.todoListItems;
         console.log(this.todoList);
         this.todoListSubscription();
