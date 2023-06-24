@@ -56,7 +56,7 @@ export default{
   }
 
   function isOpen(status){
-     if(status != 'Closed') {
+     if(status != 'closed') {
       return true
      } else{
       return false
@@ -64,7 +64,7 @@ export default{
   }
 
   function isClosed(status){
-     if(status == 'Closed') {
+     if(status == 'closed') {
       return true
      } else{
       return false

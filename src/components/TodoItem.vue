@@ -27,6 +27,14 @@ const closeReminderDateModal = async () => {
  
 }
 
+const markItemAsComplete = async () => {
+   let data = {
+      status_name : "closed",
+      id: props.todoListItem.id
+    }
+    await updateTodoListItem(data)
+}
+
 const updateReminderDate = async (reminderDate) => {
     console.log(reminderDate)
     if(reminderDate){
@@ -34,7 +42,7 @@ const updateReminderDate = async (reminderDate) => {
       todoReminderDate.value = reminderDate
       // Save to the db
       let data = {
-        reminder: reminderDate.value,
+        reminder: todoReminderDate.value,
         id: props.todoListItem.id
       }
       await updateTodoListItem(data)
@@ -52,9 +60,9 @@ const updateTodoListItem = async (data) => {
       <div class="flex">
         {{props.todoListItem.item_name}}
       </div>
-      <div class="flex space-x-2" v-show="props.todoListItem.status_name != 'Closed'">
+      <div class="flex space-x-2" v-show="props.todoListItem.status_name != 'closed'">
         <font-awesome-icon icon="fa-regular fa-clock" @click="selectReminderDate()"/>
-        <font-awesome-icon icon="fa-solid fa-check" />
+        <font-awesome-icon icon="fa-solid fa-check" @click="markItemAsComplete"/>
         <font-awesome-icon icon="fa-regular fa-edit " />
         <DatesModal v-show="showDatePicker" @updateSelectedDate="updateReminderDate" @close="closeReminderDateModal"/>
       </div>
