@@ -1,7 +1,8 @@
 <script setup>
-import { ref, computed, watchEffect } from 'vue';
+import { ref, computed, watchEffect, watch } from 'vue';
 import { toRefs, toRef } from 'vue'
 import DatesModal from './../components/DatesModal.vue'
+import EditTodoItem from './../components/EditTodoItem.vue'
 import moment from 'moment'
 import { useNotesStore } from './../stores/notesStore'
 
@@ -12,7 +13,9 @@ const props =  defineProps({
 
 const store = useNotesStore()
 
+let taskDesc = ref(props.todoListItem.item_name);
 let showDatePicker = ref(false)
+let showEditDesc = ref(false)
 let todoReminderDate = ref(props.todoListItem.reminder)
 let formattedTodoReminderDate = computed(() => {
   return todoReminderDate.value ? moment(todoReminderDate.value).format('MMMM Do YYYY, h:mm a') : ''
@@ -24,7 +27,14 @@ const selectReminderDate = () => {
 
 const closeReminderDateModal = async () => {
   showDatePicker.value = false
- 
+}
+
+const showEditTodoItemDesc = async () => {
+   showEditDesc.value = true
+}
+
+const closeEditTodoItemDes = async () => {
+   showEditDesc.value = false
 }
 
 const markItemAsComplete = async () => {
@@ -32,7 +42,7 @@ const markItemAsComplete = async () => {
       status_name : "closed",
       id: props.todoListItem.id
     }
-    await updateTodoListItem(data)
+    await store.updateToDoListItem(data)
 }
 
 const updateReminderDate = async (reminderDate) => {
@@ -45,26 +55,32 @@ const updateReminderDate = async (reminderDate) => {
         reminder: todoReminderDate.value,
         id: props.todoListItem.id
       }
-      await updateTodoListItem(data)
+      await store.updateToDoListItem(data)
     }
 }
 
-const updateTodoListItem = async (data) => {
-   await store.updateToDoListItem(data)
-}
+watch(taskDesc, async (newTaskDesc) =>  {
+   if(newTaskDesc && taskDesc != newTaskDesc){
+      let data = {
+        item_name: newTaskDesc,
+        id: props.todoListItem.id
+      }
+      await store.updateToDoListItem(data)
+   }    
+});
 
 </script>
 
 <template>
    <div class="flex flex-row w-full justify-between">
-      <div class="flex">
-        {{props.todoListItem.item_name}}
-      </div>
+      <!-- <p>{{ taskDesc }}</p> -->
+      <div class="flex">{{taskDesc}}</div>
       <div class="flex space-x-2" v-show="props.todoListItem.status_name != 'closed'">
         <font-awesome-icon icon="fa-regular fa-clock" @click="selectReminderDate()"/>
-        <font-awesome-icon icon="fa-solid fa-check" @click="markItemAsComplete"/>
-        <font-awesome-icon icon="fa-regular fa-edit " />
+        <font-awesome-icon icon="fa-solid fa-check" @click="markItemAsComplete()"/>
+        <font-awesome-icon icon="fa-regular fa-edit" @click="showEditTodoItemDesc()"/>
         <DatesModal v-show="showDatePicker" @updateSelectedDate="updateReminderDate" @close="closeReminderDateModal"/>
+        <EditTodoItem v-show="showEditDesc" @close="closeEditTodoItemDes" v-model="taskDesc"/>
       </div>
     </div>
     <!-- FIXME: This should show either the date selected or the reminder that already exists -->

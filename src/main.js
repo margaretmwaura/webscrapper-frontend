@@ -92,6 +92,8 @@ library.add(
 
 import { DefaultApolloClient } from '@vue/apollo-composable';
 
+import { vue3Debounce } from 'vue-debounce';
+
 const TRANSLATIONS = {
   fr: FRENCH_TRANSLATIONS,
 };
@@ -123,6 +125,7 @@ app.use(pinia);
 app.use(router);
 app.use(i18n);
 app.use(VueSidebarMenu);
+app.directive('debounce', vue3Debounce({ lock: true }));
 app.component('VueDatePicker', VueDatePicker);
 app.component('font-awesome-icon', FontAwesomeIcon).mount('#app');
 
