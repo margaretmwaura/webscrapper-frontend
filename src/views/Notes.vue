@@ -5,10 +5,9 @@ import axios from 'axios'
 import NotesModal from './../components/NotesModal.vue'
 import ToDoListModal from './../components/ToDoListModal.vue'
 import TodoItem from './../components/TodoItem.vue'
+import QuoteDetails from './../components/QuoteDetails.vue'
 import { useNotesStore } from './../stores/notesStore'
 import { storeToRefs } from 'pinia';
-
-
 
 export default{
 
@@ -16,7 +15,8 @@ export default{
   components: {
     ToDoListModal,
     NotesModal,
-    TodoItem
+    TodoItem,
+    QuoteDetails
   },
 
   setup(props, context){
@@ -112,11 +112,7 @@ export default{
             </div>
             <div class="grid grid-cols-3 gap-4 mt-4">
               <div v-for="quote in dailyQuotes" :key="quote">
-                <div class="p-4 border border-slate-200 h-36 rounded-md">
-                  <p class="font-semibold underline underline-offset-8">{{quote.a}}</p>
-                  <br>
-                  <q class="font-thin text-base">{{quote.q.substring(0,52)+".." }}</q>
-                </div>
+                <QuoteDetails :quote="quote"/>
               </div>
             </div>
           </div>
