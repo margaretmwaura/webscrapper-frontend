@@ -20,6 +20,11 @@ const updateTodoListItemMutation = gql`
     updateTodoListItem(input: $input)
   }
 `;
+const addTodoListItemMutation = gql`
+  mutation addTodoListItem($input: addTodoListItem!) {
+    addTodoListItem(input: $input)
+  }
+`;
 export const useNotesStore = defineStore({
   id: 'notesStore',
   state: () => ({
@@ -82,6 +87,35 @@ export const useNotesStore = defineStore({
         console.log(result);
       });
       await updateTodoListItem();
+    },
+    async addToDoListItem(data) {
+      data.id = todoList[0].id;
+      const {
+        mutate: addTodoItem,
+        onError,
+        onDone,
+      } = useMutation(addTodoListItemMutation, () => {
+        return {
+          variables: {
+            input: data,
+          },
+        };
+      });
+      onError(error => {
+        if (error) {
+          console.log(
+            error.networkError
+              ? error.networkError.result.errors[0].message
+              : error.graphQLErrors[0].message
+          );
+        } else {
+          console.log('No error gotten');
+        }
+      });
+      onDone(result => {
+        console.log(result);
+      });
+      await addTodoItem();
     },
     async getTheToDoList() {
       const { onResult } = useQuery(

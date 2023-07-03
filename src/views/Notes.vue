@@ -6,6 +6,7 @@ import NotesModal from './../components/NotesModal.vue'
 import ToDoListModal from './../components/ToDoListModal.vue'
 import TodoItem from './../components/TodoItem.vue'
 import QuoteDetails from './../components/QuoteDetails.vue'
+import AddTodoItem from './../components/AddTodoItem.vue'
 import { useNotesStore } from './../stores/notesStore'
 import { storeToRefs } from 'pinia';
 
@@ -15,8 +16,9 @@ export default{
   components: {
     ToDoListModal,
     NotesModal,
-    TodoItem,
-    QuoteDetails
+    QuoteDetails,
+    AddTodoItem,
+    TodoItem
   },
 
   setup(props, context){
@@ -24,6 +26,7 @@ export default{
   const store = useNotesStore()
   let { todoList } = storeToRefs(store);
 
+  let addTodoItem = ref(false)
   let dailyQuotes = ref([])
   let isVisible = ref(false)
   let action = ref("")
@@ -71,6 +74,14 @@ export default{
      }
   }
 
+  function closeAddTodoItemModal(){
+    addTodoItem.value = false
+  }
+
+  function openAddTodoItemModal(){
+    addTodoItem.value = true
+  }
+
 // FIXME: How can this be done better? The store then function is being called before the onResult function is actually called
 // Is it okay calling on Result from component or just go with the store
   async function getToDoList(){
@@ -90,13 +101,16 @@ export default{
     isVisible,
     action,
     isTodoListAdded,
+    addTodoItem,
 
     getDailyQuotes,
     showModal,
     close,
     getToDoList,
     isOpen,
-    isClosed
+    isClosed,
+    closeAddTodoItemModal,
+    openAddTodoItemModal
   }}
   }
 </script>
@@ -140,15 +154,23 @@ export default{
                 data-te-collapse-item
                 data-te-collapse-horizontal
                 id="collapseWidthExample">
-                 <div class="flex-1 max-w-sm rounded-lg"  style="width: 280px" >
-                  <div v-if="isTodoListAdded">
-                    <ol v-for="todoListItem in todoList" :key="todoListItem">
-                    <li :class="{open: isOpen(todoListItem.status_name), closed : isClosed(todoListItem.status_name)}">
-                      <TodoItem :todoListItem="todoListItem"></TodoItem>
-                    </li>
-                    </ol>
-                 </div>
-                </div>
+                  <div class="flex w-full justify-end">
+                    <div class="-mt-8" v-show="todoList && todoList.length != 0">
+                      <div class="rounded-full bg-mustard-yellow w-10 h-10 flex justify-center items-center text-white text-sm">
+                        <font-awesome-icon icon="fa-solid fa-plus" size="lg" @click="openAddTodoItemModal"/>
+                      </div>
+                      <AddTodoItem v-show="addTodoItem" @close="closeAddTodoItemModal"/>
+                    </div>
+                  </div>
+                  <div class="flex-1 max-w-sm rounded-lg"  style="width: 280px" >
+                      <div v-if="isTodoListAdded">
+                        <ol v-for="todoListItem in todoList" :key="todoListItem">
+                          <li :class="{open: isOpen(todoListItem.status_name), closed : isClosed(todoListItem.status_name)}">
+                            <TodoItem :todoListItem="todoListItem"></TodoItem>
+                          </li>
+                        </ol>
+                      </div>
+                  </div>
               </div>
           </div>
        </div>
