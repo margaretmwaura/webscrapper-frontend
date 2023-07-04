@@ -89,7 +89,7 @@ export const useNotesStore = defineStore({
       await updateTodoListItem();
     },
     async addToDoListItem(data) {
-      data.id = todoList[0].id;
+      data.id = this.todoList[0].id;
       const {
         mutate: addTodoItem,
         onError,

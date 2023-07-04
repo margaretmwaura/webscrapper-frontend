@@ -15,11 +15,12 @@ function closeModal(){
 
 async function saveToDoItem(){
   let data = {
-    item_name: newTodoItem,
+    item_name: newTodoItem.value,
   }
   console.log("Data to add")
   console.log(data)
-  // await store.addToDoListItem(data)
+  await store.addToDoListItem(data)
+  emit('close') 
 }
 
 </script>

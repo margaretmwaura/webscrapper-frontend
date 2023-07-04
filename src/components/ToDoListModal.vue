@@ -47,7 +47,7 @@ export default{
       let todolists = toDoList.value.split("\u20DD")
       let nonEmptyToDoList = todolists.filter(e => typeof e === 'string' && e !== '')
       let formattedToDoList = nonEmptyToDoList.map((toDoListItem) => {
-          return {"name": toDoListItem.trim().replace(/(\r\n|\n|\r)/gm,"")}
+          return {"item_name": toDoListItem.trim().replace(/(\r\n|\n|\r)/gm,"")}
       })
 
       await store.createToDoList(formattedToDoList)

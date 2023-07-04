@@ -118,7 +118,7 @@ export default{
 <template>
   <div class="flex flex-col w-full mb-10 banner h-full ">
     <div class="flex flex-col w-full mt-52 h-screen bg-snow-white">
-      <div class="flex flex-row space-x-4 bg-transparent -mt-10 mx-10 h-64 ">
+      <div class="flex flex-row space-x-4 bg-transparent -mt-10 mx-10 h-64">
           <div class="flex flex-col flex-grow bg-white rounded p-6">
             <div class="flex justify-between">
             <p class="text-2xl font-semibold tracking-wide leading-loose">Daily Growth 🌱 ☀️</p>
