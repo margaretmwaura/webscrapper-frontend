@@ -177,7 +177,7 @@ export default{
        <div class="flex space-x-4 bg-transparent mt-10 mx-10 h-96">
           <div class="flex flex-col w-full bg-white rounded p-6 h-96">
             <div class="flex justify-between">
-              <p class="text-2xl font-semibold tracking-wide leading-loose">Notes </p>
+              <p class="text-2xl font-semibold tracking-wide leading-loose">Notes</p>
               <div class="space-x-4">
                 <font-awesome-icon icon="fa-regular fa-calendar lg" />
                 <font-awesome-icon icon="fa-solid fa-ellipsis lg" />
@@ -201,7 +201,7 @@ export default{
                     transition duration-150 ease-in-out hover:bg-indigo-600 rounded-full w-64
                     "
                   type="button"
-                  id="dropdownMenuButton1"
+                  id="dropdownMenuButton"
                   data-te-dropdown-toggle-ref
                   aria-expanded="false"
                   data-te-ripple-init
@@ -225,7 +225,7 @@ export default{
                    overflow-hidden rounded-lg border-none bg-white bg-clip-padding
                     text-left text-base shadow-lg dark:bg-indigo-100 [&[data-te-dropdown-show]]:block w-32
                     "
-                  aria-labelledby="dropdownMenuButton1"
+                  aria-labelledby="dropdownMenuButton"
                   data-te-dropdown-menu-ref>
                   <li>
                     <button
