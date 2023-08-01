@@ -27,6 +27,9 @@ import { FRENCH_TRANSLATIONS } from './translations/fr';
 /* import the fontawesome core */
 import { library } from '@fortawesome/fontawesome-svg-core';
 
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css';
+
 import {
   faPlay,
   faCheck,
@@ -46,6 +49,7 @@ import {
   faEllipsis,
   faPlus,
   faChevronDown,
+  faTrash,
 } from '@fortawesome/free-solid-svg-icons';
 
 import {
@@ -55,6 +59,7 @@ import {
   faCalendar,
   faBarChart,
   faClock,
+  faEdit,
 } from '@fortawesome/free-regular-svg-icons';
 
 /* add icons to the library */
@@ -82,10 +87,14 @@ library.add(
   faMusic,
   faEllipsis,
   faPlus,
-  faChevronDown
+  faChevronDown,
+  faEdit,
+  faTrash
 );
 
 import { DefaultApolloClient } from '@vue/apollo-composable';
+
+import { vue3Debounce } from 'vue-debounce';
 
 const TRANSLATIONS = {
   fr: FRENCH_TRANSLATIONS,
@@ -118,6 +127,8 @@ app.use(pinia);
 app.use(router);
 app.use(i18n);
 app.use(VueSidebarMenu);
+app.directive('debounce', vue3Debounce({ lock: true }));
+app.component('VueDatePicker', VueDatePicker);
 app.component('font-awesome-icon', FontAwesomeIcon).mount('#app');
 
 // app.use(vuetify);

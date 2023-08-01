@@ -1,16 +1,21 @@
 <script>
 import { onMounted, ref } from 'vue';
 import { useNotesStore } from './../stores/notesStore'
+import { storeToRefs } from 'pinia';
+import { toast } from 'vue3-toastify';
+
 
 export default{
   name : 'ToDoListModal',
   setup(props, context){
 
     const store = useNotesStore()
+    let { isCreateTodoListSuccessful, errorSavingTodoList } = storeToRefs(store);
     
     let previousLength = ref(0);
     let textarea = ref(null)
     let toDoList = ref('')
+    let savingTodoList = ref(false)
 
     function closeModal(){
       context.emit('closeModal') 
@@ -38,20 +43,37 @@ export default{
     }
 
     async function saveToDoList(){
+      savingTodoList.value = true
       let todolists = toDoList.value.split("\u20DD")
       let nonEmptyToDoList = todolists.filter(e => typeof e === 'string' && e !== '')
       let formattedToDoList = nonEmptyToDoList.map((toDoListItem) => {
-          return {"name": toDoListItem.trim().replace(/(\r\n|\n|\r)/gm,"")}
+          return {"item_name": toDoListItem.trim().replace(/(\r\n|\n|\r)/gm,"")}
       })
 
       await store.createToDoList(formattedToDoList)
+      if(isCreateTodoListSuccessful){
+        toast.success('Your todo list of the day has been added 🎊', {
+          autoClose: 1000,
+          onClose: () => {closeModal()},
+        });
+        toDoList.value = ''
+        savingTodoList.value = false
+      }else{
+        toast.error('There was an error when trying to add todo lis 🙍 ' + errorSavingTodoList.value, {
+          autoClose: 1000,
+          onClose: () => {closeModal()},
+        });
+        savingTodoList.value = false
+      }
     }
 
+// TODO: This is only called the first time FIXME:
     onMounted(() =>{
       textarea.value.focus()
     })
 
     return{
+      savingTodoList,
       textarea,
       toDoList,
       handleInput,
@@ -89,16 +111,17 @@ export default{
               {{todo}}
             </li>
           </ul> -->
-          <textarea v-on:input="handleInput($event)" rows="5" 
+          <textarea v-on:input="handleInput($event)" 
+          rows="5" 
           class="bg-transparent outline-none w-full"
           placeholder="Create your todo list" ref="textarea" v-model="toDoList"></textarea>
         </div>
         <div class="flex justify-center">
           <button class="mt-12 bg-indigo-700 text-white rounded-full py-2 disabled:opacity-25 w-32 " 
-          @click="saveToDoList()">Save</button>
+          @click="saveToDoList()" :disabled="savingTodoList">Save To Do's</button>
           <!-- TODO: Set the method to be one for notes and todo lists -->
         </div>
-         <p class="font-light text-sm mt-4 text-center">Wanted to add a new Note? <span class="font-medium">Switch to Notes</span></p>
+         <!-- <p class="font-light text-sm mt-4 text-center">Wanted to add a new Note? <span class="font-medium">Switch to Notes</span></p> -->
       </div>
     </div>
 </div>
