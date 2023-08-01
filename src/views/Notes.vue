@@ -1,32 +1,42 @@
 <script>
-import { ref, computed, watchEffect, onMounted } from 'vue';
+import { ref, computed, watchEffect, onMounted, watch } from 'vue';
 import { CollapseTransition } from "@ivanv/vue-collapse-transition"
 import axios from 'axios'
 import NotesModal from './../components/NotesModal.vue'
 import ToDoListModal from './../components/ToDoListModal.vue'
+import TodoItem from './../components/TodoItem.vue'
+import QuoteDetails from './../components/QuoteDetails.vue'
+import AddTodoItem from './../components/AddTodoItem.vue'
 import { useNotesStore } from './../stores/notesStore'
 import { storeToRefs } from 'pinia';
-import { useQuery } from '@vue/apollo-composable';
-import gql from 'graphql-tag';
 
 export default{
 
   name : 'Notes',
   components: {
     ToDoListModal,
-    NotesModal
+    NotesModal,
+    QuoteDetails,
+    AddTodoItem,
+    TodoItem
   },
 
   setup(props, context){
 
   const store = useNotesStore()
-  let { todoLists } = storeToRefs(store);
+  let { todoList } = storeToRefs(store);
 
+  let addTodoItem = ref(false)
   let dailyQuotes = ref([])
   let isVisible = ref(false)
   let action = ref("")
-  let todoListsItems = ref([])
+  console.log(todoList.value)
+  let isTodoListAdded = computed(() => (todoList.value == 'undefined'
+   || !todoList.value || todoList.value.length <= 0) ? false : true);
+  console.log(isTodoListAdded.value)
 
+
+  // FIXME: Confirm is we can move this to the store
 
   async function getDailyQuotes(){
     axios.get('https://zenquotes.io/api/quotes/')
@@ -48,6 +58,30 @@ export default{
     isVisible.value = false
   }
 
+  function isOpen(status){
+     if(status != 'closed') {
+      return true
+     } else{
+      return false
+     }
+  }
+
+  function isClosed(status){
+     if(status == 'closed') {
+      return true
+     } else{
+      return false
+     }
+  }
+
+  function closeAddTodoItemModal(){
+    addTodoItem.value = false
+  }
+
+  function openAddTodoItemModal(){
+    addTodoItem.value = true
+  }
+
 // FIXME: How can this be done better? The store then function is being called before the onResult function is actually called
 // Is it okay calling on Result from component or just go with the store
   async function getToDoList(){
@@ -62,16 +96,21 @@ export default{
 
   return{
     store,
-    todoLists,
+    todoList,
     dailyQuotes,
     isVisible,
     action,
-    todoListsItems,
+    isTodoListAdded,
+    addTodoItem,
 
     getDailyQuotes,
     showModal,
     close,
-    getToDoList
+    getToDoList,
+    isOpen,
+    isClosed,
+    closeAddTodoItemModal,
+    openAddTodoItemModal
   }}
   }
 </script>
@@ -79,7 +118,7 @@ export default{
 <template>
   <div class="flex flex-col w-full mb-10 banner h-full ">
     <div class="flex flex-col w-full mt-52 h-screen bg-snow-white">
-      <div class="flex flex-row space-x-4 bg-transparent -mt-10 mx-10 h-64 ">
+      <div class="flex flex-row space-x-4 bg-transparent -mt-10 mx-10 h-72">
           <div class="flex flex-col flex-grow bg-white rounded p-6">
             <div class="flex justify-between">
             <p class="text-2xl font-semibold tracking-wide leading-loose">Daily Growth 🌱 ☀️</p>
@@ -87,11 +126,7 @@ export default{
             </div>
             <div class="grid grid-cols-3 gap-4 mt-4">
               <div v-for="quote in dailyQuotes" :key="quote">
-                <div class="p-4 border border-slate-200 h-36 rounded-md">
-                  <p class="font-semibold underline underline-offset-8">{{quote.a}}</p>
-                  <br>
-                  <q class="font-thin text-base">{{quote.q.substring(0,52)+".." }}</q>
-                </div>
+                <QuoteDetails :quote="quote"/>
               </div>
             </div>
           </div>
@@ -100,6 +135,7 @@ export default{
           <div class="flex rounded p-4 bg-millenial-pink">
             <div class="flex justify-end mt-2">
                 <p class="mb-4">
+                  <!-- <span class="animate-ping absolute h-4 w-4 rounded-full bg-sky-400 opacity-75"></span> -->
                   <button
                     type="button"
                     data-te-collapse-init
@@ -107,29 +143,41 @@ export default{
                     data-te-ripple-init
                     data-te-ripple-color="light"
                     aria-expanded="false"
-                    class="text-2xl"
+                    class="text-2xl animate-bounce"
                     aria-controls="collapseWidthExample">
                     📌
                   </button>
                 </p>
               </div>
               <div
-                class= "!visible hidden flex flex-col h-full p-6" 
+                class= "!visible hidden flex flex-col h-full mt-10" 
                 data-te-collapse-item
                 data-te-collapse-horizontal
                 id="collapseWidthExample">
-                 <div class="flex-1 max-w-sm rounded-lg"  style="width: 180px">
-                  <div v-for="todoList in todoLists" :key="todoList" >
-                   <p>{{todoList.id}}</p>
-                 </div>
-                </div>
+                  <div class="flex w-full justify-end">
+                    <div class="-mt-8" v-show="todoList && todoList.length != 0">
+                      <div class="rounded-full bg-mustard-yellow w-10 h-10 flex justify-center items-center text-white text-sm">
+                        <font-awesome-icon icon="fa-solid fa-plus" size="lg" @click="openAddTodoItemModal"/>
+                      </div>
+                      <AddTodoItem v-show="addTodoItem" @close="closeAddTodoItemModal"/>
+                    </div>
+                  </div>
+                  <div class="flex-1 max-w-sm rounded-lg"  style="width: 280px" >
+                      <div v-if="isTodoListAdded">
+                        <ol v-for="todoListItem in todoList" :key="todoListItem">
+                          <li :class="{open: isOpen(todoListItem.status_name), closed : isClosed(todoListItem.status_name)}">
+                            <TodoItem :todoListItem="todoListItem"></TodoItem>
+                          </li>
+                        </ol>
+                      </div>
+                  </div>
               </div>
           </div>
        </div>
        <div class="flex space-x-4 bg-transparent mt-10 mx-10 h-96">
           <div class="flex flex-col w-full bg-white rounded p-6 h-96">
             <div class="flex justify-between">
-              <p class="text-2xl font-semibold tracking-wide leading-loose">Notes </p>
+              <p class="text-2xl font-semibold tracking-wide leading-loose">Notes</p>
               <div class="space-x-4">
                 <font-awesome-icon icon="fa-regular fa-calendar lg" />
                 <font-awesome-icon icon="fa-solid fa-ellipsis lg" />
@@ -153,7 +201,7 @@ export default{
                     transition duration-150 ease-in-out hover:bg-indigo-600 rounded-full w-64
                     "
                   type="button"
-                  id="dropdownMenuButton1"
+                  id="dropdownMenuButton"
                   data-te-dropdown-toggle-ref
                   aria-expanded="false"
                   data-te-ripple-init
@@ -177,18 +225,18 @@ export default{
                    overflow-hidden rounded-lg border-none bg-white bg-clip-padding
                     text-left text-base shadow-lg dark:bg-indigo-100 [&[data-te-dropdown-show]]:block w-32
                     "
-                  aria-labelledby="dropdownMenuButton1"
+                  aria-labelledby="dropdownMenuButton"
                   data-te-dropdown-menu-ref>
                   <li>
                     <button
+                     v-if="!isTodoListAdded"
                       class="block w-full whitespace-nowrap bg-transparent px-4 py-2 text-sm 
                       font-normal text-black-700 hover:bg-black-100 
                       active:text-black-800 active:no-underline 
                       disabled:pointer-events-none disabled:bg-transparent
                        disabled:text-black-400 dark:text-black-200 dark:hover:bg-black-600"
                       @click="showModal('ToDoListModal')"
-                      data-te-dropdown-item-ref
-                      >To Do List</button
+                      data-te-dropdown-item-ref>To Do List</button
                     >
                   </li>
                   <li>
@@ -218,4 +266,6 @@ export default{
  background-repeat: no-repeat;
  background-size: cover
 }
+li.open {list-style: circle;}
+li.closed {list-style: disc;}
 </style>

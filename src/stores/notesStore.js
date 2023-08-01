@@ -6,6 +6,7 @@ import gql from 'graphql-tag';
 import { useQuery } from '@vue/apollo-composable';
 import { computed, watch } from 'vue';
 import { useLocalStorage } from '@vueuse/core';
+import { useSubscription } from '@vue/apollo-composable';
 
 provideApolloClient(apolloClient);
 
@@ -14,10 +15,57 @@ const createToDoListMutation = gql`
     createToDoList(input: $input)
   }
 `;
+const updateTodoListItemMutation = gql`
+  mutation updateTodoListItem($input: UpdateTodoListItem!) {
+    updateTodoListItem(input: $input)
+  }
+`;
+const addTodoListItemMutation = gql`
+  mutation addTodoListItem($input: AddTodoListItem!) {
+    addTodoListItem(input: $input)
+  }
+`;
+const getTodoList = gql`
+  query {
+    getTodaysToDoList {
+      id
+      todoListItems {
+        id
+        item_name
+        status_name
+        reminder
+        key_name
+      }
+    }
+  }
+`;
+const todoListSubscription = gql`
+  subscription Subscription {
+    todoCreated {
+      id
+      todoListItems {
+        id
+        item_name
+        status_name
+        reminder
+      }
+    }
+  }
+`;
+const deleteTodoListItemMutation = gql`
+  mutation deleteTodoListItem($input: DeleteTodoListItem!) {
+    deleteTodoListItem(input: $input)
+  }
+`;
 export const useNotesStore = defineStore({
   id: 'notesStore',
   state: () => ({
-    todoLists: useLocalStorage('todoLists', []),
+    todoList: useLocalStorage('todoList', []),
+    isCreateTodoListSuccessful: useLocalStorage(
+      'isCreateTodoListSuccessful',
+      false
+    ),
+    errorSavingTodoList: useLocalStorage('errorSavingTodoList', ''),
   }),
   getters: {},
   actions: {
@@ -35,55 +83,118 @@ export const useNotesStore = defineStore({
           },
         };
       });
-      onError(error => {});
-      onDone(result => {});
-
+      onError(error => {
+        this.errorSavingTodoList = error.message;
+        this.isCreateTodoListSuccessful = false;
+      });
+      onDone(result => {
+        this.isCreateTodoListSuccessful = true;
+      });
       await createToDo();
     },
-    async getTodo() {
-      const { result, onResult } = useQuery(
-        gql`
-          query {
-            getTodoList {
-              id
-              todoListItems {
-                id
-                itemName
-                statusName
-              }
-            }
-          }
-        `
-      );
-
-      return onResult(({ data }) => {
-        console.log('We are in on result function');
-        this.todoLists = data.getTodoList;
-        console.log(this.todoLists);
+    async updateToDoListItem(data) {
+      const {
+        mutate: updateTodoListItem,
+        onError,
+        onDone,
+      } = useMutation(updateTodoListItemMutation, () => {
+        return {
+          variables: {
+            input: data,
+          },
+        };
       });
+      onError(error => {
+        if (error) {
+          console.log(
+            error.networkError
+              ? error.networkError.result.errors[0].message
+              : error.graphQLErrors[0].message
+          );
+        } else {
+          console.log('No error gotten');
+        }
+      });
+      onDone(result => {
+        console.log(result);
+      });
+      await updateTodoListItem();
+    },
+    async addToDoListItem(data) {
+      data.id = this.todoList[0].id;
+      const {
+        mutate: addTodoItem,
+        onError,
+        onDone,
+      } = useMutation(addTodoListItemMutation, () => {
+        return {
+          variables: {
+            input: data,
+          },
+        };
+      });
+      onError(error => {
+        if (error) {
+          console.log(
+            error.networkError
+              ? error.networkError.result.errors[0].message
+              : error.graphQLErrors[0].message
+          );
+        } else {
+          console.log('No error gotten');
+        }
+      });
+      onDone(result => {
+        console.log(result);
+      });
+      await addTodoItem();
     },
     async getTheToDoList() {
-      console.log('In the todolist');
-      const { onResult, result } = useQuery(
-        gql`
-          query {
-            getTodoList {
-              id
-              todoListItems {
-                id
-                itemName
-                statusName
-              }
-            }
-          }
-        `,
-        { fetchPolicy: 'no-cache' }
-      );
-
+      const { onResult } = useQuery(getTodoList, { fetchPolicy: 'no-cache' });
       return onResult(({ data }) => {
-        console.log('we here and we have been called');
-        this.todoLists = data.getTodoList;
+        this.todoList = data.getTodaysToDoList?.todoListItems;
+        console.log(this.todoList);
+        this.todoListSubscription();
       });
+    },
+    async todoListSubscription() {
+      const { onResult } = useSubscription(todoListSubscription, null, () => ({
+        fetchPolicy: 'no-cache',
+      }));
+
+      onResult(result => {
+        console.log('We are in susbscription');
+        console.log(result.data.todoCreated.todoListItems);
+        this.todoList = result.data?.todoCreated?.todoListItems;
+      });
+    },
+    async deleteTodoItem(data) {
+      const {
+        mutate: deleteItem,
+        onError,
+        onDone,
+      } = useMutation(deleteTodoListItemMutation, () => {
+        return {
+          variables: {
+            input: data,
+          },
+        };
+      });
+      onError(error => {
+        if (error) {
+          console.log(
+            error.networkError
+              ? error.networkError.result.errors[0].message
+              : error.graphQLErrors[0].message
+          );
+        } else {
+          console.log('No error gotten');
+        }
+      });
+      onDone(result => {
+        console.log(result);
+      });
+      await deleteItem();
     },
   },
 });

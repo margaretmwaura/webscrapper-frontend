@@ -22,7 +22,7 @@ const { user } = storeToRefs(store);
         <!-- TODO: Spacing is not uniform for the small screens -->
          <div class="flex flex-wrap justify-between space-y-8">
             <div class="mt-4">
-              <p class="text-4xl font-medium tracking-normal leading-tight font-['Gill_Sans']">Hi, {{user.firstName}}</p>
+              <p class="text-4xl font-medium tracking-normal leading-tight font-['Gill_Sans']">Hi, {{user.first_name}}</p>
             </div>
             <div class="space-x-4 mt-4">
               <font-awesome-icon icon="fa-solid fa-search" />
