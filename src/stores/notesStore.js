@@ -21,8 +21,40 @@ const updateTodoListItemMutation = gql`
   }
 `;
 const addTodoListItemMutation = gql`
-  mutation addTodoListItem($input: addTodoListItem!) {
+  mutation addTodoListItem($input: AddTodoListItem!) {
     addTodoListItem(input: $input)
+  }
+`;
+const getTodoList = gql`
+  query {
+    getTodaysToDoList {
+      id
+      todoListItems {
+        id
+        item_name
+        status_name
+        reminder
+        key_name
+      }
+    }
+  }
+`;
+const todoListSubscription = gql`
+  subscription Subscription {
+    todoCreated {
+      id
+      todoListItems {
+        id
+        item_name
+        status_name
+        reminder
+      }
+    }
+  }
+`;
+const deleteTodoListItemMutation = gql`
+  mutation deleteTodoListItem($input: DeleteTodoListItem!) {
+    deleteTodoListItem(input: $input)
   }
 `;
 export const useNotesStore = defineStore({
@@ -118,22 +150,7 @@ export const useNotesStore = defineStore({
       await addTodoItem();
     },
     async getTheToDoList() {
-      const { onResult } = useQuery(
-        gql`
-          query {
-            getTodaysToDoList {
-              id
-              todoListItems {
-                id
-                item_name
-                status_name
-                reminder
-              }
-            }
-          }
-        `,
-        { fetchPolicy: 'no-cache' }
-      );
+      const { onResult } = useQuery(getTodoList, { fetchPolicy: 'no-cache' });
       return onResult(({ data }) => {
         this.todoList = data.getTodaysToDoList?.todoListItems;
         console.log(this.todoList);
@@ -141,31 +158,43 @@ export const useNotesStore = defineStore({
       });
     },
     async todoListSubscription() {
-      const { onResult } = useSubscription(
-        gql`
-          subscription Subscription {
-            todoCreated {
-              id
-              todoListItems {
-                id
-                item_name
-                status_name
-                reminder
-              }
-            }
-          }
-        `,
-        null,
-        () => ({
-          fetchPolicy: 'no-cache',
-        })
-      );
+      const { onResult } = useSubscription(todoListSubscription, null, () => ({
+        fetchPolicy: 'no-cache',
+      }));
 
       onResult(result => {
         console.log('We are in susbscription');
         console.log(result.data.todoCreated.todoListItems);
         this.todoList = result.data?.todoCreated?.todoListItems;
       });
+    },
+    async deleteTodoItem(data) {
+      const {
+        mutate: deleteItem,
+        onError,
+        onDone,
+      } = useMutation(deleteTodoListItemMutation, () => {
+        return {
+          variables: {
+            input: data,
+          },
+        };
+      });
+      onError(error => {
+        if (error) {
+          console.log(
+            error.networkError
+              ? error.networkError.result.errors[0].message
+              : error.graphQLErrors[0].message
+          );
+        } else {
+          console.log('No error gotten');
+        }
+      });
+      onDone(result => {
+        console.log(result);
+      });
+      await deleteItem();
     },
   },
 });

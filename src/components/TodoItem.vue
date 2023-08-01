@@ -59,6 +59,16 @@ const updateReminderDate = async (reminderDate) => {
     }
 }
 
+const deleteItem = async () => {
+  console.log("We are deleting")
+  console.log(props.todoListItem)
+  let data = {
+      key_name: props.todoListItem.key_name,
+      id: props.todoListItem.id
+  }
+  await store.deleteTodoItem(data)
+}
+
 watch(taskDesc, async (newTaskDesc) =>  {
    if(newTaskDesc && taskDesc != newTaskDesc){
       let data = {
@@ -102,9 +112,9 @@ watch(taskDesc, async (newTaskDesc) =>  {
                       disabled:pointer-events-none disabled:bg-transparent
                        disabled:text-black-400 dark:text-black-200 dark:hover:bg-black-600"
                       @click="selectReminderDate()"
-                      data-te-dropdown-item-ref>Reminder
+                      data-te-dropdown-item-ref>Done
                       <font-awesome-icon
-                       icon="fa-regular fa-clock" @click="selectReminderDate()"/>
+                       icon="fa-solid fa-check"/>
                       </button>
                   </li>
                   <li>
@@ -115,9 +125,22 @@ watch(taskDesc, async (newTaskDesc) =>  {
                       disabled:pointer-events-none disabled:bg-transparent
                        disabled:text-black-400 dark:text-black-200 dark:hover:bg-black-600"
                       @click="selectReminderDate()"
-                      data-te-dropdown-item-ref>Done
+                      data-te-dropdown-item-ref>Edit
                       <font-awesome-icon
-                       icon="fa-solid fa-check" @click="markItemAsComplete()"/>
+                       icon="fa-regular fa-edit"/>
+                      </button>
+                  </li>
+                  <li>
+                    <button
+                      class="block w-full whitespace-nowrap bg-transparent px-4 mt-2 text-sm 
+                      font-normal text-black-700 hover:bg-black-100 
+                      active:text-black-800 active:no-underline 
+                      disabled:pointer-events-none disabled:bg-transparent
+                       disabled:text-black-400 dark:text-black-200 dark:hover:bg-black-600"
+                      @click="deleteItem()"
+                      data-te-dropdown-item-ref>Delete
+                      <font-awesome-icon
+                       icon="fa-solid fa-trash"/>
                       </button>
                   </li>
                   <li>
@@ -128,9 +151,9 @@ watch(taskDesc, async (newTaskDesc) =>  {
                       disabled:pointer-events-none disabled:bg-transparent
                        disabled:text-black-400 dark:text-black-200 dark:hover:bg-black-600"
                       @click="selectReminderDate()"
-                      data-te-dropdown-item-ref>Edit
+                      data-te-dropdown-item-ref>Reminder
                       <font-awesome-icon
-                       icon="fa-regular fa-edit" @click="showEditTodoItemDesc()"/>
+                       icon="fa-regular fa-clock"/>
                       </button>
                   </li>
                 </ul>
