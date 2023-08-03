@@ -96,7 +96,7 @@ watch(taskDesc, async (newTaskDesc) =>  {
                   data-te-ripple-init
                   data-te-ripple-color="light"
                   aria-expanded="false">
-                  <font-awesome-icon icon="fa-solid fa-ellipsis" class="rotate-90" @click="selectReminderDate()"/>
+                  <font-awesome-icon icon="fa-solid fa-ellipsis" class="rotate-90"/>
                 </button>
                 <ul
                   class="absolute z-[1000] float-left m-0 hidden min-w-max list-none
@@ -111,7 +111,7 @@ watch(taskDesc, async (newTaskDesc) =>  {
                       active:text-black-800 active:no-underline 
                       disabled:pointer-events-none disabled:bg-transparent
                        disabled:text-black-400 dark:text-black-200 dark:hover:bg-black-600"
-                      @click="selectReminderDate()"
+                      @click="markItemAsComplete()"
                       data-te-dropdown-item-ref>Done
                       <font-awesome-icon
                        icon="fa-solid fa-check"/>
@@ -124,7 +124,7 @@ watch(taskDesc, async (newTaskDesc) =>  {
                       active:text-black-800 active:no-underline 
                       disabled:pointer-events-none disabled:bg-transparent
                        disabled:text-black-400 dark:text-black-200 dark:hover:bg-black-600"
-                      @click="selectReminderDate()"
+                      @click="showEditTodoItemDesc()"
                       data-te-dropdown-item-ref>Edit
                       <font-awesome-icon
                        icon="fa-regular fa-edit"/>
