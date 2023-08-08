@@ -25,6 +25,11 @@ const addTodoListItemMutation = gql`
     addTodoListItem(input: $input)
   }
 `;
+const createNoteMutation = gql`
+  mutation createNote($input: CreateNote!) {
+    createNote(input: $input)
+  }
+`;
 const getTodoList = gql`
   query {
     getTodaysToDoList {
@@ -66,6 +71,8 @@ export const useNotesStore = defineStore({
       false
     ),
     errorSavingTodoList: useLocalStorage('errorSavingTodoList', ''),
+    isCreateNoteSuccessful: useLocalStorage('isCreateNoteSuccessful', false),
+    errorCreatingNote: useLocalStorage('errorCreatingNote', ''),
   }),
   getters: {},
   actions: {
@@ -195,6 +202,27 @@ export const useNotesStore = defineStore({
         console.log(result);
       });
       await deleteItem();
+    },
+    async createNoteMutation(data) {
+      const {
+        mutate: createNote,
+        onError,
+        onDone,
+      } = useMutation(createNoteMutation, () => {
+        return {
+          variables: {
+            input: data,
+          },
+        };
+      });
+      onError(error => {
+        this.errorCreatingNote = error.message;
+        this.isCreateNoteSuccessful = false;
+      });
+      onDone(result => {
+        this.isCreateNoteSuccessful = true;
+      });
+      await createNote();
     },
   },
 });

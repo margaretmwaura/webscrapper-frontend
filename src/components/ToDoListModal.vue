@@ -95,14 +95,15 @@ export default{
         <div class="flex items-center flex-no-shrink text-black mr-6">
             <div class="rounded-full bg-indigo-700 w-6 h-6 flex justify-center"><p class="text-white font-bold">L</p></div>
             <!-- TODO: Greetings based on time of the day -->
-            <span class="font-semibold text-xl tracking-wider pl-2 text-indigo-700">Bonjour!</span>
+            <span class="font-semibold text-xl tracking-wider pl-2 text-indigo-700">Bonjour! 😊</span>
         </div>
         <button className="text-indigo-700 text-lg font-light place-self-end">
             <font-awesome-icon icon="fa-solid fa-times" size="xl"  @click="closeModal()"/>
         </button>
       </div>
       <div className="flex flex-col w-full py-4">
-        <p>“Each day I will accomplish one thing on my to do list.”― Lailah Gifty Akita 😊</p>
+        <p>“Each day I will accomplish one thing on my to do list.”― Lailah Gifty Akita </p>
+          <!-- </p> -->
         <div class="mt-6">
           <textarea v-on:input="handleInput($event)" 
           rows="5" 
@@ -124,15 +125,6 @@ a{
   list-style-type: circle;
 }
 
-.notes {
-    background-attachment: local;
-    background-image:
-        linear-gradient(to right, white 10px, transparent 10px),
-        linear-gradient(to left, white 10px, transparent 10px),
-        repeating-linear-gradient(white, white 30px, #ccc 30px, #ccc 31px, white 31px);
-    line-height: 31px;
-    padding: 8px 10px;
-}
 </style>
 
   
