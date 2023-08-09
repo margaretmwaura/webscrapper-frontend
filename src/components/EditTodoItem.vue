@@ -36,7 +36,8 @@ const updateModelValue = function (val, e)  {
           Description
         </label>
         <input class="border rounded w-full py-2 px-3 leading-tight focus:outline-none 
-        focus:shadow-outline" type="text" placeholder="name" v-model="taskDesc" debounce-events="input" v-debounce:5000ms="updateModelValue">
+        focus:shadow-outline" type="text" placeholder="name" 
+        v-model="taskDesc" debounce-events="input" v-debounce:5000ms="updateModelValue">
       </div>
     </div>
   </div>

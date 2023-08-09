@@ -44,6 +44,16 @@ const getTodoList = gql`
     }
   }
 `;
+const getNotes = gql`
+  query {
+    getNotes {
+      id
+      topic
+      content
+      createdAt
+    }
+  }
+`;
 const todoListSubscription = gql`
   subscription Subscription {
     todoCreated {
@@ -66,6 +76,7 @@ export const useNotesStore = defineStore({
   id: 'notesStore',
   state: () => ({
     todoList: useLocalStorage('todoList', []),
+    notes: useLocalStorage('notes', ''),
     isCreateTodoListSuccessful: useLocalStorage(
       'isCreateTodoListSuccessful',
       false
@@ -162,6 +173,14 @@ export const useNotesStore = defineStore({
         this.todoList = data.getTodaysToDoList?.todoListItems;
         console.log(this.todoList);
         this.todoListSubscription();
+      });
+    },
+    async getNotes() {
+      const { onResult } = useQuery(getNotes, { fetchPolicy: 'no-cache' });
+      return onResult(({ data }) => {
+        this.notes = data.getNotes;
+        console.log('Notes');
+        console.log(data);
       });
     },
     async todoListSubscription() {

@@ -16,8 +16,9 @@
   }
 }
 
+/* FIXME: Find out which page was benefiting from us using white */
 body {
-  background-color: white;
+  background-color: #f6f6f6;
 }
 
 .notes {
