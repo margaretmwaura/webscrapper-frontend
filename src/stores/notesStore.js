@@ -177,48 +177,6 @@ export const useNotesStore = defineStore({
       });
       await addTodoItem();
     },
-    async getTheToDoList() {
-      const { onResult } = useQuery(getTodoList, { fetchPolicy: 'no-cache' });
-      return onResult(({ data }) => {
-        this.todoList = data.getTodaysToDoList?.todoListItems;
-        console.log(this.todoList);
-        this.todoListSubscription();
-      });
-    },
-    async getNotes() {
-      const { onResult } = useQuery(getNotes, { fetchPolicy: 'no-cache' });
-      return onResult(({ data }) => {
-        this.notes = data.getNotes;
-        console.log('Notes');
-        console.log(data);
-        this.notesSubscription();
-      });
-    },
-    async todoListSubscription() {
-      const { onResult } = useSubscription(todoListSubscription, null, () => ({
-        fetchPolicy: 'no-cache',
-      }));
-
-      onResult(result => {
-        console.log('We are in susbscription');
-        console.log(result.data.todoCreated.todoListItems);
-        this.todoList = result.data?.todoCreated?.todoListItems;
-      });
-    },
-
-    // https://stackoverflow.com/questions/5915789/how-to-replace-item-in-array
-    // https://www.geeksforgeeks.org/remove-elements-from-a-javascript-array/
-    async notesSubscription() {
-      const { onResult } = useSubscription(notesSubscription, null, () => ({
-        fetchPolicy: 'no-cache',
-      }));
-
-      onResult(result => {
-        console.log('We are in notes susbscription');
-        console.log(result.data.noteAdded);
-        this.notes = result.data?.noteAdded;
-      });
-    },
     async deleteTodoItem(data) {
       const {
         mutate: deleteItem,
@@ -267,6 +225,47 @@ export const useNotesStore = defineStore({
         this.isCreateNoteSuccessful = true;
       });
       await createNote();
+    },
+    async getTheToDoList() {
+      const { onResult } = useQuery(getTodoList, { fetchPolicy: 'no-cache' });
+      return onResult(({ data }) => {
+        this.todoList = data.getTodaysToDoList?.todoListItems;
+        console.log(this.todoList);
+        this.todoListSubscription();
+      });
+    },
+    async todoListSubscription() {
+      const { onResult } = useSubscription(todoListSubscription, null, () => ({
+        fetchPolicy: 'no-cache',
+      }));
+
+      onResult(result => {
+        console.log('We are in susbscription');
+        console.log(result.data.todoCreated.todoListItems);
+        this.todoList = result.data?.todoCreated?.todoListItems;
+      });
+    },
+    // https://stackoverflow.com/questions/5915789/how-to-replace-item-in-array
+    // https://www.geeksforgeeks.org/remove-elements-from-a-javascript-array/
+    async getNotes() {
+      const { onResult } = useQuery(getNotes, { fetchPolicy: 'no-cache' });
+      return onResult(({ data }) => {
+        this.notes = data.getNotes;
+        console.log('Notes');
+        console.log(data);
+        this.notesSubscription();
+      });
+    },
+    async notesSubscription() {
+      const { onResult } = useSubscription(notesSubscription, null, () => ({
+        fetchPolicy: 'no-cache',
+      }));
+
+      onResult(result => {
+        console.log('We are in notes susbscription');
+        console.log(result.data.noteAdded);
+        this.notes = result.data?.noteAdded;
+      });
     },
   },
 });
