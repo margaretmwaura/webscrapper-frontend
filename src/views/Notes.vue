@@ -37,16 +37,17 @@ export default{
 
   const notes_section = ref(null);
 
-  // FIXME: Confirm is we can move this to the store
-
+// FIXME: Currently not working
   let lastCrollPosition = computed(() => {
     if(notes & notes.value & notes.value.length > 2){
+      console.log("Position is " + notes.value.length - 1)
       return notes.value.length - 1
     }else{
       return 0
     }
  })
 
+  // FIXME: Confirm is we can move this to the store
   async function getDailyQuotes(){
     axios.get('https://zenquotes.io/api/quotes/')
     .then(function (response) {

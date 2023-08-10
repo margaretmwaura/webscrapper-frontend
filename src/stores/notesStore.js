@@ -55,7 +55,7 @@ const getNotes = gql`
   }
 `;
 const todoListSubscription = gql`
-  subscription Subscription {
+  subscription {
     todoCreated {
       id
       todoListItems {
@@ -64,6 +64,16 @@ const todoListSubscription = gql`
         status_name
         reminder
       }
+    }
+  }
+`;
+const notesSubscription = gql`
+  subscription {
+    noteAdded {
+      id
+      topic
+      content
+      createdAt
     }
   }
 `;
@@ -181,6 +191,7 @@ export const useNotesStore = defineStore({
         this.notes = data.getNotes;
         console.log('Notes');
         console.log(data);
+        this.notesSubscription();
       });
     },
     async todoListSubscription() {
@@ -192,6 +203,20 @@ export const useNotesStore = defineStore({
         console.log('We are in susbscription');
         console.log(result.data.todoCreated.todoListItems);
         this.todoList = result.data?.todoCreated?.todoListItems;
+      });
+    },
+
+    // https://stackoverflow.com/questions/5915789/how-to-replace-item-in-array
+    // https://www.geeksforgeeks.org/remove-elements-from-a-javascript-array/
+    async notesSubscription() {
+      const { onResult } = useSubscription(notesSubscription, null, () => ({
+        fetchPolicy: 'no-cache',
+      }));
+
+      onResult(result => {
+        console.log('We are in notes susbscription');
+        console.log(result.data.noteAdded);
+        this.notes = result.data?.noteAdded;
       });
     },
     async deleteTodoItem(data) {

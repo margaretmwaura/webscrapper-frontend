@@ -54,10 +54,9 @@ const saveToDoItem =async () => {
         <!-- <input class="border rounded w-full py-2 px-3 leading-tight focus:outline-none 
         focus:shadow-outline" type="text" placeholder="name" 
         v-model="taskDesc" debounce-events="input" v-debounce:5000ms="updateModelValue"> -->
-        <input class="border rounded w-full py-2 px-3 leading-tight focus:outline-none 
-        focus:shadow-outline" type="text" placeholder="name" v-model="todoItemDesc" />
-
-         <button class="mt-2 bg-indigo-700 text-white rounded-full py-2 disabled:opacity-25 w-32" 
+        <textarea class="border rounded w-full py-2 px-3 leading-tight focus:outline-none 
+        focus:shadow-outline" type="text" placeholder="name" v-model="todoItemDesc" rows="3" />
+         <button class="mt-2 bg-indigo-700 text-white rounded-full py-1 disabled:opacity-25 w-20" 
         @click="saveToDoItem()">Save</button>
       </div>
     </div>
