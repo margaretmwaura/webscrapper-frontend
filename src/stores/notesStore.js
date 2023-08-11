@@ -69,11 +69,14 @@ const todoListSubscription = gql`
 `;
 const notesSubscription = gql`
   subscription {
-    noteAdded {
-      id
-      topic
-      content
-      createdAt
+    noteSubcription {
+      mutation
+      data {
+        id
+        topic
+        content
+        createdAt
+      }
     }
   }
 `;
@@ -86,7 +89,7 @@ export const useNotesStore = defineStore({
   id: 'notesStore',
   state: () => ({
     todoList: useLocalStorage('todoList', []),
-    notes: useLocalStorage('notes', ''),
+    notes: useLocalStorage('notes', []),
     isCreateTodoListSuccessful: useLocalStorage(
       'isCreateTodoListSuccessful',
       false
@@ -247,24 +250,34 @@ export const useNotesStore = defineStore({
     },
     // https://stackoverflow.com/questions/5915789/how-to-replace-item-in-array
     // https://www.geeksforgeeks.org/remove-elements-from-a-javascript-array/
+
+    // TODO: Star of the day https://v4.apollo.vuejs.org/guide-composable/subscription.html#subscribetomore
     async getNotes() {
-      const { onResult } = useQuery(getNotes, { fetchPolicy: 'no-cache' });
+      const { onResult, subscribeToMore } = useQuery(getNotes, {
+        fetchPolicy: 'no-cache',
+      });
+      subscribeToMore(() => ({
+        document: notesSubscription,
+
+        // TODO: In this we shall have checks to check what type of mutation was done in order to update the data accordingly
+        updateQuery: (previousResult, { subscriptionData }) => {
+          console.log('Within update Query');
+          let newDataAdded = subscriptionData.data.noteSubcription;
+          let newNote = newDataAdded.data;
+          console.log(newNote);
+          let previousData = previousResult.getNotes;
+          console.log(previousData);
+          let newData = {
+            getNotes: [],
+          };
+          newData.getNotes = [...previousData, newNote];
+          return newData;
+        },
+      }));
       return onResult(({ data }) => {
         this.notes = data.getNotes;
         console.log('Notes');
-        console.log(data);
-        this.notesSubscription();
-      });
-    },
-    async notesSubscription() {
-      const { onResult } = useSubscription(notesSubscription, null, () => ({
-        fetchPolicy: 'no-cache',
-      }));
-
-      onResult(result => {
-        console.log('We are in notes susbscription');
-        console.log(result.data.noteAdded);
-        this.notes = result.data?.noteAdded;
+        console.log(this.notes);
       });
     },
   },

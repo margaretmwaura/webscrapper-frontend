@@ -7,6 +7,7 @@ import ToDoListModal from './../components/ToDoListModal.vue'
 import TodoItem from './../components/TodoItem.vue'
 import QuoteDetails from './../components/QuoteDetails.vue'
 import AddTodoItem from './../components/AddTodoItem.vue'
+import NoteDetails from './../components/NoteDetails.vue'
 import { useNotesStore } from './../stores/notesStore'
 import { storeToRefs } from 'pinia';
 import moment from 'moment';
@@ -19,7 +20,8 @@ export default{
     NotesModal,
     QuoteDetails,
     AddTodoItem,
-    TodoItem
+    TodoItem,
+    NoteDetails
   },
 
   setup(props, context){
@@ -34,12 +36,14 @@ export default{
   console.log(todoList.value)
   let isTodoListAdded = computed(() => (todoList.value == 'undefined'
    || !todoList.value || todoList.value.length <= 0) ? false : true);
+  let isNotesAdded = computed(() => (notes.value == 'undefined'
+  || !notes.value || notes.value.length <= 0) ? false : true);
 
   const notes_section = ref(null);
 
 // FIXME: Currently not working
   let lastCrollPosition = computed(() => {
-    if(notes & notes.value & notes.value.length > 2){
+    if(notes && notes.value && notes.value.length > 2){
       console.log("Position is " + notes.value.length - 1)
       return notes.value.length - 1
     }else{
@@ -93,11 +97,12 @@ export default{
   }
 
   function scrollLeft(){
-      notes_section.value[lastCrollPosition].scrollIntoView({ behavior: "smooth" });
+      notes_section.value[1].scrollIntoView({ behavior: "smooth" });
   }
 
   function scrollRight(){
-      notes_section.value[1].scrollIntoView({ behavior: "smooth" });
+      console.log(lastCrollPosition.value)
+      notes_section.value[lastCrollPosition.value].scrollIntoView({ behavior: "smooth" });
   }
 
 // FIXME: How can this be done better? The store then function is being called before the onResult function is actually called
@@ -128,6 +133,8 @@ export default{
     addTodoItem,
     moment,
     notes_section,
+    isNotesAdded,
+    lastCrollPosition,
 
     getDailyQuotes,
     showModal,
@@ -208,7 +215,7 @@ export default{
               <p class="text-2xl font-semibold tracking-wide leading-loose">Notes</p>
               <div class="space-x-4" v-show="notes && notes.length > 0">
                 <font-awesome-icon icon="fa-solid fa-chevron-left lg" @click="scrollLeft"/>
-                <font-awesome-icon icon="fa-solid fa-chevron-right lg" v-show="lastCrollPosition > 1" @click="scrollRight"/>
+                <font-awesome-icon icon="fa-solid fa-chevron-right lg" @click="scrollRight" v-show="lastCrollPosition > 1"/>
               </div>
               <div class="space-x-4">
                 <font-awesome-icon icon="fa-regular fa-calendar lg" />
@@ -216,16 +223,11 @@ export default{
               </div>
             </div>
             <div class="h-1 w-full bg-slate-600" />
-            <div class="flex w-full h-full justify-between overflow-x-auto overflow-y-hidden space-x-4 mt-2 scroll-smooth">
-              <!-- [&>div]:flex-shrink-0 -->
-              <div class="flex w-full scroll-smooth" v-for="note in notes" :key="note" ref="notes_section">
-                  <div class="px-4 pt-4 border border-slate-200 rounded-md w-96">
-                      <p class="font-semibold underline underline-offset-8">{{note.topic}}</p>
-                        <br>
-                      <p class="font-bold">{{moment(note.createdAt).format('LLLL')}}</p>
-                      <p class="font-thin text-base">{{note.content }}</p>
-                  </div>
-              </div>
+            <div class="flex w-full h-full justify-between overflow-x-auto overflow-y-hidden space-x-4 mt-2 scroll-smooth" >
+                <div class="flex w-full scroll-smooth" v-for="(note , index) in notes"
+                :key="index" ref="notes_section">
+                    <NoteDetails :note="note"></NoteDetails>
+                </div>
             </div>
             <div class="flex justify-end items-end mt-2">
              <!-- https://tailwind-elements.com/docs/standard/components/dropdown/ -->
