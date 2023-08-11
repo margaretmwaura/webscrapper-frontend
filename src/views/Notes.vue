@@ -33,7 +33,9 @@ export default{
   let dailyQuotes = ref([])
   let isVisible = ref(false)
   let action = ref("")
-  console.log(todoList.value)
+  let activity = ref({})
+
+
   let isTodoListAdded = computed(() => (todoList.value == 'undefined'
    || !todoList.value || todoList.value.length <= 0) ? false : true);
   let isNotesAdded = computed(() => (notes.value == 'undefined'
@@ -41,7 +43,6 @@ export default{
 
   const notes_section = ref(null);
 
-// FIXME: Currently not working
   let lastCrollPosition = computed(() => {
     if(notes && notes.value && notes.value.length > 2){
       console.log("Position is " + notes.value.length - 1)
@@ -64,7 +65,9 @@ export default{
 
   function showModal(actionType){
     isVisible.value = true
-    console.log("Opening modal with value " + actionType)
+    if(actionType == 'NotesModal'){
+      activity.value = {currentAction: "NewNote"}
+    }
     action.value = actionType
   }
 
@@ -135,7 +138,7 @@ export default{
     notes_section,
     isNotesAdded,
     lastCrollPosition,
-
+    activity,
     getDailyQuotes,
     showModal,
     close,
@@ -293,7 +296,7 @@ export default{
           </div>
        </div>
     </div>
-    <component :is="action" v-show="isVisible" @closeModal="close"></component>
+    <component :is="action" v-show="isVisible" @closeModal="close" v-bind="activity"></component>
 
   </div>
 </template>

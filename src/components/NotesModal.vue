@@ -7,16 +7,20 @@ import { toast } from 'vue3-toastify';
 
 export default{
   name : 'NotesModal',
+  props: ['currentAction', 'note'],
   setup(props, context){
 
     const store = useNotesStore()
     let { isCreateNoteSuccessful, errorCreatingNote } = storeToRefs(store);
     
-    let title = ref('')
-    let content = ref('')
+    let title = ref(props.note?.topic)
+    let content = ref(props.note?.content)
+    let id = ref(props.note?.id)
     let savingNote = ref(false)
+    let action = ref(props.currentAction)
 
-
+    console.log(action)
+  
     function closeModal(){
       context.emit('closeModal') 
     }
@@ -52,7 +56,8 @@ export default{
       addNote,
       savingNote,
       title,
-      content
+      content,
+      action
     }
   },
 }
@@ -88,7 +93,12 @@ export default{
         <div class="flex justify-center">
           <button class="mt-12 bg-indigo-700 text-white 
           rounded-full px-16 py-2 disabled:opacity-25" @click="addNote()" 
+          v-if="action && action == 'NewNote'"
           :disabled="savingNote">Add New Note</button>
+          <button v-else class="mt-12 bg-indigo-700 text-white 
+          rounded-full px-16 py-2 disabled:opacity-25"
+           @click="addNote()" 
+          :disabled="savingNote">Edit Note</button>
         </div>
       </div>
     </div>
