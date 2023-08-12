@@ -11,7 +11,7 @@ export default{
   setup(props, context){
 
     const store = useNotesStore()
-    let { isCreateNoteSuccessful, errorCreatingNote } = storeToRefs(store);
+    let { isCreateNoteSuccessful, errorCreatingNote, errorUpdatingNote, isUpdateNoteSuccessful } = storeToRefs(store);
     
     let title = ref(props.note?.topic)
     let content = ref(props.note?.content)
@@ -34,8 +34,8 @@ export default{
       }
 
       await store.createNoteMutation(data)
-      if(isCreateNoteSuccessful){
-        toast.success('Your todo list of the day has been added 🎊', {
+      if(isCreateNoteSuccessful.value){
+        toast.success('Your note has been added 🎊', {
           autoClose: 1000,
           onClose: () => {closeModal()},
         });
@@ -43,7 +43,33 @@ export default{
         title.value = ''
         savingNote.value = false
       }else{
-        toast.error('There was an error when trying to add todo lis 🙍 ' + errorCreatingNote.value, {
+        toast.error('There was an error when trying to add note🙍 ' + errorCreatingNote.value, {
+          autoClose: 1000,
+          onClose: () => {closeModal()},
+        });
+        savingNote.value = false
+      }
+    }
+
+    const editNote = async() => {
+      savingNote.value = true
+      let data = {
+        "topic" : title.value,
+        "content": content.value,
+        "id": id.value
+      }
+
+      await store.updateNoteMutation(data)
+      if(isUpdateNoteSuccessful.value){
+        toast.success('Your not been editted 🎊', {
+          autoClose: 1000,
+          onClose: () => {closeModal()},
+        });
+        content.value = ''
+        title.value = ''
+        savingNote.value = false
+      }else{
+        toast.error('There was an error when trying to edit note 🙍 ' + errorUpdatingNote.value, {
           autoClose: 1000,
           onClose: () => {closeModal()},
         });
@@ -54,6 +80,8 @@ export default{
     return{
       closeModal,
       addNote,
+      editNote,
+
       savingNote,
       title,
       content,
@@ -97,7 +125,7 @@ export default{
           :disabled="savingNote">Add New Note</button>
           <button v-else class="mt-12 bg-indigo-700 text-white 
           rounded-full px-16 py-2 disabled:opacity-25"
-           @click="addNote()" 
+           @click="editNote()" 
           :disabled="savingNote">Edit Note</button>
         </div>
       </div>

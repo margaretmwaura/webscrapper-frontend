@@ -30,6 +30,11 @@ const createNoteMutation = gql`
     createNote(input: $input)
   }
 `;
+const updateNoteMutation = gql`
+  mutation updateNote($input: UpdateNote!) {
+    updateNote(input: $input)
+  }
+`;
 const getTodoList = gql`
   query {
     getTodaysToDoList {
@@ -97,6 +102,8 @@ export const useNotesStore = defineStore({
     errorSavingTodoList: useLocalStorage('errorSavingTodoList', ''),
     isCreateNoteSuccessful: useLocalStorage('isCreateNoteSuccessful', false),
     errorCreatingNote: useLocalStorage('errorCreatingNote', ''),
+    isUpdateNoteSuccessful: useLocalStorage('isUpdateNoteSuccessful', false),
+    errorUpdatingNote: useLocalStorage('errorUpdatingNote', ''),
   }),
   getters: {},
   actions: {
@@ -229,6 +236,34 @@ export const useNotesStore = defineStore({
       });
       await createNote();
     },
+    async updateNoteMutation(data) {
+      console.log('We are updating fellas');
+      try {
+        const {
+          mutate: updateNote,
+          onError,
+          onDone,
+        } = useMutation(updateNoteMutation, () => {
+          return {
+            variables: {
+              input: data,
+            },
+          };
+        });
+        onError(error => {
+          console.log(error.message);
+          this.errorUpdatingNote = error.message;
+          this.isUpdateNoteSuccessful = false;
+        });
+        onDone(result => {
+          this.isUpdateNoteSuccessful = true;
+        });
+        await updateNote();
+      } catch (error) {
+        console.log('Withing catch');
+        console.log(error);
+      }
+    },
     async getTheToDoList() {
       const { onResult } = useQuery(getTodoList, { fetchPolicy: 'no-cache' });
       return onResult(({ data }) => {
@@ -262,15 +297,22 @@ export const useNotesStore = defineStore({
         // TODO: In this we shall have checks to check what type of mutation was done in order to update the data accordingly
         updateQuery: (previousResult, { subscriptionData }) => {
           console.log('Within update Query');
-          let newDataAdded = subscriptionData.data.noteSubcription;
-          let newNote = newDataAdded.data;
-          console.log(newNote);
-          let previousData = previousResult.getNotes;
-          console.log(previousData);
+          let noteSubData = subscriptionData.data.noteSubcription;
+          let newNote = noteSubData.data;
           let newData = {
             getNotes: [],
           };
-          newData.getNotes = [...previousData, newNote];
+          if (noteSubData.mutation == 'Create') {
+            let previousData = previousResult.getNotes;
+            newData.getNotes = [...previousData, newNote];
+          }
+          if (noteSubData.mutation == 'Edit') {
+            let previousData = previousResult.getNotes;
+            previousData = previousData.map(note =>
+              note.id == newNote.id ? newNote : note
+            );
+            newData.getNotes = previousData;
+          }
           return newData;
         },
       }));
