@@ -317,7 +317,12 @@ export const useNotesStore = defineStore({
         },
       }));
       return onResult(({ data }) => {
-        this.notes = data.getNotes;
+        console.log(data.getNotes);
+        this.notes = [];
+        for (let note of data.getNotes) {
+          this.notes.push(note);
+        }
+        // this.notes = data.getNotes;
         console.log('Notes');
         console.log(this.notes);
       });

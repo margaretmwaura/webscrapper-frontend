@@ -227,8 +227,8 @@ export default{
             </div>
             <div class="h-1 w-full bg-slate-600" />
             <div class="flex w-full h-full justify-between overflow-x-auto overflow-y-hidden space-x-4 mt-2 scroll-smooth" >
-                <div class="flex w-full scroll-smooth" v-for="(note , index) in notes"
-                :key="index" ref="notes_section">
+                <div class="flex w-full scroll-smooth" v-for="note in notes"
+                :key="note" ref="notes_section">
                     <NoteDetails :note="note"></NoteDetails>
                 </div>
             </div>
