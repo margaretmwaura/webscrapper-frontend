@@ -3,6 +3,7 @@ import { ref, computed, watchEffect, watch } from 'vue';
 import moment from 'moment'
 import { useNotesStore } from './../stores/notesStore'
 import NotesModal from './NotesModal.vue';
+import ConfirmDelete from './ConfirmDelete.vue'
 import { storeToRefs } from 'pinia';
 import { toast } from 'vue3-toastify';
 
@@ -12,6 +13,7 @@ let props =  defineProps({
 });
 
 let showEditModal = ref(false)
+let showDeleteModal = ref(false)
 
 let note = ref(props.note)
 let date = new Date(parseInt(note.value.createdAt))
@@ -22,6 +24,10 @@ let { isDeleteNoteSuccessful, errorDeletingNote } = storeToRefs(store);
 
 const editNote = () => {
   showEditModal.value = true
+}
+
+const confirmDelete = () => {
+  showDeleteModal.value = true
 }
 
 const deleteNote = async () => {
@@ -38,8 +44,15 @@ const deleteNote = async () => {
   }
 }
 
-const close = () => {
+const closeEditModal = () => {
   showEditModal.value = false
+}
+
+const closeDeleteModal = (consent) => {
+  if(consent && consent == 'Yes'){
+    deleteNote()
+  }
+  showDeleteModal.value = false
 }
 
 </script>
@@ -50,14 +63,15 @@ const close = () => {
          <p class="font-semibold underline underline-offset-8">{{note.topic}}</p>
          <div class="flex flex-row space-x-4 text-slate-600">
             <font-awesome-icon icon="fa-regular fa-edit lg" @click="editNote"/>
-            <font-awesome-icon icon="fa-solid fa-trash lg" @click="deleteNote"/>
+            <font-awesome-icon icon="fa-solid fa-trash lg" @click="confirmDelete"/>
          </div>
       </div>
         <br>
       <p class="font-bold">{{date}}</p>
       <p class="font-thin text-base">{{note.content }}</p>
   </div>
-  <NotesModal :note="props.note" v-show="showEditModal" @closeModal="close"/>
+  <NotesModal :note="props.note" v-show="showEditModal" @close="closeEditModal"/>
+  <ConfirmDelete v-show="showDeleteModal" @close="closeDeleteModal"/>
 </template>
 
 <style scoped></style>
