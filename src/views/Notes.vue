@@ -133,7 +133,7 @@ export default{
 
   onMounted(() =>{
     console.log("mounted")
-    // getDailyQuotes()
+    getDailyQuotes()
     getToDoList()
     getNotes()
   })

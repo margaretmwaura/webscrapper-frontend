@@ -28,7 +28,7 @@ function closeModal(){
             <font-awesome-icon icon="fa-solid fa-times" size="xl"  @click="closeModal()"/>
         </button>
       </div>
-       <div class="p-4 border border-slate-200 h-36 rounded-md">
+       <div class="p-4 border border-slate-200 h-full rounded-md">
         <q class="font-thin text-base">{{quote.q}}</q>
         <br>
         ~
