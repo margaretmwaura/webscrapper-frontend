@@ -90,6 +90,11 @@ const deleteTodoListItemMutation = gql`
     deleteTodoListItem(input: $input)
   }
 `;
+const deleteNoteMutation = gql`
+  mutation deleteNote($id: String!) {
+    deleteNote(id: $id)
+  }
+`;
 export const useNotesStore = defineStore({
   id: 'notesStore',
   state: () => ({
@@ -100,10 +105,15 @@ export const useNotesStore = defineStore({
       false
     ),
     errorSavingTodoList: useLocalStorage('errorSavingTodoList', ''),
+
     isCreateNoteSuccessful: useLocalStorage('isCreateNoteSuccessful', false),
     errorCreatingNote: useLocalStorage('errorCreatingNote', ''),
+
     isUpdateNoteSuccessful: useLocalStorage('isUpdateNoteSuccessful', false),
     errorUpdatingNote: useLocalStorage('errorUpdatingNote', ''),
+
+    isDeleteNoteSuccessful: useLocalStorage('isDeleteNoteSuccessful', false),
+    errorDeletingNote: useLocalStorage('errorDeletingNote', ''),
   }),
   getters: {},
   actions: {
@@ -264,6 +274,33 @@ export const useNotesStore = defineStore({
         console.log(error);
       }
     },
+    async deleteNoteMutation(note_id) {
+      try {
+        const {
+          mutate: deleteNote,
+          onError,
+          onDone,
+        } = useMutation(deleteNoteMutation, () => {
+          return {
+            variables: {
+              id: note_id,
+            },
+          };
+        });
+        onError(error => {
+          console.log(error.message);
+          this.isDeleteNoteSuccessful = error.message;
+          this.isDeleteNoteSuccessful = false;
+        });
+        onDone(result => {
+          this.isDeleteNoteSuccessful = true;
+        });
+        await deleteNote();
+      } catch (error) {
+        console.log('Withing catch');
+        console.log(error);
+      }
+    },
     async getTheToDoList() {
       const { onResult } = useQuery(getTodoList, { fetchPolicy: 'no-cache' });
       return onResult(({ data }) => {
@@ -299,6 +336,7 @@ export const useNotesStore = defineStore({
           console.log('Within update Query');
           let noteSubData = subscriptionData.data.noteSubcription;
           let newNote = noteSubData.data;
+          console.log(noteSubData);
           let newData = {
             getNotes: [],
           };
@@ -311,6 +349,11 @@ export const useNotesStore = defineStore({
             previousData = previousData.map(note =>
               note.id == newNote.id ? newNote : note
             );
+            newData.getNotes = previousData;
+          }
+          if (noteSubData.mutation == 'Delete') {
+            let previousData = previousResult.getNotes;
+            previousData = previousData.map(note => note.id !== newNote.id);
             newData.getNotes = previousData;
           }
           return newData;

@@ -99,13 +99,26 @@ export default{
     addTodoItem.value = true
   }
 
+// TODO: Explore this idea for refs, at the moment the key had to be an index or a value for it to work
+// https://codeamend.com/blog/how-to-scroll-to-an-element-with-vue-3-and/#:~:text=To%20Scroll%20to%20an%20Element%20with%20Vue%203%20and%20JavaScript
+// ,element%20assigned%20to%20the%20ref.&text=We%20have%20the%20scroll%20to%20last%20button%20that%20calls%20scrollToElement%20.
   function scrollLeft(){
-      notes_section.value[1].scrollIntoView({ behavior: "smooth" });
+      // notes_section.value[notes[1]].scrollIntoView({ behavior: "smooth" });
+      const el = document.getElementById(1);
+
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+      }
   }
 
   function scrollRight(){
-      console.log(lastCrollPosition.value)
-      notes_section.value[lastCrollPosition.value].scrollIntoView({ behavior: "smooth" });
+      // console.log(lastCrollPosition.value)
+      // notes_section.value[notes[lastCrollPosition.value]].scrollIntoView({ behavior: "smooth" });
+      const el = document.getElementById(lastCrollPosition.value);
+
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+      }
   }
 
 // FIXME: How can this be done better? The store then function is being called before the onResult function is actually called
@@ -227,8 +240,8 @@ export default{
             </div>
             <div class="h-1 w-full bg-slate-600" />
             <div class="flex w-full h-full justify-between overflow-x-auto overflow-y-hidden space-x-4 mt-2 scroll-smooth" >
-                <div class="flex w-full scroll-smooth" v-for="note in notes"
-                :key="note" ref="notes_section">
+                <div class="flex w-full scroll-smooth" v-for="(note, index) in notes"
+                :key="note" ref="notes_section" :id="index">
                     <NoteDetails :note="note"></NoteDetails>
                 </div>
             </div>
