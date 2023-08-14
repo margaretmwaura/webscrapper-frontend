@@ -3,6 +3,7 @@ import { computed, ref } from 'vue';
 import { useNotesStore } from './../stores/notesStore'
 import { storeToRefs } from 'pinia';
 import { toast } from 'vue3-toastify';
+import { useAuthStore } from '../stores/authStore';
 
 
 export default{
@@ -10,8 +11,15 @@ export default{
   props: ['currentAction', 'note'],
   setup(props, context){
 
-    const store = useNotesStore()
-    let { isCreateNoteSuccessful, errorCreatingNote, errorUpdatingNote, isUpdateNoteSuccessful } = storeToRefs(store);
+   
+    const notesStore = useNotesStore()
+    let { isCreateNoteSuccessful, errorCreatingNote, errorUpdatingNote, isUpdateNoteSuccessful } = storeToRefs(notesStore);
+
+    const authStore = useAuthStore()
+    let { user } = storeToRefs(authStore)
+
+    console.log("The user")
+    console.log(user.value.id)
     
     let title = ref(props.note?.topic)
     let content = ref(props.note?.content)
@@ -30,9 +38,12 @@ export default{
       savingNote.value = true
       let data = {
         "topic" : title.value,
-        "content": content.value
+        "content": content.value,
+        "user_id": user.value.id
       }
-      await store.createNoteMutation(data)
+      console.log("Adding note")
+      console.log(data)
+      await notesStore.createNoteMutation(data)
       if(isCreateNoteSuccessful.value){
         toast.success('Your note has been added 🎊', {
           autoClose: 1000,
@@ -58,7 +69,7 @@ export default{
         "id": id.value
       }
 
-      await store.updateNoteMutation(data)
+      await notesStore.updateNoteMutation(data)
       if(isUpdateNoteSuccessful.value){
         toast.success('Your not been editted 🎊', {
           autoClose: 1000,

@@ -7,6 +7,7 @@ import { useQuery } from '@vue/apollo-composable';
 import { computed, watch } from 'vue';
 import { useLocalStorage } from '@vueuse/core';
 import { useSubscription } from '@vue/apollo-composable';
+import { useAuthStore } from './authStore';
 
 provideApolloClient(apolloClient);
 
@@ -50,8 +51,8 @@ const getTodoList = gql`
   }
 `;
 const getNotes = gql`
-  query {
-    getNotes {
+  query ($user_id: String!) {
+    getNotes(user_id: $user_id) {
       id
       topic
       content
@@ -325,8 +326,12 @@ export const useNotesStore = defineStore({
 
     // TODO: Star of the day https://v4.apollo.vuejs.org/guide-composable/subscription.html#subscribetomore
     async getNotes() {
+      const authStore = useAuthStore();
+      let user_id = authStore.user.id;
+      console.log('Getting notes');
+      console.log(user_id);
       const { onResult, subscribeToMore } = useQuery(getNotes, {
-        fetchPolicy: 'no-cache',
+        user_id: user_id,
       });
       subscribeToMore(() => ({
         document: notesSubscription,
