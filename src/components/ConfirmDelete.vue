@@ -30,11 +30,10 @@ function closeModal(consent){
       </div>
        <div class="p-4 border border-slate-200 h-full rounded-md">
         <p class="text-base font-semibold text-center">Are you sure you want to delete ?</p>
-        <br>
-        <div class="flex flex-row justify-center space-x-4">
-          <button class="mt-2 bg-green-700 text-white rounded-full py-1 w-20" 
+        <div class="flex flex-row justify-center space-x-4 mt-2">
+          <button class=" bg-green-700 text-white rounded-full py-1 w-20" 
            @click="closeModal('Yes')">Yes</button>
-          <button class="mt-2 bg-rose-600 text-white rounded-full py-1 w-20" 
+          <button class=" bg-rose-600 text-white rounded-full py-1 w-20" 
            @click="closeModal('No')">No</button>
         </div>
       </div>

@@ -1,5 +1,5 @@
 <script>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useNotesStore } from './../stores/notesStore'
 import { storeToRefs } from 'pinia';
 import { toast } from 'vue3-toastify';
@@ -18,8 +18,8 @@ export default{
     let id = ref(props.note?.id)
     let savingNote = ref(false)
     let action = ref(props.currentAction)
-
-    console.log(action)
+    let title_error = ref('')
+    let content_error = ref('')
   
     function closeModal(){
       context.emit('closeModal') 
@@ -32,7 +32,6 @@ export default{
         "topic" : title.value,
         "content": content.value
       }
-
       await store.createNoteMutation(data)
       if(isCreateNoteSuccessful.value){
         toast.success('Your note has been added 🎊', {
@@ -77,15 +76,38 @@ export default{
       }
     }
 
+    const validateTitle = async() => {
+      title_error.value = title.value === "" ? "The Input field is required" : "";
+    }
+
+    const validateContent = async() => {
+      content_error.value = content.value === "" ? "The Input field is required" : "";
+    }
+
+    let isFormValid = computed (() => {
+      if(!title || !content || title.value?.length == 0 || content.value?.length == 0 
+      || typeof title.value == 'undefined' || typeof content.value == 'undefined'){
+         console.log("It is false")
+         return false
+      }else{
+         console.log("It is True")
+         return true
+      }    
+    })
+
     return{
       closeModal,
       addNote,
       editNote,
-
+      content_error,
+      title_error,
       savingNote,
       title,
       content,
-      action
+      isFormValid,
+      action,
+      validateContent,
+      validateTitle
     }
   },
 }
@@ -107,28 +129,43 @@ export default{
             <font-awesome-icon icon="fa-solid fa-times" size="xl"  @click="closeModal()"/>
         </button>
       </div>
-      <div className="flex flex-col w-full py-4">
+      <form className="flex flex-col w-full py-4" method="post" v-on:submit.prevent>
         <!-- <p>“Each day I will accomplish one thing on my to do list.”― Lailah Gifty Akita 😊</p> -->
         <p class="font-bold pl-2 text-lg">Topic</p>
-        <input placeholder="Title" type="text" v-model="title" required/>
+        <input placeholder="Title" type="text" v-model="title" @keyup="validateTitle"/>
+        <div class="pl-2 text-rose-700 font-base text-sm" v-if="title_error">
+        {{ title_error }}
+        </div>
+        <!-- <div id="tooltip-bottom" role="tooltip" 
+        class="absolute z-10 invisible inline-block px-3 py-2 text-sm 
+        font-medium text-rose-700 bg-white rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700" v-if="title_error">
+          {{ title_error }}
+          <div class="tooltip-arrow" data-popper-arrow></div>
+        </div> -->
         <p class="font-bold pl-2 text-lg mt-4">Content</p>
         <div class="mt-2">
           <textarea
           rows="5" 
           class="notes bg-transparent outline-none w-full"
-          placeholder="Let's learn ...." ref="textarea" v-model="content" required></textarea>
+          placeholder="Let's learn ...." ref="textarea" 
+          v-model="content"
+          @keyup="validateContent"></textarea>
+          <div class="pl-2 text-rose-700 font-base text-sm" v-if="content_error">
+          {{ content_error }}
+          </div>
         </div>
         <div class="flex justify-center">
           <button class="mt-12 bg-indigo-700 text-white 
           rounded-full px-16 py-2 disabled:opacity-25" @click="addNote()" 
           v-if="action && action == 'NewNote'"
-          :disabled="savingNote">Add New Note</button>
+          :disabled="savingNote || !isFormValid" type="submit">Add New Note</button>
+
           <button v-else class="mt-12 bg-indigo-700 text-white 
           rounded-full px-16 py-2 disabled:opacity-25"
            @click="editNote()" 
           :disabled="savingNote">Edit Note</button>
         </div>
-      </div>
+      </form>
     </div>
 </div>
 </template>
