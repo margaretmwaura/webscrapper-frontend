@@ -1,5 +1,5 @@
 <script>
-import { onMounted, ref } from 'vue';
+import { onActivated, onMounted, onUpdated, ref } from 'vue';
 import { useNotesStore } from './../stores/notesStore'
 import { storeToRefs } from 'pinia';
 import { toast } from 'vue3-toastify';
@@ -72,6 +72,10 @@ export default{
       textarea.value.focus()
     })
 
+    onUpdated(() => {
+      textarea.value.focus()
+    })
+
     return{
       savingTodoList,
       textarea,
@@ -103,7 +107,7 @@ export default{
       </div>
       <div className="flex flex-col w-full py-4">
         <p>“Each day I will accomplish one thing on my to do list.”― Lailah Gifty Akita </p>
-          <!-- </p> -->
+        <p class="italic font-thin pt-2">(to add a new item ,press enter)</p>
         <div class="mt-6">
           <textarea v-on:input="handleInput($event)" 
           rows="5" 

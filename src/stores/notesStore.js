@@ -37,8 +37,8 @@ const updateNoteMutation = gql`
   }
 `;
 const getTodoList = gql`
-  query {
-    getTodaysToDoList {
+  query ($user_id: String!) {
+    getTodaysToDoList(user_id: $user_id) {
       id
       todoListItems {
         id
@@ -119,6 +119,13 @@ export const useNotesStore = defineStore({
   getters: {},
   actions: {
     async createToDoList(data) {
+      let user_id = await this.getCurrentUserId();
+      if (typeof user_id == 'undefined' || user_id == '') {
+        this.errorSavingTodoList =
+          'You need to authenticate first, you are not authenticated';
+        this.isCreateTodoListSuccessful = false;
+        return;
+      }
       const {
         mutate: createToDo,
         onError,
@@ -127,6 +134,7 @@ export const useNotesStore = defineStore({
         return {
           variables: {
             input: {
+              user_id: user_id,
               todoListItems: data,
             },
           },
@@ -303,7 +311,14 @@ export const useNotesStore = defineStore({
       }
     },
     async getTheToDoList() {
-      const { onResult } = useQuery(getTodoList, { fetchPolicy: 'no-cache' });
+      let user_id = await this.getCurrentUserId();
+      if (typeof user_id == 'undefined' || user_id == '') {
+        console.log('You need to authenticate first ');
+        return;
+      }
+      const { onResult } = useQuery(getTodoList, {
+        user_id: user_id,
+      });
       return onResult(({ data }) => {
         this.todoList = data.getTodaysToDoList?.todoListItems;
         console.log(this.todoList);
@@ -326,22 +341,22 @@ export const useNotesStore = defineStore({
 
     // TODO: Star of the day https://v4.apollo.vuejs.org/guide-composable/subscription.html#subscribetomore
     async getNotes() {
-      const authStore = useAuthStore();
-      let user_id = authStore.user.id;
-      console.log('Getting notes');
-      console.log(user_id);
+      let user_id = await this.getCurrentUserId();
+      if (typeof user_id == 'undefined' || user_id == '') {
+        console.log('You need to authenticate first ');
+        return;
+      }
       const { onResult, subscribeToMore } = useQuery(getNotes, {
         user_id: user_id,
       });
       subscribeToMore(() => ({
         document: notesSubscription,
-
-        // TODO: In this we shall have checks to check what type of mutation was done in order to update the data accordingly
         updateQuery: (previousResult, { subscriptionData }) => {
           console.log('Within update Query');
           let noteSubData = subscriptionData.data.noteSubcription;
           let newNote = noteSubData.data;
           console.log(noteSubData);
+          console.log(previousResult);
           let newData = {
             getNotes: [],
           };
@@ -374,6 +389,13 @@ export const useNotesStore = defineStore({
         console.log('Notes');
         console.log(this.notes);
       });
+    },
+    async getCurrentUserId() {
+      const authStore = useAuthStore();
+      let user_id = authStore.user?.id;
+      console.log('User id is + ');
+      console.log(user_id);
+      return user_id;
     },
   },
 });

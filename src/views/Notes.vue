@@ -183,7 +183,7 @@ export default{
           </div>
           <!-- sm:w-full md:w-full lg:w-full xl:w-2/3 2xl:w-2/3 -->
           <!-- sm:w-full md:w-full lg:w-full xl:w-1/3 2xl:w-1/3  -->
-          <div class="flex rounded p-4 pb-6 bg-millenial-pink overflow-y-auto ">
+          <div class="flex rounded p-4 pb-6 bg-millenial-pink">
             <div class="flex justify-end mt-2">
                 <p class="mb-4">
                   <!-- <span class="animate-ping absolute h-4 w-4 rounded-full bg-sky-400 opacity-75"></span> -->
@@ -205,7 +205,8 @@ export default{
                 data-te-collapse-item
                 data-te-collapse-horizontal
                 id="collapseWidthExample">
-                  <div class="flex w-full justify-end">
+                  <div class="flex w-full justify-between">
+                    <p class="-mt-4 pl-4 font-semibold underline underline-offset-4">Todo List : {{moment().format('dddd')}}</p>
                     <div class="-mt-8" v-show="todoList && todoList.length != 0">
                       <div class="rounded-full bg-mustard-yellow w-10 h-10 flex justify-center items-center text-white text-sm">
                         <font-awesome-icon icon="fa-solid fa-plus" size="lg" @click="openAddTodoItemModal"/>
@@ -213,9 +214,9 @@ export default{
                       <AddTodoItem v-show="addTodoItem" @close="closeAddTodoItemModal"/>
                     </div>
                   </div>
-                  <div class="flex-1 max-w-sm rounded-lg h-full"  style="width: 280px" >
+                  <div class="flex-1 max-w-sm rounded-lg h-full overflow-y-scoll overflow-x-hidden"  style="width: 300px" >
                       <div v-if="isTodoListAdded">
-                        <ol v-for="todoListItem in todoList" :key="todoListItem">
+                        <ol v-for="todoListItem in todoList" :key="todoListItem" class="pl-6">
                           <li :class="{open: isOpen(todoListItem.status_name), closed : isClosed(todoListItem.status_name)}">
                             <TodoItem :todoListItem="todoListItem"></TodoItem>
                           </li>
