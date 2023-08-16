@@ -2,100 +2,29 @@ import { defineStore } from 'pinia';
 import { provideApolloClient } from '@vue/apollo-composable';
 import { useMutation } from '@vue/apollo-composable';
 import { apolloClient } from './../apolloClient';
-import gql from 'graphql-tag';
 import { useQuery } from '@vue/apollo-composable';
 import { computed, watch } from 'vue';
 import { useLocalStorage } from '@vueuse/core';
 import { useSubscription } from '@vue/apollo-composable';
 import { useAuthStore } from './authStore';
+import {
+  CREATE_TODO_LIST_MUTATION,
+  UPDATE_TODO_LIST_ITEM_MUTATION,
+  ADD_TODO_LIST_ITEM_MUTATION,
+  DELETE_TODO_LIST_ITEM_MUTATION,
+  CREATE_NOTE_MUTATION,
+  UPDATE_NOTE_MUTATION,
+  DELETE_NOTE_MUTATION,
+} from './../graphql/mutation';
+
+import { GET_TODO_LIST_QUERY, GET_NOTES_QUERY } from './../graphql/query';
+import {
+  TODO_LIST_SUBSCRIPTION,
+  NOTE_SUBSCRIPTION,
+} from './../graphql/subscriptions';
 
 provideApolloClient(apolloClient);
 
-const createToDoListMutation = gql`
-  mutation createToDoList($input: TodoListInput!) {
-    createToDoList(input: $input)
-  }
-`;
-const updateTodoListItemMutation = gql`
-  mutation updateTodoListItem($input: UpdateTodoListItem!) {
-    updateTodoListItem(input: $input)
-  }
-`;
-const addTodoListItemMutation = gql`
-  mutation addTodoListItem($input: AddTodoListItem!) {
-    addTodoListItem(input: $input)
-  }
-`;
-const createNoteMutation = gql`
-  mutation createNote($input: CreateNote!) {
-    createNote(input: $input)
-  }
-`;
-const updateNoteMutation = gql`
-  mutation updateNote($input: UpdateNote!) {
-    updateNote(input: $input)
-  }
-`;
-const getTodoList = gql`
-  query ($user_id: String!) {
-    getTodaysToDoList(user_id: $user_id) {
-      id
-      todoListItems {
-        id
-        item_name
-        status_name
-        reminder
-        key_name
-      }
-    }
-  }
-`;
-const getNotes = gql`
-  query ($user_id: String!) {
-    getNotes(user_id: $user_id) {
-      id
-      topic
-      content
-      createdAt
-    }
-  }
-`;
-const todoListSubscription = gql`
-  subscription ($user_id: String!) {
-    todoCreated(user_id: $user_id) {
-      id
-      todoListItems {
-        id
-        item_name
-        status_name
-        reminder
-      }
-    }
-  }
-`;
-const notesSubscription = gql`
-  subscription ($user_id: String!) {
-    noteSubcription(user_id: $user_id) {
-      mutation
-      data {
-        id
-        topic
-        content
-        createdAt
-      }
-    }
-  }
-`;
-const deleteTodoListItemMutation = gql`
-  mutation deleteTodoListItem($input: DeleteTodoListItem!) {
-    deleteTodoListItem(input: $input)
-  }
-`;
-const deleteNoteMutation = gql`
-  mutation deleteNote($id: String!) {
-    deleteNote(id: $id)
-  }
-`;
 export const useNotesStore = defineStore({
   id: 'notesStore',
   state: () => ({
@@ -131,7 +60,7 @@ export const useNotesStore = defineStore({
         mutate: createToDo,
         onError,
         onDone,
-      } = useMutation(createToDoListMutation, () => {
+      } = useMutation(CREATE_TODO_LIST_MUTATION, () => {
         return {
           variables: {
             input: {
@@ -155,7 +84,7 @@ export const useNotesStore = defineStore({
         mutate: updateTodoListItem,
         onError,
         onDone,
-      } = useMutation(updateTodoListItemMutation, () => {
+      } = useMutation(UPDATE_TODO_LIST_ITEM_MUTATION, () => {
         return {
           variables: {
             input: data,
@@ -184,7 +113,7 @@ export const useNotesStore = defineStore({
         mutate: addTodoItem,
         onError,
         onDone,
-      } = useMutation(addTodoListItemMutation, () => {
+      } = useMutation(ADD_TODO_LIST_ITEM_MUTATION, () => {
         return {
           variables: {
             input: data,
@@ -212,7 +141,7 @@ export const useNotesStore = defineStore({
         mutate: deleteItem,
         onError,
         onDone,
-      } = useMutation(deleteTodoListItemMutation, () => {
+      } = useMutation(DELETE_TODO_LIST_ITEM_MUTATION, () => {
         return {
           variables: {
             input: data,
@@ -240,7 +169,7 @@ export const useNotesStore = defineStore({
         mutate: createNote,
         onError,
         onDone,
-      } = useMutation(createNoteMutation, () => {
+      } = useMutation(CREATE_NOTE_MUTATION, () => {
         return {
           variables: {
             input: data,
@@ -262,7 +191,7 @@ export const useNotesStore = defineStore({
           mutate: updateNote,
           onError,
           onDone,
-        } = useMutation(updateNoteMutation, () => {
+        } = useMutation(UPDATE_NOTE_MUTATION, () => {
           return {
             variables: {
               input: data,
@@ -288,7 +217,7 @@ export const useNotesStore = defineStore({
           mutate: deleteNote,
           onError,
           onDone,
-        } = useMutation(deleteNoteMutation, () => {
+        } = useMutation(DELETE_NOTE_MUTATION, () => {
           return {
             variables: {
               id: note_id,
@@ -315,7 +244,7 @@ export const useNotesStore = defineStore({
         console.log('You need to authenticate first ');
         return;
       }
-      const { onResult } = useQuery(getTodoList, {
+      const { onResult } = useQuery(GET_TODO_LIST_QUERY, {
         user_id: user_id,
       });
       return onResult(({ data }) => {
@@ -331,7 +260,7 @@ export const useNotesStore = defineStore({
         return;
       }
       const { onResult } = useSubscription(
-        todoListSubscription,
+        TODO_LIST_SUBSCRIPTION,
         { user_id: user_id },
         () => ({
           fetchPolicy: 'no-cache',
@@ -353,19 +282,21 @@ export const useNotesStore = defineStore({
         console.log('You need to authenticate first ');
         return;
       }
-      const { onResult, subscribeToMore } = useQuery(getNotes, {
+      const { onResult, subscribeToMore } = useQuery(GET_NOTES_QUERY, {
         user_id: user_id,
       });
       subscribeToMore(() => ({
-        document: notesSubscription,
+        document: NOTE_SUBSCRIPTION,
         variables: {
           user_id: user_id,
         },
         updateQuery: (previousResult, { subscriptionData }) => {
+          console.log('We are subscrining');
           let noteSubData = subscriptionData.data.noteSubcription;
           let newData = {
             getNotes: [],
           };
+          let newNote = noteSubData.data;
           if (noteSubData.mutation == 'Create') {
             let previousData = previousResult.getNotes;
             newData.getNotes = [...previousData, newNote];
