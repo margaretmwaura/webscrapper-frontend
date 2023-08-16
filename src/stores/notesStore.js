@@ -61,8 +61,8 @@ const getNotes = gql`
   }
 `;
 const todoListSubscription = gql`
-  subscription {
-    todoCreated {
+  subscription ($user_id: String!) {
+    todoCreated(user_id: $user_id) {
       id
       todoListItems {
         id
@@ -74,8 +74,8 @@ const todoListSubscription = gql`
   }
 `;
 const notesSubscription = gql`
-  subscription {
-    noteSubcription {
+  subscription ($user_id: String!) {
+    noteSubcription(user_id: $user_id) {
       mutation
       data {
         id
@@ -100,6 +100,7 @@ export const useNotesStore = defineStore({
   id: 'notesStore',
   state: () => ({
     todoList: useLocalStorage('todoList', []),
+    todo: useLocalStorage('todo', {}),
     notes: useLocalStorage('notes', []),
     isCreateTodoListSuccessful: useLocalStorage(
       'isCreateTodoListSuccessful',
@@ -178,7 +179,7 @@ export const useNotesStore = defineStore({
       await updateTodoListItem();
     },
     async addToDoListItem(data) {
-      data.id = this.todoList[0].id;
+      data.id = this.todo.id;
       const {
         mutate: addTodoItem,
         onError,
@@ -256,7 +257,6 @@ export const useNotesStore = defineStore({
       await createNote();
     },
     async updateNoteMutation(data) {
-      console.log('We are updating fellas');
       try {
         const {
           mutate: updateNote,
@@ -279,7 +279,6 @@ export const useNotesStore = defineStore({
         });
         await updateNote();
       } catch (error) {
-        console.log('Withing catch');
         console.log(error);
       }
     },
@@ -320,19 +319,27 @@ export const useNotesStore = defineStore({
         user_id: user_id,
       });
       return onResult(({ data }) => {
+        this.todo = data.getTodaysToDoList;
         this.todoList = data.getTodaysToDoList?.todoListItems;
-        console.log(this.todoList);
         this.todoListSubscription();
       });
     },
     async todoListSubscription() {
-      const { onResult } = useSubscription(todoListSubscription, null, () => ({
-        fetchPolicy: 'no-cache',
-      }));
+      let user_id = await this.getCurrentUserId();
+      if (typeof user_id == 'undefined' || user_id == '') {
+        console.log('You need to authenticate first ');
+        return;
+      }
+      const { onResult } = useSubscription(
+        todoListSubscription,
+        { user_id: user_id },
+        () => ({
+          fetchPolicy: 'no-cache',
+        })
+      );
 
       onResult(result => {
-        console.log('We are in susbscription');
-        console.log(result.data.todoCreated.todoListItems);
+        this.todo = result.data.todoCreated;
         this.todoList = result.data?.todoCreated?.todoListItems;
       });
     },
@@ -351,12 +358,11 @@ export const useNotesStore = defineStore({
       });
       subscribeToMore(() => ({
         document: notesSubscription,
+        variables: {
+          user_id: user_id,
+        },
         updateQuery: (previousResult, { subscriptionData }) => {
-          console.log('Within update Query');
           let noteSubData = subscriptionData.data.noteSubcription;
-          let newNote = noteSubData.data;
-          console.log(noteSubData);
-          console.log(previousResult);
           let newData = {
             getNotes: [],
           };
@@ -393,8 +399,6 @@ export const useNotesStore = defineStore({
     async getCurrentUserId() {
       const authStore = useAuthStore();
       let user_id = authStore.user?.id;
-      console.log('User id is + ');
-      console.log(user_id);
       return user_id;
     },
   },

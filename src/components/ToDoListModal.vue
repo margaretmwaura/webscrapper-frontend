@@ -1,5 +1,5 @@
 <script>
-import { onActivated, onMounted, onUpdated, ref } from 'vue';
+import { onMounted, onUpdated, ref } from 'vue';
 import { useNotesStore } from './../stores/notesStore'
 import { storeToRefs } from 'pinia';
 import { toast } from 'vue3-toastify';
@@ -67,11 +67,11 @@ export default{
       }
     }
 
-// TODO: This is only called the first time FIXME:
     onMounted(() =>{
       textarea.value.focus()
     })
 
+// TODO: Carefully read on the hook and check if something is going wrong
     onUpdated(() => {
       textarea.value.focus()
     })
