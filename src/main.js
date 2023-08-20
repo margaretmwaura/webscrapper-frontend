@@ -50,6 +50,8 @@ import {
   faPlus,
   faChevronDown,
   faTrash,
+  faChevronRight,
+  faChevronLeft,
 } from '@fortawesome/free-solid-svg-icons';
 
 import {
@@ -89,7 +91,9 @@ library.add(
   faPlus,
   faChevronDown,
   faEdit,
-  faTrash
+  faTrash,
+  faChevronRight,
+  faChevronLeft
 );
 
 import { DefaultApolloClient } from '@vue/apollo-composable';

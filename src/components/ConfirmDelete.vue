@@ -7,8 +7,8 @@ const props =  defineProps({
   quote: Object,
 });
 
-function closeModal(){
-  emit('close') 
+function closeModal(consent){
+  emit('close', consent) 
 }
 
 </script>
@@ -22,17 +22,20 @@ function closeModal(){
       <div className="flex justify-between">
         <div class="flex items-center flex-no-shrink text-black mr-6">
             <div class="rounded-full bg-indigo-700 w-6 h-6 flex justify-center"><p class="text-white font-bold">L</p></div>
-            <span class="font-semibold text-xl tracking-wider pl-2 text-indigo-700"> </span>
+            <span class="font-semibold text-xl tracking-wider pl-2 text-indigo-700"> Delete Confirmation</span>
         </div>
         <button className="text-indigo-700 text-lg font-light place-self-end">
             <font-awesome-icon icon="fa-solid fa-times" size="xl"  @click="closeModal()"/>
         </button>
       </div>
        <div class="p-4 border border-slate-200 h-full rounded-md">
-        <q class="font-thin text-base">{{quote.q}}</q>
-        <br>
-        ~
-        <p class="font-semibold underline underline-offset-8">{{quote.a}}</p>
+        <p class="text-base font-semibold text-center">Are you sure you want to delete ?</p>
+        <div class="flex flex-row justify-center space-x-4 mt-2">
+          <button class=" bg-green-700 text-white rounded-full py-1 w-20" 
+           @click="closeModal('Yes')">Yes</button>
+          <button class=" bg-rose-600 text-white rounded-full py-1 w-20" 
+           @click="closeModal('No')">No</button>
+        </div>
       </div>
     </div>
   </div>

@@ -4,6 +4,9 @@
 // FIXME: Only solution working is to use localstorage,
 // The pnly way to stay secure is to clear and set after every call
 
+// Difference between vue2 and vue3
+// https://www.apollographql.com/blog/frontend/getting-started-with-vue-apollo/
+
 import {
   ApolloClient,
   createHttpLink,

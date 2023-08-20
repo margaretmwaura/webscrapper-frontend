@@ -83,81 +83,82 @@ watch(taskDesc, async (newTaskDesc) =>  {
 
 <template>
    <div class="flex flex-row w-full justify-between mt-2">
-      <!-- <p>{{ taskDesc }}</p> -->
-      <div class="flex">{{taskDesc}}</div>
+      <div class="flex"><p>{{taskDesc}}</p></div>
       <div class="flex space-x-2" v-show="props.todoListItem.status_name != 'closed'">
         <DatesModal v-show="showDatePicker" @updateSelectedDate="updateReminderDate" @close="closeReminderDateModal"/>
-        <EditTodoItem v-show="showEditDesc" @close="closeEditTodoItemDes" v-model="taskDesc"/> 
-         <div data-te-dropdown-ref>
-                <button
-                  type="button"
-                  id="dropdownMenuButton"
-                  data-te-dropdown-toggle-ref
-                  data-te-ripple-init
-                  data-te-ripple-color="light"
-                  aria-expanded="false">
-                  <font-awesome-icon icon="fa-solid fa-ellipsis" class="rotate-90" @click="selectReminderDate()"/>
+        <EditTodoItem v-show="showEditDesc" @close="closeEditTodoItemDes" :desc="taskDesc" :id="props.todoListItem.id"/>
+        <!-- v-model="taskDesc" 
+        />  -->
+        <div data-te-dropdown-ref>
+          <button
+            type="button"
+            id="dropdownMenuButton"
+            data-te-dropdown-toggle-ref
+            data-te-ripple-init
+            data-te-ripple-color="light"
+            aria-expanded="false">
+            <font-awesome-icon icon="fa-solid fa-ellipsis" class="rotate-90"/>
+          </button>
+          <ul
+            class="absolute z-[1000] float-left m-0 hidden min-w-max list-none
+              overflow-hidden rounded-lg border-none bg-white bg-clip-padding
+              text-left text-base shadow-lg dark:bg-indigo-100 [&[data-te-dropdown-show]]:block w-32"
+            aria-labelledby="dropdownMenuButton"
+            data-te-dropdown-menu-ref>
+            <li>
+              <button
+                class="block w-full whitespace-nowrap bg-transparent px-4 py-2 text-sm 
+                font-normal text-black-700 hover:bg-black-100 
+                active:text-black-800 active:no-underline 
+                disabled:pointer-events-none disabled:bg-transparent
+                  disabled:text-black-400 dark:text-black-200 dark:hover:bg-black-600"
+                @click="markItemAsComplete()"
+                data-te-dropdown-item-ref>Done
+                <font-awesome-icon
+                  icon="fa-solid fa-check"/>
                 </button>
-                <ul
-                  class="absolute z-[1000] float-left m-0 hidden min-w-max list-none
-                   overflow-hidden rounded-lg border-none bg-white bg-clip-padding
-                    text-left text-base shadow-lg dark:bg-indigo-100 [&[data-te-dropdown-show]]:block w-32"
-                  aria-labelledby="dropdownMenuButton"
-                  data-te-dropdown-menu-ref>
-                  <li>
-                    <button
-                      class="block w-full whitespace-nowrap bg-transparent px-4 py-2 text-sm 
-                      font-normal text-black-700 hover:bg-black-100 
-                      active:text-black-800 active:no-underline 
-                      disabled:pointer-events-none disabled:bg-transparent
-                       disabled:text-black-400 dark:text-black-200 dark:hover:bg-black-600"
-                      @click="selectReminderDate()"
-                      data-te-dropdown-item-ref>Done
-                      <font-awesome-icon
-                       icon="fa-solid fa-check"/>
-                      </button>
-                  </li>
-                  <li>
-                    <button
-                      class="block w-full whitespace-nowrap bg-transparent px-4 text-sm 
-                      font-normal text-black-700 hover:bg-black-100 
-                      active:text-black-800 active:no-underline 
-                      disabled:pointer-events-none disabled:bg-transparent
-                       disabled:text-black-400 dark:text-black-200 dark:hover:bg-black-600"
-                      @click="selectReminderDate()"
-                      data-te-dropdown-item-ref>Edit
-                      <font-awesome-icon
-                       icon="fa-regular fa-edit"/>
-                      </button>
-                  </li>
-                  <li>
-                    <button
-                      class="block w-full whitespace-nowrap bg-transparent px-4 mt-2 text-sm 
-                      font-normal text-black-700 hover:bg-black-100 
-                      active:text-black-800 active:no-underline 
-                      disabled:pointer-events-none disabled:bg-transparent
-                       disabled:text-black-400 dark:text-black-200 dark:hover:bg-black-600"
-                      @click="deleteItem()"
-                      data-te-dropdown-item-ref>Delete
-                      <font-awesome-icon
-                       icon="fa-solid fa-trash"/>
-                      </button>
-                  </li>
-                  <li>
-                    <button
-                      class="block w-full whitespace-nowrap bg-transparent px-4 py-2 text-sm 
-                      font-normal text-black-700 hover:bg-black-100 
-                      active:text-black-800 active:no-underline 
-                      disabled:pointer-events-none disabled:bg-transparent
-                       disabled:text-black-400 dark:text-black-200 dark:hover:bg-black-600"
-                      @click="selectReminderDate()"
-                      data-te-dropdown-item-ref>Reminder
-                      <font-awesome-icon
-                       icon="fa-regular fa-clock"/>
-                      </button>
-                  </li>
-                </ul>
-              </div>
+            </li>
+            <li>
+              <button
+                class="block w-full whitespace-nowrap bg-transparent px-4 text-sm 
+                font-normal text-black-700 hover:bg-black-100 
+                active:text-black-800 active:no-underline 
+                disabled:pointer-events-none disabled:bg-transparent
+                  disabled:text-black-400 dark:text-black-200 dark:hover:bg-black-600"
+                @click="showEditTodoItemDesc()"
+                data-te-dropdown-item-ref>Edit
+                <font-awesome-icon
+                  icon="fa-regular fa-edit"/>
+                </button>
+            </li>
+            <li>
+              <button
+                class="block w-full whitespace-nowrap bg-transparent px-4 mt-2 text-sm 
+                font-normal text-black-700 hover:bg-black-100 
+                active:text-black-800 active:no-underline 
+                disabled:pointer-events-none disabled:bg-transparent
+                  disabled:text-black-400 dark:text-black-200 dark:hover:bg-black-600"
+                @click="deleteItem()"
+                data-te-dropdown-item-ref>Delete
+                <font-awesome-icon
+                  icon="fa-solid fa-trash"/>
+                </button>
+            </li>
+            <li>
+              <button
+                class="block w-full whitespace-nowrap bg-transparent px-4 py-2 text-sm 
+                font-normal text-black-700 hover:bg-black-100 
+                active:text-black-800 active:no-underline 
+                disabled:pointer-events-none disabled:bg-transparent
+                  disabled:text-black-400 dark:text-black-200 dark:hover:bg-black-600"
+                @click="selectReminderDate()"
+                data-te-dropdown-item-ref>Reminder
+                <font-awesome-icon
+                  icon="fa-regular fa-clock"/>
+                </button>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
     <!-- FIXME: This should show either the date selected or the reminder that already exists -->

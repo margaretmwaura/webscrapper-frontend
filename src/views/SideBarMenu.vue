@@ -34,7 +34,8 @@ const menu = [
                 icon: 'fa-regular fa-bar-chart'
                 
                }
-             }
+             },
+             exact: true,
           },
           {
             href: '/learning',
