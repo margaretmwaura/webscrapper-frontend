@@ -1,4 +1,6 @@
 import gql from 'graphql-tag';
+// TODO: Practices now
+// https://www.apollographql.com/docs/react/data/operation-best-practices/
 export const GET_TODO_LIST_QUERY = gql`
   query ($user_id: String!) {
     getTodaysToDoList(user_id: $user_id) {

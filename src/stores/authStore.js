@@ -13,10 +13,13 @@ import { apolloClient } from './../apolloClient';
 import gql from 'graphql-tag';
 import { useQuery } from '@vue/apollo-composable';
 import { computed } from 'vue';
+import CryptoJS from 'crypto-js';
 
 provideApolloClient(apolloClient);
 
 const auth = getAuth(firebaseAdmin);
+
+const ENCRYPTION_KEY = import.meta.env.VITE_ENCRYPTION_KEY;
 
 const registerMutation = gql`
   mutation RegisterUser($input: RegisterUser!) {
@@ -65,10 +68,22 @@ export const useAuthStore = defineStore({
         return {
           variables: {
             input: {
-              first_name: data.name,
-              last_name: data.name,
-              email: data.email,
-              password: data.password,
+              first_name: CryptoJS.AES.encrypt(
+                data.name,
+                ENCRYPTION_KEY
+              ).toString(),
+              last_name: CryptoJS.AES.encrypt(
+                data.name,
+                ENCRYPTION_KEY
+              ).toString(),
+              email: CryptoJS.AES.encrypt(
+                data.email,
+                ENCRYPTION_KEY
+              ).toString(),
+              password: CryptoJS.AES.encrypt(
+                data.password,
+                ENCRYPTION_KEY
+              ).toString(),
             },
           },
         };
