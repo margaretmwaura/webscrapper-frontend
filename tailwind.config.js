@@ -8,6 +8,7 @@ module.exports = {
   content: [
     './src/**/*.{html,js}',
     './node_modules/tw-elements/dist/js/**/*.js',
+    // './node_modules/flowbite/**/*.js',
   ],
   purge: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
   theme: {
@@ -94,5 +95,6 @@ module.exports = {
     // require('@tailwindcss/line-clamp'),
     // require('@tailwindcss/aspect-ratio'),
     require('tw-elements/dist/plugin'),
+    // require('flowbite/plugin'),
   ],
 };

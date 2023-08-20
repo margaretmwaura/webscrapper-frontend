@@ -3,7 +3,6 @@
 import { ref, computed, watch, defineEmits } from 'vue';
 import { useNotesStore } from './../stores/notesStore'
 
-
 const emit = defineEmits(['close'])
 const store = useNotesStore()
 
@@ -20,6 +19,7 @@ async function saveToDoItem(){
   console.log("Data to add")
   console.log(data)
   await store.addToDoListItem(data)
+  newTodoItem.value = ''
   emit('close') 
 }
 
