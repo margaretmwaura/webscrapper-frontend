@@ -33,7 +33,7 @@ export default{
 </script>
 
 <template>
-  <div class="px-4 pt-4 border border-slate-200 h-40 rounded-md">
+  <div class="px-4 pt-4 border border-slate-200 h-full rounded-md">
     <p class="font-semibold underline underline-offset-8">{{quote.a}}</p>
     <br>
     <q class="font-thin text-base">{{quote.q.substring(0,52)+".." }}</q>

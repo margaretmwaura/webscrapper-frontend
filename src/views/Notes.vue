@@ -166,16 +166,18 @@ export default{
   }
 </script>
 
+<!-- https://tailwind-elements.com/docs/standard/components/dropdown/ -->
 <template>
   <div class="flex flex-col w-full mb-10 banner h-full bg-snow-white">
-    <div class="flex flex-col w-full mt-52 h-screen bg-snow-white">
-      <div class="flex flex-row space-x-4 bg-transparent -mt-10 mx-10 h-72">
+    <div class="flex flex-col w-full mt-52 h-full bg-snow-white">
+       <div class="flex flex-row space-x-4 space-y-4 bg-transparent -mt-10 mx-10 h-full
+      sm:flex-wrap md:flex-wrap lg:flex-nowrap xl:flex-nowrap 2xl:flex-nowrap">
           <div class="flex flex-col flex-grow bg-white rounded p-6">
             <div class="flex justify-between">
             <p class="text-2xl font-semibold tracking-wide leading-loose">Daily Growth 🌱 ☀️</p>
             <font-awesome-icon icon="fa-solid fa-ellipsis lg" />
             </div>
-            <div class="grid grid-cols-3 gap-4 mt-4">
+            <div class="grid sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 overflow-auto overflow-x-auto gap-4 mt-4">
               <div v-for="quote in dailyQuotes" :key="quote">
                 <QuoteDetails :quote="quote"/>
               </div>
@@ -199,8 +201,8 @@ export default{
                     📌
                   </button>
                 </p>
-              </div>
-              <div
+            </div>
+            <div
                 class= "!visible hidden flex flex-col h-full pt-8" 
                 data-te-collapse-item
                 data-te-collapse-horizontal
@@ -223,7 +225,7 @@ export default{
                         </ol>
                       </div>
                   </div>
-              </div>
+            </div>
           </div>
        </div>
        <div class="flex space-x-4 bg-transparent mt-10 mx-10 h-full">
@@ -247,7 +249,6 @@ export default{
                 </div>
             </div>
             <div class="flex justify-end items-end mt-2">
-             <!-- https://tailwind-elements.com/docs/standard/components/dropdown/ -->
               <div class="relative" data-te-dropdown-ref>
                   <button
                     class="flex items-center whitespace-nowrap bg-indigo-700

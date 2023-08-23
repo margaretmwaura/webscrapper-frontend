@@ -18,7 +18,11 @@
 
 /* FIXME: Find out which page was benefiting from us using white */
 body {
-  background-color: #f6f6f6;
+  /* background-color: #f6f6f6; */
+  background-color: white;
+  /* opacity: 0.8;
+  background-image: radial-gradient(#444cf7 0.5px, white 0.5px);
+  background-size: 40px 40px; */
 }
 
 .notes {
