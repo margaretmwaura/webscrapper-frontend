@@ -70,7 +70,7 @@ const closeDeleteModal = (consent) => {
       <p class="font-bold">{{date}}</p>
       <p class="font-thin text-base">{{note.content }}</p>
   </div>
-  <NotesModal :note="props.note" v-show="showEditModal" @close="closeEditModal"/>
+  <NotesModal :note="props.note" v-show="showEditModal" @closeModal="closeEditModal"/>
   <ConfirmDelete v-show="showDeleteModal" @close="closeDeleteModal"/>
 </template>
 
