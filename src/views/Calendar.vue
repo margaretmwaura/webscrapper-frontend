@@ -1,28 +1,80 @@
 <script setup>
-import { ref, computed, watchEffect, onMounted } from 'vue';
+import { ref, computed, watchEffect, onMounted , onUpdated} from 'vue';
+import { useNow } from '@vueuse/core'
 
+let timeRef = ref(null)
 
-defineProps({
-  msg: String,
-});
+let cells = ref((24 * 7 * 12))
 
-let cells = ref((24 * 14))
-
+const now = useNow()
 let curr = new Date()
-let currentHour = ref(curr.getHours())
 let currentDate = ref(curr.getDate())
-let week = []
 
-for (let i = 1; i <= 14; i++) {
+let currentHour = computed(() => {
+  return now.value.getHours()
+})
+let currentMinutes = computed(() => {
+  return now.value.getMinutes()
+})
+
+let currentHourIndicator = computed(() => {return((currentHour.value) * 12 + 1) + Math.floor(0.2 * currentMinutes.value)})
+
+let display_time = computed (() => {
+  return `"` + `${currentHour.value}` + ":" + `${currentMinutes.value.toString().padStart(2, "0")}` + `"`
+})
+
+let height = '20px'
+
+let week = []
+let days = []
+
+const dates = (startDate, num) => Array.from(
+  { length: num },
+  (_, i) => new Date(startDate.getTime() + (i * 60000 * 60 * 24)).toISOString().slice(0, 10)
+);
+
+const lastWeek = () => {
+  let date = new Date();
+  date.setDate(date.getDate() - date.getDay() - 6);
+  return dates(date, 7);
+}
+
+const thisWeek = () => {
+  let date = new Date();
+  date.setDate(date.getDate() - date.getDay() + 1);
+  return dates(date, 7);
+}
+
+const nextWeek = () => {
+  let date = new Date();
+  date.setDate(date.getDate() - date.getDay() + 8);
+  return dates(date, 7);
+}
+
+let current_w = thisWeek();
+
+const display_d = days.concat(current_w)
+
+for (let i = 0 ; i < 7; i++) {
   let date = {}
-  let first = curr.getDate() - curr.getDay() + i 
-  let day = new Date(curr.setDate(first)).toDateString().split(' ')
+  let data = display_d[i]
+  let day = new Date(data).toDateString().split(' ')
   date.day = day[0]
   date.date = day[2]
   week.push(date)
 }
 
-console.log(week)
+const isCurrentDay = (day) => {
+  return day == currentDate.value
+}
+
+// onUpdated(() => {
+//   timeRef.value[currentHour.value].scrollIntoView({ behavior: "smooth"});
+// })
+
+onMounted(() => {
+  timeRef.value[currentHour.value].scrollIntoView({ behavior: "smooth"});
+})
 
 </script>
 
@@ -44,35 +96,35 @@ console.log(week)
 <!-- 6. Show an indicator at the current date -->
 <!-- 7. Buttons to go forward or backwards for dates (done) -->
 <!-- 8. Borders within the time and date grid (done)-->
-<div class="container">
-    <ol class="headline" >
-      <li v-for="day in week" :key="day">
-        <p>
-          {{day.day}} 
-          <br>
-          <span> {{day.date}}  </span>
-        </p>
-      </li>
-    </ol>
-    <div class="button">
-      <p><font-awesome-icon icon="fa-solid fa-chevron-left xlg" /></p>
+<!-- 9. When the body of the calendar is quite far away from the top the calendar is still visible beneath the sticky header -->
+  <div class="z-999">
+    <div class="block md:hidden">
+      <p>Our list will go in here</p>
     </div>
-    <ol class="time">
-      <li v-for="i in 24" :key="i">
-        <time>{{i - 1 }} <span> {{ i <= 12 ? 'am' : 'pm' }}</span></time>
-      </li>
-    </ol>
-    <ol  class="calendar">
-      <li v-for="cell in cells" :key="cell">
-      </li>
-        <!-- <section class="task task-1" style="--column: 1; --row: 9 / span 24; --color: #4cc3d2;"> </section>  -->
-        <!-- <section class="task" style="--column: 1 ; --row: 12 / span 4; --color: #d6219c;"> </section>  -->
-        <!-- <section class="task" style="--column: 4; --row: 13 / span 10; --color: #b779ff;"></section>
-        <section class="task" style="--column: 1; --row: 13 / span 32; --color: #b779ff;--overlap-count: 2;"></section>
-        <section class="task" style="--column: 1; --row: 15 / span 8; --color: #d6219c;--overlap-count: 1;"></section>  -->
-    </ol>
-</div>
-
+    <div class="hidden md:grid w-full main">
+        <ol class="headline" >
+          <li v-for="day in week" :key="day">
+            <p :class="{ current_day: isCurrentDay(day.date) }"> 
+              {{day.day}} 
+              <br>
+              <span> {{day.date}}  </span>
+            </p>
+          </li>
+        </ol>
+        <div class="button">
+        </div>
+        <ol class="time">
+          <li v-for="i in 24" :key="i" ref="timeRef">
+            <time>{{ (i - 1) }} <span> {{ i <= 12 ? 'am' : 'pm' }}</span></time>
+          </li>
+        </ol>
+        <ol  class="calendar">
+          <li v-for="cell in cells" :key="cell">
+          </li>
+          <section class="current_time" />
+        </ol>
+    </div>
+  </div>
 
 </template>
 
@@ -87,58 +139,30 @@ ol {
   text-align: center;
 }
 
-
-.button{
-  margin-top: 20px;
-  background-color: #e1e2e620;
-  justify-content: center;
-  display: flex;
-  align-items: center;
-  margin-left: 5px;
-  box-shadow:  -6px -4px 4px -4px rgba(0, 0, 0, 0.25); 
-}
-
 // The fraction here controls how many times we divide an hour
-$fraction: 1;
+$fraction: 12;
 $total-rows: 24;
-$total-columns: 14;
+$total-columns: 7;
 
-.container {
+.main {
   // FIXME: The width should be set in a way it allows for scrolling
-  width: 100%;
-  // margin: auto;
-  display: grid;
   grid-template-columns: min-content auto;
-  overflow: scroll;
   grid-template-areas:
     ". headline"
     "time calendar";
+  margin-top: 20px;
 }
 
-ol.time {
-  grid-area: time;
-  display: grid;
-  margin-left: 5px;
-  grid-template-rows: repeat($total-rows, 1fr);
-  background-color: #e1e2e620;
-  box-shadow: 6px 0 4px -4px rgba(0, 0, 0, 0.25), -6px 0 4px -4px rgba(0, 0, 0, 0.25); 
-  > li {
-    display: flex;
-    align-items: flex-end;
-    justify-content: flex-end;
-    border-bottom-width: 1px;
-    border-top-width: 1px;
-    border-color: #DCDCDC;
-    padding-left: 10px;
-    padding-right: 10px;
-    height: 100px;
-    > time {
-      line-height: 1;
-      font-size: small;
-      white-space: nowrap;
-      text-transform: uppercase;
-    }
-  }
+.button{
+  background-color: #e1e2e680;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  box-shadow:  -6px -4px 4px -4px rgba(0, 0, 0, 0.25); 
+  position: sticky;
+  top: 0;
+  margin-top: 20px;
+  margin-left: 20px;
 }
 
 ol.headline {
@@ -149,24 +173,57 @@ ol.headline {
   padding-bottom: 4px;
   grid-template-columns: repeat($total-columns, 1fr);
   box-shadow: 0px 0 3.64752px rgba(0, 0, 0, 0.25);
-  background-color: #e1e2e620;
+  background-color: #e1e2e680;
+  position: sticky;
+  top: 0;
+
+  .current_day {
+    background-color: paleturquoise;
+    border-radius: 12px;
+  }
+
   > li {
     border-right-width: 1px;
     border-left-width: 1px;
     border-color: #DCDCDC;
-    // height: 100px;
     width: 200px;
     justify-content: center;
     display: flex;
     align-items: center;
     > p {
       font-weight: bolder;
+      padding: 10px 40px 10px 40px;
       > span {
           // text-transform: uppercase;
           font-weight: normal;
       }
     }
    
+  }
+}
+
+ol.time {
+  grid-area: time;
+  display: grid;
+  margin-left: 20px;
+  grid-template-rows: repeat($total-rows, 1fr);
+  background-color: #e1e2e620;
+  box-shadow: 6px 0 4px -4px rgba(0, 0, 0, 0.25), -6px 0 4px -4px rgba(0, 0, 0, 0.25); 
+  > li {
+    display: flex;
+    // align-items: flex-end;
+    justify-content: flex-end;
+    border-color: #DCDCDC;
+    padding-left: 10px;
+    padding-right: 10px;
+    height: 100px;
+    width: 80px;
+    > time {
+      line-height: 1;
+      font-size: small;
+      white-space: nowrap;
+      text-transform: uppercase;
+    }
   }
 }
 
@@ -181,8 +238,7 @@ ol.calendar {
   grid-auto-flow: column;
   background-color: #e1e2e6;
   box-shadow: 0px 0 3.64752px rgba(0, 0, 0, 0.25);
-  // border-radius: 3.64752px;
-  overflow: hidden;
+
   > li {
     // FIXME: The height is controlling the height of the one cell in the calendar
     grid-column: var(--column);
@@ -190,23 +246,49 @@ ol.calendar {
     background-color: white;
   }
 
-  // FIXME: This is to be used if we divide a row by 4; setting the fraction to be 4
-  // @for $i from 1 through $total-rows {
-  //   $current-row: $i * $fraction - $fraction + 1;
-  //   li:nth-child(#{$total-rows}n + #{$i}) {
-  //     --row: #{$current-row} / span #{$fraction};
-  //   }
-  // }
 
-  // $sum: $total-rows * $total-columns;
-  // $next: 1;
-  // @for $i from 1 through $total-columns {
-  //   $sum: $sum - $total-rows + 1;
-  //   li:nth-child(1n + #{$next}):nth-last-child(1n + #{$sum}) {
-  //     --column: #{$i};
-  //   }
-  //   $next: $next + $total-rows;
-  // }
+  // FIXME: This is to be used if we divide a row by 4; setting the fraction to be 4
+  @for $i from 1 through $total-rows {
+    $current-row: $i * $fraction - $fraction + 1;
+    li:nth-child(#{$total-rows}n + #{$i}) {
+      --row: #{$current-row} / span #{$fraction};
+    }
+  }
+
+  $sum: $total-rows * $total-columns;
+  $next: 1;
+  @for $i from 1 through $total-columns {
+    $sum: $sum - $total-rows + 1;
+    li:nth-child(1n + #{$next}):nth-last-child(1n + #{$sum}) {
+      --column: #{$i};
+    }
+    $next: $next + $total-rows;
+  }
+}
+
+.current_time {
+  grid-row: v-bind('currentHourIndicator');
+  grid-column: 1 / span 7;
+  background-color: #d6219c;
+  border-radius: 3.64752px;
+  --indent: calc(var(--overlap-count, 0) * 8px);
+  margin: 1px 1px 1px -20px
+}
+
+.current_time::after {
+    width : 60px;
+    height: v-bind('height');
+    // https://github.com/vuejs/core/issues/4880
+    // counter-reset: hour v-bind('currentHour') minutes v-bind('currentMinutes');
+    // content: counter(hour) ":" counter(minutes);
+    content: v-bind('display_time');
+    color: white;
+    font-size: 12px;
+    background-color: #d6219c;
+    position: absolute;
+    border-radius: 75%;
+    margin-top: -7px;
+    margin-left: -53vw;
 }
 
 .task {
@@ -214,9 +296,10 @@ ol.calendar {
   grid-row: var(--row);
   background-color: var(--color);
   border-radius: 3.64752px;
-  // width: 90%;
+  width: 100%;
   --indent: calc(var(--overlap-count, 0) * 8px);
   margin: 1px 1px 1px calc(1px + var(--indent));
 }
+
 
 </style>
