@@ -115,7 +115,7 @@ onMounted(() => {
         </div>
         <ol class="time">
           <li v-for="i in 24" :key="i" ref="timeRef">
-            <time>{{ (i - 1) }} <span> {{ i <= 12 ? 'am' : 'pm' }}</span></time>
+            <time>{{ (i - 1).toString().padStart(2, "0") }} <span> {{ i <= 12 ? 'am' : 'pm' }}</span></time>
           </li>
         </ol>
         <ol  class="calendar">
