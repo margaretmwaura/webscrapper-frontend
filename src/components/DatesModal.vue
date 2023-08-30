@@ -4,6 +4,10 @@
 import { ref, computed, watch, defineEmits } from 'vue';
 const emit = defineEmits(['updateSelectedDate','close'])
 
+const props =  defineProps({
+  allowedDates: Array,
+});
+
 let reminderDate = ref()
 
 function sendDate(modelData){
@@ -33,7 +37,7 @@ function closeModal(){
             <font-awesome-icon icon="fa-solid fa-times" size="xl"  @click="closeModal()"/>
         </button>
       </div>
-      <VueDatePicker :model-value="reminderDate" @update:model-value="sendDate"/>
+      <VueDatePicker :model-value="reminderDate" @update:model-value="sendDate" :allowedDates="props.allowedDates"/>
     </div>
   </div>
 </template>

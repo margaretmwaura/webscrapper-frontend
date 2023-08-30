@@ -1,10 +1,18 @@
 <script setup>
 import { ref, computed, watchEffect, onMounted , onUpdated} from 'vue';
 import { useNow } from '@vueuse/core'
+import { useNotesStore } from './../stores/notesStore'
+import { storeToRefs } from 'pinia';
+
+
+const store = useNotesStore()
+let { todoList } = storeToRefs(store);
 
 let timeRef = ref(null)
 
 let cells = ref((24 * 7 * 12))
+
+let days = []
 
 const now = useNow()
 let curr = new Date()
@@ -23,21 +31,11 @@ let display_time = computed (() => {
   return `"` + `${currentHour.value}` + ":" + `${currentMinutes.value.toString().padStart(2, "0")}` + `"`
 })
 
-let height = '20px'
-
-let week = []
-let days = []
-
 const dates = (startDate, num) => Array.from(
   { length: num },
-  (_, i) => new Date(startDate.getTime() + (i * 60000 * 60 * 24)).toISOString().slice(0, 10)
+  (_, i) => 
+    new Date(startDate.getTime() + (i * 60000 * 60 * 24)).toISOString().slice(0, 10)
 );
-
-const lastWeek = () => {
-  let date = new Date();
-  date.setDate(date.getDate() - date.getDay() - 6);
-  return dates(date, 7);
-}
 
 const thisWeek = () => {
   let date = new Date();
@@ -45,35 +43,43 @@ const thisWeek = () => {
   return dates(date, 7);
 }
 
-const nextWeek = () => {
-  let date = new Date();
-  date.setDate(date.getDate() - date.getDay() + 8);
-  return dates(date, 7);
-}
-
 let current_w = thisWeek();
-
-const display_d = days.concat(current_w)
 
 for (let i = 0 ; i < 7; i++) {
   let date = {}
-  let data = display_d[i]
-  let day = new Date(data).toDateString().split(' ')
-  date.day = day[0]
-  date.date = day[2]
-  week.push(date)
+  let instance_date = current_w[i]
+  let formatted_date = new Date(instance_date).toDateString().split(' ')
+  date.day = formatted_date[0]
+  date.date = formatted_date[2]
+  days.push(date)
 }
 
 const isCurrentDay = (day) => {
   return day == currentDate.value
 }
 
-// onUpdated(() => {
-//   timeRef.value[currentHour.value].scrollIntoView({ behavior: "smooth"});
-// })
+async function getToDoList(){
+  await store.getTheToDoList()  
+}
+
+const getColumnLocation = (item) => {
+  console.log("Column Function")
+  let date = new Date(item.reminder)
+  console.log(current_w)
+  let f_date = new Date(date).toISOString().split('T')[0]
+  return current_w.indexOf(f_date);
+}
+
+const getRowLocation = (item) => {
+  console.log("Row Function")
+  let minutes = new Date(item.reminder).getMinutes()
+  let hour = new Date(item.reminder).getHours()
+  return ((hour) * 12 + 1) + Math.floor(0.2 * minutes);
+}
 
 onMounted(() => {
-  timeRef.value[currentHour.value].scrollIntoView({ behavior: "smooth"});
+  timeRef.value[currentHour.value].scrollIntoView({ behavior: "smooth", block: "center"});
+  getToDoList();
 })
 
 </script>
@@ -103,7 +109,7 @@ onMounted(() => {
     </div>
     <div class="hidden md:grid w-full main">
         <ol class="headline" >
-          <li v-for="day in week" :key="day">
+          <li v-for="day in days" :key="day">
             <p :class="{ current_day: isCurrentDay(day.date) }"> 
               {{day.day}} 
               <br>
@@ -114,7 +120,7 @@ onMounted(() => {
         <div class="button">
         </div>
         <ol class="time">
-          <li v-for="i in 24" :key="i" ref="timeRef">
+          <li v-for="i in 24" :key="i" ref="timeRef" :id="i">
             <time>{{ (i - 1).toString().padStart(2, "0") }} <span> {{ i <= 12 ? 'am' : 'pm' }}</span></time>
           </li>
         </ol>
@@ -122,6 +128,9 @@ onMounted(() => {
           <li v-for="cell in cells" :key="cell">
           </li>
           <section class="current_time" />
+            <section class="item" 
+            :style="{'--column' : getColumnLocation(item), '--row': getRowLocation(item)}"
+            v-for="item in todoList" :key="item"></section>
         </ol>
     </div>
   </div>
@@ -277,24 +286,35 @@ ol.calendar {
 
 .current_time::after {
     width : 60px;
-    height: v-bind('height');
+    height: 30px;
     // https://github.com/vuejs/core/issues/4880
     // counter-reset: hour v-bind('currentHour') minutes v-bind('currentMinutes');
     // content: counter(hour) ":" counter(minutes);
     content: v-bind('display_time');
     color: white;
-    font-size: 12px;
+    font-size: 13px;
     background-color: #d6219c;
     position: absolute;
-    border-radius: 75%;
-    margin-top: -7px;
+    border-radius: 25px;
+    margin-top: -10px;
     margin-left: -53vw;
+    padding-top: 4px;
 }
 
 .task {
   grid-column: var(--column);
   grid-row: var(--row);
   background-color: var(--color);
+  border-radius: 3.64752px;
+  width: 100%;
+  --indent: calc(var(--overlap-count, 0) * 8px);
+  margin: 1px 1px 1px calc(1px + var(--indent));
+}
+
+.item {
+  grid-column: var(--column)/ span 1;
+  grid-row: var(--row) / span 12 ;
+  background-color: #d6219c;
   border-radius: 3.64752px;
   width: 100%;
   --indent: calc(var(--overlap-count, 0) * 8px);
