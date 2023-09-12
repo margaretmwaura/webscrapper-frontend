@@ -72,7 +72,6 @@ function isModalVisible(state) {
   if(state){
       textarea.value.focus()
   }
-  
 }
 
 </script>

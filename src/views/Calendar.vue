@@ -31,16 +31,12 @@ let display_time = computed (() => {
   return `"` + `${currentHour.value}` + ":" + `${currentMinutes.value.toString().padStart(2, "0")}` + `"`
 })
 
-const dates = (startDate, num) => Array.from(
-  { length: num },
-  (_, i) => 
-    new Date(startDate.getTime() + (i * 60000 * 60 * 24)).toISOString().slice(0, 10)
-);
-
 const thisWeek = () => {
-  let date = new Date();
-  date.setDate(date.getDate() - date.getDay() + 1);
-  return dates(date, 7);
+  return [...Array(7)].map((_, i) => {
+    const d = new Date()
+    d.setDate(d.getDate() - i)
+    return d.toISOString().split('T')[0]
+  }).reverse()
 }
 
 let current_w = thisWeek();
@@ -65,9 +61,8 @@ async function getToDoList(){
 const getColumnLocation = (item) => {
   console.log("Column Function")
   let date = new Date(item.reminder)
-  console.log(current_w)
   let f_date = new Date(date).toISOString().split('T')[0]
-  return current_w.indexOf(f_date);
+  return (current_w.indexOf(f_date) + 1);
 }
 
 const getRowLocation = (item) => {
@@ -128,9 +123,9 @@ onMounted(() => {
           <li v-for="cell in cells" :key="cell">
           </li>
           <section class="current_time" />
-            <section class="item" 
-            :style="{'--column' : getColumnLocation(item), '--row': getRowLocation(item)}"
-            v-for="item in todoList" :key="item"></section>
+          <section class="item" 
+          :style="{'--column' : getColumnLocation(item), '--row': getRowLocation(item)}"
+          v-for="item in todoList" :key="item"></section>
         </ol>
     </div>
   </div>
@@ -312,7 +307,7 @@ ol.calendar {
 }
 
 .item {
-  grid-column: var(--column)/ span 1;
+  grid-column: var(--column);
   grid-row: var(--row) / span 12 ;
   background-color: #d6219c;
   border-radius: 3.64752px;
