@@ -124,7 +124,7 @@ export default{
 // FIXME: How can this be done better? The store then function is being called before the onResult function is actually called
 // Is it okay calling on Result from component or just go with the store
   async function getToDoList(){
-    await store.getTheToDoList()  
+    await store.getTodayToDoList()  
   }
 
   async function getNotes(){

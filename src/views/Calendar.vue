@@ -3,10 +3,11 @@ import { ref, computed, watchEffect, onMounted , onUpdated} from 'vue';
 import { useNow } from '@vueuse/core'
 import { useNotesStore } from './../stores/notesStore'
 import { storeToRefs } from 'pinia';
+import colors from 'tailwindcss/colors'
 
 
 const store = useNotesStore()
-let { todoList } = storeToRefs(store);
+let { currentWeekTodoList } = storeToRefs(store);
 
 let timeRef = ref(null)
 
@@ -55,21 +56,38 @@ const isCurrentDay = (day) => {
 }
 
 async function getToDoList(){
-  await store.getTheToDoList()  
+  await store.getCurrentWeekToDoList()  
 }
 
 const getColumnLocation = (item) => {
-  console.log("Column Function")
   let date = new Date(item.reminder)
   let f_date = new Date(date).toISOString().split('T')[0]
   return (current_w.indexOf(f_date) + 1);
 }
 
 const getRowLocation = (item) => {
-  console.log("Row Function")
   let minutes = new Date(item.reminder).getMinutes()
   let hour = new Date(item.reminder).getHours()
   return ((hour) * 12 + 1) + Math.floor(0.2 * minutes);
+}
+
+const setItemColor = (item) => {
+  let status = item.status_name
+  let item_hour = new Date(item.reminder).getHours()
+
+  if((item_hour) == currentHour.value){
+    return colors.blue[600]
+  }
+
+  if(status == 'not-started'){
+    return colors.red[100]
+  }
+  if(status == 'in-progress'){
+    return colors.yellow[600]
+  }
+  if(status == 'closed'){
+    return colors.green[600]
+  }
 }
 
 onMounted(() => {
@@ -124,8 +142,8 @@ onMounted(() => {
           </li>
           <section class="current_time" />
           <section class="item" 
-          :style="{'--column' : getColumnLocation(item), '--row': getRowLocation(item)}"
-          v-for="item in todoList" :key="item"></section>
+          :style="{'--column' : getColumnLocation(todoListitem), '--row': getRowLocation(todoListitem), '--color': setItemColor(todoListitem)}"
+          v-for="todoListitem in currentWeekTodoList" :key="todoListitem"></section>
         </ol>
     </div>
   </div>
@@ -309,7 +327,7 @@ ol.calendar {
 .item {
   grid-column: var(--column);
   grid-row: var(--row) / span 12 ;
-  background-color: #d6219c;
+  background-color: var(--color);
   border-radius: 3.64752px;
   width: 100%;
   --indent: calc(var(--overlap-count, 0) * 8px);

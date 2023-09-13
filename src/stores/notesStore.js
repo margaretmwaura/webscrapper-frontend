@@ -17,7 +17,11 @@ import {
   DELETE_NOTE_MUTATION,
 } from './../graphql/mutation';
 
-import { GET_TODO_LIST_QUERY, GET_NOTES_QUERY } from './../graphql/query';
+import {
+  GET_CURRENT_WEEK_TODO_LIST_QUERY,
+  GET_TODAY_TODO_LIST_QUERY,
+  GET_NOTES_QUERY,
+} from './../graphql/query';
 import {
   TODO_LIST_SUBSCRIPTION,
   NOTE_SUBSCRIPTION,
@@ -28,17 +32,19 @@ provideApolloClient(apolloClient);
 export const useNotesStore = defineStore({
   id: 'notesStore',
   state: () => ({
+    notes: useLocalStorage('notes', []),
+    isCreateNoteSuccessful: useLocalStorage('isCreateNoteSuccessful', false),
+    errorCreatingNote: useLocalStorage('errorCreatingNote', ''),
+
     todoList: useLocalStorage('todoList', []),
     todo: useLocalStorage('todo', {}),
-    notes: useLocalStorage('notes', []),
+    currentWeekTodoList: useLocalStorage('currentWeekTodoList', []),
+
     isCreateTodoListSuccessful: useLocalStorage(
       'isCreateTodoListSuccessful',
       false
     ),
     errorSavingTodoList: useLocalStorage('errorSavingTodoList', ''),
-
-    isCreateNoteSuccessful: useLocalStorage('isCreateNoteSuccessful', false),
-    errorCreatingNote: useLocalStorage('errorCreatingNote', ''),
 
     isUpdateNoteSuccessful: useLocalStorage('isUpdateNoteSuccessful', false),
     errorUpdatingNote: useLocalStorage('errorUpdatingNote', ''),
@@ -238,19 +244,36 @@ export const useNotesStore = defineStore({
         console.log(error);
       }
     },
-    async getTheToDoList() {
+    async getTodayToDoList() {
       let user_id = await this.getCurrentUserId();
       if (typeof user_id == 'undefined' || user_id == '') {
         console.log('You need to authenticate first ');
         return;
       }
-      const { onResult } = useQuery(GET_TODO_LIST_QUERY, {
+      const { onResult } = useQuery(GET_TODAY_TODO_LIST_QUERY, {
         user_id: user_id,
       });
       return onResult(({ data }) => {
         this.todo = data.getTodaysToDoList;
         this.todoList = data.getTodaysToDoList?.todoListItems;
         this.todoListSubscription();
+      });
+    },
+    async getCurrentWeekToDoList() {
+      let user_id = await this.getCurrentUserId();
+      if (typeof user_id == 'undefined' || user_id == '') {
+        console.log('You need to authenticate first ');
+        return;
+      }
+      const { onResult } = useQuery(GET_CURRENT_WEEK_TODO_LIST_QUERY, {
+        user_id: user_id,
+      });
+      return onResult(({ data }) => {
+        this.currentWeekTodoList = [];
+        let todolists = data.getThisWeeksToDoList;
+        for (let todolist of todolists) {
+          this.currentWeekTodoList.push(...todolist.todoListItems);
+        }
       });
     },
     async todoListSubscription() {
@@ -322,7 +345,6 @@ export const useNotesStore = defineStore({
         for (let note of data.getNotes) {
           this.notes.push(note);
         }
-        // this.notes = data.getNotes;
         console.log('Notes');
         console.log(this.notes);
       });
