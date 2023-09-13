@@ -71,22 +71,49 @@ const getRowLocation = (item) => {
   return ((hour) * 12 + 1) + Math.floor(0.2 * minutes);
 }
 
-const setItemColor = (item) => {
+const setBackGroundItemColor = (item) => {
   let status = item.status_name
   let item_hour = new Date(item.reminder).getHours()
 
   if((item_hour) == currentHour.value){
-    return colors.blue[600]
+    return colors.indigo[600]
   }
-
   if(status == 'not-started'){
     return colors.red[100]
   }
   if(status == 'in-progress'){
-    return colors.yellow[600]
+    return colors.yellow[100]
   }
   if(status == 'closed'){
-    return colors.green[600]
+    return colors.green[100]
+  }
+}
+
+const setBorderItemColor = (item) => {
+  let status = item.status_name
+  let item_hour = new Date(item.reminder).getHours()
+
+  if((item_hour) == currentHour.value){
+    return colors.blue[300]
+  }
+  if(status == 'not-started'){
+    return colors.red[300]
+  }
+  if(status == 'in-progress'){
+    return colors.yellow[300]
+  }
+  if(status == 'closed'){
+    return colors.green[300]
+  }
+}
+
+const setTextColor = (item) => {
+  let item_hour = new Date(item.reminder).getHours()
+
+  if((item_hour) == currentHour.value){
+    return colors.white
+  }else{
+    return colors.black
   }
 }
 
@@ -94,6 +121,14 @@ onMounted(() => {
   timeRef.value[currentHour.value].scrollIntoView({ behavior: "smooth", block: "center"});
   getToDoList();
 })
+
+const lastWeek = () => {
+
+}
+
+const nextWeek = () => {
+
+}
 
 </script>
 
@@ -103,22 +138,39 @@ onMounted(() => {
 <template>
 <!-- https://dev.to/yinon/a-css-grid-week-s-view-calendar-overlapping-scheduled-events-2f80 -->
 <!-- https://css-tricks.com/building-a-conference-schedule-with-css-grid/ -->
-<!-- There is a thought of using 2d to display a multidimensional array in this case a 2 day array -->
-<!-- TODO:-->
-<!-- 1. Yet to understand is the span property in the css (done)-->
 <!-- FIXME: -->
-<!-- 1. The days should be dynamic (done) -- compare with teams-->
-<!-- 2. The time should be dynamic (done) -->
-<!-- 3. The grid generation should be dynamic (done)-->
-<!-- 4. Allow for the width to be scrollable (done)-->
-<!-- 5. Show an indicator at the current time -->
-<!-- 6. Show an indicator at the current date -->
-<!-- 7. Buttons to go forward or backwards for dates (done) -->
-<!-- 8. Borders within the time and date grid (done)-->
+<!-- 7. Buttons to go forward or backwards for dates -->
 <!-- 9. When the body of the calendar is quite far away from the top the calendar is still visible beneath the sticky header -->
-  <div class="z-999">
+  <div class="main w-full">
+    <div class="flex flex-col w-full ml-10 mt-10">
+        <p class="text-2xl font-semibold">Calendar <font-awesome-icon icon="fa-regular fa-calendar" size="sm"/></p>
+        <hr>
+        <div class="flex flex-row mt-4 space-x-4 mb-4">
+          <div class="border border-slate-300 rounded-full py-2 px-2">
+            <font-awesome-icon icon="fa-solid fa-list" size="lg"/>
+          </div>
+          <div class="border border-slate-300 rounded-full">
+            <p class="font-light pt-2 px-2"> <font-awesome-icon icon="fa-regular fa-clock" size="sm"/> 
+              {{ curr.toDateString() }} {{display_time.replaceAll('"', '')}}
+            </p>
+          </div>
+          <button class="bg-indigo-500 border border-indigo-600 py-2 px-2 rounded-full w-32 text-white text-sm" @click="lastWeek">
+            <font-awesome-icon icon="fa-solid fa-chevron-left" size="sm"/>
+            Last week
+          </button>
+          <button class="bg-transparent border border-indigo-600 py-2 px-2 rounded-full w-28 text-sm">
+            <font-awesome-icon icon="fa-solid fa-download" size="sm"/>
+             Export
+          </button>
+           <button class="bg-indigo-500 border border-indigo-600 py-2 px-2 rounded-full w-32 text-white text-sm" @click="nextWeek">
+             Next week
+            <font-awesome-icon icon="fa-solid fa-chevron-right" size="sm"/>
+          </button>
+        </div>
+        <hr>
+    </div>
     <div class="block md:hidden">
-      <p>Our list will go in here</p>
+      <p>Under Development</p>
     </div>
     <div class="hidden md:grid w-full main">
         <ol class="headline" >
@@ -140,10 +192,20 @@ onMounted(() => {
         <ol  class="calendar">
           <li v-for="cell in cells" :key="cell">
           </li>
-          <section class="current_time" />
+          <section class="current_time"/>
           <section class="item" 
-          :style="{'--column' : getColumnLocation(todoListitem), '--row': getRowLocation(todoListitem), '--color': setItemColor(todoListitem)}"
-          v-for="todoListitem in currentWeekTodoList" :key="todoListitem"></section>
+            :style="{
+              '--column' : getColumnLocation(todoListitem),
+             '--row': getRowLocation(todoListitem),
+              '--bg-color': setBackGroundItemColor(todoListitem),
+             '--border-color': setBorderItemColor(todoListitem),
+             '--text-color': setTextColor(todoListitem)
+             }"
+            v-for="todoListitem in currentWeekTodoList" :key="todoListitem">
+              <p>{{todoListitem.item_name.substring(0,30)+".."}}</p>
+              <br>
+              <p>Time: {{ new Date(todoListitem.reminder).toLocaleTimeString('en-US', {hour: '2-digit', minute:'2-digit'})}}</p>
+          </section>
         </ol>
     </div>
   </div>
@@ -158,7 +220,7 @@ ol {
   list-style: none;
   margin: 0;
   padding: 0;
-  text-align: center;
+  // text-align: center;
 }
 
 // The fraction here controls how many times we divide an hour
@@ -198,10 +260,12 @@ ol.headline {
   background-color: #e1e2e680;
   position: sticky;
   top: 0;
+  text-align: center;
 
   .current_day {
-    background-color: paleturquoise;
+    background-color: theme("colors.indigo.500");
     border-radius: 12px;
+    color: white;
   }
 
   > li {
@@ -291,10 +355,11 @@ ol.calendar {
 .current_time {
   grid-row: v-bind('currentHourIndicator');
   grid-column: 1 / span 7;
-  background-color: #d6219c;
+  background-color: theme("colors.indigo.500");
   border-radius: 3.64752px;
   --indent: calc(var(--overlap-count, 0) * 8px);
-  margin: 1px 1px 1px -20px
+  margin: 1px 1px 1px -20px;
+  text-align: center
 }
 
 .current_time::after {
@@ -306,7 +371,7 @@ ol.calendar {
     content: v-bind('display_time');
     color: white;
     font-size: 13px;
-    background-color: #d6219c;
+    background-color: theme("colors.indigo.500");
     position: absolute;
     border-radius: 25px;
     margin-top: -10px;
@@ -314,24 +379,19 @@ ol.calendar {
     padding-top: 4px;
 }
 
-.task {
-  grid-column: var(--column);
-  grid-row: var(--row);
-  background-color: var(--color);
-  border-radius: 3.64752px;
-  width: 100%;
-  --indent: calc(var(--overlap-count, 0) * 8px);
-  margin: 1px 1px 1px calc(1px + var(--indent));
-}
-
 .item {
   grid-column: var(--column);
   grid-row: var(--row) / span 12 ;
-  background-color: var(--color);
+  background-color: var(--bg-color);
+  border-width: 1px;
+  border-color: var(--border-color);
   border-radius: 3.64752px;
   width: 100%;
-  --indent: calc(var(--overlap-count, 0) * 8px);
-  margin: 1px 1px 1px calc(1px + var(--indent));
+  padding: 10px;
+  color: var(--text-color);
+  p {
+    font-size: 14px;
+  }
 }
 
 
