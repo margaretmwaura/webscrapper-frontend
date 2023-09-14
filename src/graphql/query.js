@@ -27,8 +27,8 @@ export const GET_NOTES_QUERY = gql`
 `;
 
 export const GET_CURRENT_WEEK_TODO_LIST_QUERY = gql`
-  query ($user_id: String!) {
-    getThisWeeksToDoList(user_id: $user_id) {
+  query ($input: GetAWeekTodoList!) {
+    getThisWeeksToDoList(input: $input) {
       id
       todoListItems {
         id

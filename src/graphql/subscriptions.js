@@ -8,6 +8,7 @@ export const TODO_LIST_SUBSCRIPTION = gql`
         item_name
         status_name
         reminder
+        key_name
       }
     }
   }

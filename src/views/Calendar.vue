@@ -1,23 +1,23 @@
 <script setup>
-import { ref, computed, watchEffect, onMounted , onUpdated} from 'vue';
+import { ref, computed, watch, onMounted , onUpdated} from 'vue';
 import { useNow } from '@vueuse/core'
 import { useNotesStore } from './../stores/notesStore'
 import { storeToRefs } from 'pinia';
 import colors from 'tailwindcss/colors'
+import moment from 'moment';
 
 
 const store = useNotesStore()
 let { currentWeekTodoList } = storeToRefs(store);
 
-let timeRef = ref(null)
-
-let cells = ref((24 * 7 * 12))
-
-let days = []
-
-const now = useNow()
+const cells = ref((24 * 7 * 12))
+let now = useNow()
 let curr = new Date()
+
+let timeRef = ref(null)
+let days = ref([])
 let currentDate = ref(curr.getDate())
+let current_w = ref([])
 
 let currentHour = computed(() => {
   return now.value.getHours()
@@ -25,44 +25,52 @@ let currentHour = computed(() => {
 let currentMinutes = computed(() => {
   return now.value.getMinutes()
 })
-
 let currentHourIndicator = computed(() => {return((currentHour.value) * 12 + 1) + Math.floor(0.2 * currentMinutes.value)})
-
 let display_time = computed (() => {
   return `"` + `${currentHour.value}` + ":" + `${currentMinutes.value.toString().padStart(2, "0")}` + `"`
 })
+let isNextWeek = ref(false)
+
+watch(current_w, (new_current_w) => {
+   days.value = []
+
+   if(!new_current_w || new_current_w.length == 0){
+    return;
+   }
+   getToDoList(current_w.value[0], current_w.value[6]);
+   for (let i = 0 ; i < 7; i++) {
+      let date = {}
+      let instance_date = new_current_w[i]
+      let formatted_date = new Date(instance_date).toDateString().split(' ')
+      date.day = formatted_date[0]
+      date.date = formatted_date[2]
+      days.value.push(date)
+   }
+   if(new Date().toISOString().split('T')[0] == new_current_w[6])
+   {
+     isNextWeek.value = false;
+   }else{
+    isNextWeek.value = true
+   }
+  
+});
 
 const thisWeek = () => {
-  return [...Array(7)].map((_, i) => {
+  current_w.value = [...Array(7)].map((_, i) => {
     const d = new Date()
     d.setDate(d.getDate() - i)
     return d.toISOString().split('T')[0]
   }).reverse()
 }
 
-let current_w = thisWeek();
-
-for (let i = 0 ; i < 7; i++) {
-  let date = {}
-  let instance_date = current_w[i]
-  let formatted_date = new Date(instance_date).toDateString().split(' ')
-  date.day = formatted_date[0]
-  date.date = formatted_date[2]
-  days.push(date)
-}
-
-const isCurrentDay = (day) => {
-  return day == currentDate.value
-}
-
-async function getToDoList(){
-  await store.getCurrentWeekToDoList()  
+async function getToDoList(start_date, end_date){
+  await store.getCurrentWeekToDoList(start_date, end_date)  
 }
 
 const getColumnLocation = (item) => {
   let date = new Date(item.reminder)
   let f_date = new Date(date).toISOString().split('T')[0]
-  return (current_w.indexOf(f_date) + 1);
+  return (current_w.value.indexOf(f_date) + 1);
 }
 
 const getRowLocation = (item) => {
@@ -74,8 +82,9 @@ const getRowLocation = (item) => {
 const setBackGroundItemColor = (item) => {
   let status = item.status_name
   let item_hour = new Date(item.reminder).getHours()
+  let item_day = new Date(item.reminder).toDateString().split(' ')[2]
 
-  if((item_hour) == currentHour.value){
+  if((item_hour) == currentHour.value && item_day == currentDate.value){
     return colors.indigo[600]
   }
   if(status == 'not-started'){
@@ -92,8 +101,9 @@ const setBackGroundItemColor = (item) => {
 const setBorderItemColor = (item) => {
   let status = item.status_name
   let item_hour = new Date(item.reminder).getHours()
+  let item_day = new Date(item.reminder).toDateString().split(' ')[2]
 
-  if((item_hour) == currentHour.value){
+  if((item_hour) == currentHour.value && item_day == currentDate.value){
     return colors.blue[300]
   }
   if(status == 'not-started'){
@@ -117,18 +127,32 @@ const setTextColor = (item) => {
   }
 }
 
-onMounted(() => {
-  timeRef.value[currentHour.value].scrollIntoView({ behavior: "smooth", block: "center"});
-  getToDoList();
-})
-
 const lastWeek = () => {
-
+  let start_date = current_w.value[0]
+  current_w.value= [...Array(7)].map((_, i) => {
+    const d = new Date(start_date)
+    d.setDate(d.getDate() - (i))
+    return d.toISOString().split('T')[0]
+    }).reverse()
 }
 
 const nextWeek = () => {
-
+  let start_date = current_w.value[6]
+  current_w.value = [...Array(7)].map((_, i) => {
+    const d = new Date(start_date)
+    d.setDate(d.getDate() + (i))
+    return d.toISOString().split('T')[0]
+  })
 }
+
+let isCurrentDay = (day) => {
+  return day == currentDate.value
+}
+
+onMounted(async () => {
+  timeRef.value[currentHour.value].scrollIntoView({ behavior: "smooth", block: "center"});
+  thisWeek()
+})
 
 </script>
 
@@ -162,7 +186,8 @@ const nextWeek = () => {
             <font-awesome-icon icon="fa-solid fa-download" size="sm"/>
              Export
           </button>
-           <button class="bg-indigo-500 border border-indigo-600 py-2 px-2 rounded-full w-32 text-white text-sm" @click="nextWeek">
+           <button class="bg-indigo-500 border border-indigo-600 py-2 px-2 rounded-full w-32 text-white text-sm" 
+           @click="nextWeek" v-show="isNextWeek">
              Next week
             <font-awesome-icon icon="fa-solid fa-chevron-right" size="sm"/>
           </button>

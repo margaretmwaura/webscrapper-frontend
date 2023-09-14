@@ -3,9 +3,7 @@ import { provideApolloClient } from '@vue/apollo-composable';
 import { useMutation } from '@vue/apollo-composable';
 import { apolloClient } from './../apolloClient';
 import { useQuery } from '@vue/apollo-composable';
-import { computed, watch } from 'vue';
 import { useLocalStorage } from '@vueuse/core';
-import { useSubscription } from '@vue/apollo-composable';
 import { useAuthStore } from './authStore';
 import {
   CREATE_TODO_LIST_MUTATION,
@@ -250,25 +248,41 @@ export const useNotesStore = defineStore({
         console.log('You need to authenticate first ');
         return;
       }
-      const { onResult } = useQuery(GET_TODAY_TODO_LIST_QUERY, {
-        user_id: user_id,
-      });
+      const { onResult, subscribeToMore } = useQuery(
+        GET_TODAY_TODO_LIST_QUERY,
+        {
+          user_id: user_id,
+        }
+      );
+      subscribeToMore(() => ({
+        document: TODO_LIST_SUBSCRIPTION,
+        variables: {
+          user_id: user_id,
+        },
+        updateQuery: (previousResult, { subscriptionData }) => {
+          let newData = {
+            getTodaysToDoList: [],
+          };
+          newData.getTodaysToDoList = subscriptionData.data.todoCreated;
+          return newData;
+        },
+      }));
       return onResult(({ data }) => {
         this.todo = data.getTodaysToDoList;
         this.todoList = data.getTodaysToDoList?.todoListItems;
-        this.todoListSubscription();
       });
     },
-    async getCurrentWeekToDoList() {
+    async getCurrentWeekToDoList(start_date, end_date) {
+      console.log('Getting data');
       let user_id = await this.getCurrentUserId();
       if (typeof user_id == 'undefined' || user_id == '') {
-        console.log('You need to authenticate first ');
         return;
       }
       const { onResult } = useQuery(GET_CURRENT_WEEK_TODO_LIST_QUERY, {
-        user_id: user_id,
+        input: { user_id: user_id, start_date: start_date, end_date: end_date },
       });
       return onResult(({ data }) => {
+        console.log('On Result for the current week data');
         this.currentWeekTodoList = [];
         let todolists = data.getThisWeeksToDoList;
         for (let todolist of todolists) {
@@ -276,25 +290,7 @@ export const useNotesStore = defineStore({
         }
       });
     },
-    async todoListSubscription() {
-      let user_id = await this.getCurrentUserId();
-      if (typeof user_id == 'undefined' || user_id == '') {
-        console.log('You need to authenticate first ');
-        return;
-      }
-      const { onResult } = useSubscription(
-        TODO_LIST_SUBSCRIPTION,
-        { user_id: user_id },
-        () => ({
-          fetchPolicy: 'no-cache',
-        })
-      );
 
-      onResult(result => {
-        this.todo = result.data.todoCreated;
-        this.todoList = result.data?.todoCreated?.todoListItems;
-      });
-    },
     // https://stackoverflow.com/questions/5915789/how-to-replace-item-in-array
     // https://www.geeksforgeeks.org/remove-elements-from-a-javascript-array/
 
@@ -314,7 +310,6 @@ export const useNotesStore = defineStore({
           user_id: user_id,
         },
         updateQuery: (previousResult, { subscriptionData }) => {
-          console.log('We are subscrining');
           let noteSubData = subscriptionData.data.noteSubcription;
           let newData = {
             getNotes: [],
@@ -340,7 +335,6 @@ export const useNotesStore = defineStore({
         },
       }));
       return onResult(({ data }) => {
-        console.log(data.getNotes);
         this.notes = [];
         for (let note of data.getNotes) {
           this.notes.push(note);
