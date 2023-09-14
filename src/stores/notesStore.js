@@ -278,9 +278,19 @@ export const useNotesStore = defineStore({
       if (typeof user_id == 'undefined' || user_id == '') {
         return;
       }
-      const { onResult } = useQuery(GET_CURRENT_WEEK_TODO_LIST_QUERY, {
-        input: { user_id: user_id, start_date: start_date, end_date: end_date },
-      });
+      const { onResult } = useQuery(
+        GET_CURRENT_WEEK_TODO_LIST_QUERY,
+        {
+          input: {
+            user_id: user_id,
+            start_date: start_date,
+            end_date: end_date,
+          },
+        },
+        () => ({
+          fetchPolicy: 'no-cache',
+        })
+      );
       return onResult(({ data }) => {
         console.log('On Result for the current week data');
         this.currentWeekTodoList = [];
