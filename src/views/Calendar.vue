@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed, watch, onMounted , onUpdated} from 'vue';
+import CalendarItem from './../components/CalendarItem.vue'
 import { useNow } from '@vueuse/core'
 import { useNotesStore } from './../stores/notesStore'
 import { storeToRefs } from 'pinia';
@@ -69,8 +70,15 @@ async function getToDoList(start_date, end_date){
 
 const getColumnLocation = (item) => {
   let date = new Date(item.reminder)
-  let f_date = new Date(date).toISOString().split('T')[0]
-  return (current_w.value.indexOf(f_date) + 1);
+
+  // Get year, month, and day part from the date
+  var year = date.toLocaleString("default", { year: "numeric" });
+  var month = date.toLocaleString("default", { month: "2-digit" });
+  var day = date.toLocaleString("default", { day: "2-digit" });
+
+  // Generate yyyy-mm-dd date string
+  var formattedDate = year + "-" + month + "-" + day;
+  return (current_w.value.indexOf(formattedDate) + 1);
 }
 
 const getRowLocation = (item) => {
@@ -218,7 +226,7 @@ onMounted(async () => {
           <li v-for="cell in cells" :key="cell">
           </li>
           <section class="current_time"/>
-          <section class="item" 
+          <section class="item"
             :style="{
               '--column' : getColumnLocation(todoListitem),
              '--row': getRowLocation(todoListitem),
@@ -227,9 +235,7 @@ onMounted(async () => {
              '--text-color': setTextColor(todoListitem)
              }"
             v-for="todoListitem in currentWeekTodoList" :key="todoListitem">
-              <p>{{todoListitem.item_name.substring(0,30)+".."}}</p>
-              <br>
-              <p>Time: {{ new Date(todoListitem.reminder).toLocaleTimeString('en-US', {hour: '2-digit', minute:'2-digit'})}}</p>
+              <CalendarItem :todoListitem="todoListitem" />
           </section>
         </ol>
     </div>
@@ -354,7 +360,7 @@ ol.calendar {
     // FIXME: The height is controlling the height of the one cell in the calendar
     grid-column: var(--column);
     grid-row: var(--row);
-    background-color: white;
+    background-color: theme('colors.zinc.100');
   }
 
 
@@ -413,11 +419,11 @@ ol.calendar {
   border-radius: 3.64752px;
   width: 100%;
   padding: 10px;
+  height: 120px;
   color: var(--text-color);
   p {
     font-size: 14px;
   }
 }
-
 
 </style>

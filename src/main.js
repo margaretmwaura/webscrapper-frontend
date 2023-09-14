@@ -54,6 +54,7 @@ import {
   faChevronLeft,
   faDownload,
   faList,
+  faStairs,
 } from '@fortawesome/free-solid-svg-icons';
 
 import {
@@ -97,7 +98,8 @@ library.add(
   faChevronRight,
   faChevronLeft,
   faDownload,
-  faList
+  faList,
+  faStairs
 );
 
 import { DefaultApolloClient } from '@vue/apollo-composable';
