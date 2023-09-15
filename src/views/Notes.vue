@@ -313,7 +313,6 @@ export default{
        </div>
     </div>
     <component :is="action" v-show="isVisible" @closeModal="close" v-bind="activity"></component>
-
   </div>
 </template>
 

@@ -164,16 +164,13 @@ onMounted(async () => {
 
 </script>
 
-
-
-
 <template>
 <!-- https://dev.to/yinon/a-css-grid-week-s-view-calendar-overlapping-scheduled-events-2f80 -->
 <!-- https://css-tricks.com/building-a-conference-schedule-with-css-grid/ -->
 <!-- FIXME: -->
 <!-- 7. Buttons to go forward or backwards for dates -->
 <!-- 9. When the body of the calendar is quite far away from the top the calendar is still visible beneath the sticky header -->
-  <div class="main w-full">
+  <div class="w-full">
     <div class="flex flex-col w-full ml-10 mt-10">
         <p class="text-2xl font-semibold">Calendar <font-awesome-icon icon="fa-regular fa-calendar" size="sm"/></p>
         <hr>
@@ -419,7 +416,7 @@ ol.calendar {
   border-radius: 3.64752px;
   width: 100%;
   padding: 10px;
-  height: 120px;
+  height: 140px;
   color: var(--text-color);
   p {
     font-size: 14px;
