@@ -20,10 +20,10 @@ const closeModal = () => {
 </script>
 
 <template>
-  <div class="relative">
+  <div class="relative" @click="openModal">
     <p>{{todo_item.item_name.substring(0,30)}}
       <br>
-      <span @click="openModal" class="font-semibold">more...</span>
+      <span  class="font-semibold">more...</span>
     </p>
     <br>
     <p>Time: {{ new Date(todo_item.reminder).toLocaleTimeString('en-US', {hour: '2-digit', minute:'2-digit'})}}</p>

@@ -7,7 +7,6 @@ import { storeToRefs } from 'pinia';
 import colors from 'tailwindcss/colors'
 import moment from 'moment';
 
-
 const store = useNotesStore()
 let { currentWeekTodoList, todoList } = storeToRefs(store);
 
@@ -99,7 +98,7 @@ const setBackGroundItemColor = (item) => {
   let item_day = new Date(item.reminder).toDateString().split(' ')[2]
 
   if((item_hour) == currentHour.value && item_day == currentDate.value){
-    return colors.indigo[600]
+    return colors.indigo[500]
   }
   if(status == 'not-started'){
     return colors.red[100]
@@ -236,12 +235,13 @@ onMounted(async () => {
           <section class="item"
             :style="{
               '--column' : getColumnLocation(todoListitem),
-            '--row': getRowLocation(todoListitem),
+              '--row': getRowLocation(todoListitem),
               '--bg-color': setBackGroundItemColor(todoListitem),
-            '--border-color': setBorderItemColor(todoListitem),
-            '--text-color': setTextColor(todoListitem)
+              '--border-color': setBorderItemColor(todoListitem),
+              '--text-color': setTextColor(todoListitem),
+              '--z-index': index
             }"
-            v-for="todoListitem in currentWeekTodoList" :key="todoListitem">
+            v-for="(todoListitem, index) in currentWeekTodoList" :key="todoListitem">
               <CalendarItem :todoListitem="todoListitem" />
           </section>
         </ol>
@@ -402,20 +402,20 @@ ol.calendar {
 }
 
 .current_time::after {
-    width : 60px;
-    height: 30px;
-    // https://github.com/vuejs/core/issues/4880
-    // counter-reset: hour v-bind('currentHour') minutes v-bind('currentMinutes');
-    // content: counter(hour) ":" counter(minutes);
-    content: v-bind('display_time');
-    color: white;
-    font-size: 13px;
-    background-color: theme("colors.indigo.500");
-    position: absolute;
-    border-radius: 25px;
-    margin-top: -10px;
-    margin-left: -53vw;
-    padding-top: 4px;
+  width : 60px;
+  height: 30px;
+  // https://github.com/vuejs/core/issues/4880
+  // counter-reset: hour v-bind('currentHour') minutes v-bind('currentMinutes');
+  // content: counter(hour) ":" counter(minutes);
+  content: v-bind('display_time');
+  color: white;
+  font-size: 13px;
+  background-color: theme("colors.indigo.500");
+  position: absolute;
+  border-radius: 25px;
+  margin-top: -10px;
+  margin-left: -53vw;
+  padding-top: 4px;
 }
 
 .item {
@@ -432,6 +432,10 @@ ol.calendar {
   p {
     font-size: 14px;
   }
+  z-index: var(--z-index);
+  --indent: calc(var(--z-index, 0) * 8px);
+  margin: 1px 1px 1px calc(1px + var(--indent));
 }
+
 
 </style>

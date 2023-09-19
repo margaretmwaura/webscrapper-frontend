@@ -13,7 +13,8 @@ const props = defineProps({
   todoListItem: Object,
 });
 
-const closeModal = () => {
+const closeModal = (e) => {
+  e.stopPropagation();
   emit('close') 
 }
 
@@ -49,12 +50,12 @@ const updateItemStatus = async (status) =>{
 </script>
 
 <template>
-      <div class="flex flex-col p-4 bg-white border absolute -top-64 -left-44 rounded-md z-50">
+      <div class="flex flex-col p-4 bg-white border absolute -top-64 -left-44 rounded-md z-999">
       <div className="flex justify-between">
           <div class="flex items-center flex-no-shrink text-black mr-6">
               <span class="font-semibold text-xl tracking-wider">Bonjour!</span>
           </div>
-          <button className="text-indigo-700 text-lg font-light place-self-end" @click="closeModal()">
+          <button className="text-indigo-700 text-lg font-light place-self-end" @click="closeModal">
               <font-awesome-icon icon="fa-solid fa-times" size="sm"  />
           </button>
       </div>
