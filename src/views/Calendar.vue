@@ -9,7 +9,7 @@ import moment from 'moment';
 
 
 const store = useNotesStore()
-let { currentWeekTodoList } = storeToRefs(store);
+let { currentWeekTodoList, todoList } = storeToRefs(store);
 
 const cells = ref((24 * 7 * 12))
 let now = useNow()
@@ -19,6 +19,7 @@ let timeRef = ref(null)
 let days = ref([])
 let currentDate = ref(curr.getDate())
 let current_w = ref([])
+let isNextWeek = ref(false)
 
 let currentHour = computed(() => {
   return now.value.getHours()
@@ -30,31 +31,24 @@ let currentHourIndicator = computed(() => {return((currentHour.value) * 12 + 1) 
 let display_time = computed (() => {
   return `"` + `${currentHour.value}` + ":" + `${currentMinutes.value.toString().padStart(2, "0")}` + `"`
 })
-let isNextWeek = ref(false)
+let currentWeekHasCurrentDay = ref(false)
 
-watch(current_w, (new_current_w) => {
-   days.value = []
-
+watch(current_w, async (new_current_w) => {
    if(!new_current_w || new_current_w.length == 0){
     return;
    }
-   getToDoList(current_w.value[0], current_w.value[6]);
-   for (let i = 0 ; i < 7; i++) {
-      let date = {}
-      let instance_date = new_current_w[i]
-      let formatted_date = new Date(instance_date).toDateString().split(' ')
-      date.day = formatted_date[0]
-      date.date = formatted_date[2]
-      days.value.push(date)
-   }
-   if(new Date().toISOString().split('T')[0] == new_current_w[6])
-   {
-     isNextWeek.value = false;
-   }else{
-    isNextWeek.value = true
-   }
-  
+   await getToDoList(current_w.value[0], current_w.value[6]);
+   await populateDaysOfTheWeek(new_current_w)
+   currentWeekHasCurrentDay.value = new_current_w[6] == curr.toISOString().split('T')[0] ? true : false
+   isNextWeek.value = curr.toISOString().split('T')[0] == new_current_w[6] ? false : true;
 });
+
+watch(todoList, (updatedTodoList) => {
+  console.log("todolist has been updated")
+  console.log(updatedTodoList)
+  store.updateCurrentWeekToDoList()
+  //https://stackoverflow.com/questions/37585309/replacing-objects-in-array
+})
 
 const thisWeek = () => {
   current_w.value = [...Array(7)].map((_, i) => {
@@ -62,6 +56,18 @@ const thisWeek = () => {
     d.setDate(d.getDate() - i)
     return d.toISOString().split('T')[0]
   }).reverse()
+}
+
+const populateDaysOfTheWeek = async (new_current_w) => {
+  days.value = []
+  for (let i = 0 ; i < 7; i++) {
+    let date = {}
+    let instance_date = new_current_w[i]
+    let formatted_date = new Date(instance_date).toDateString().split(' ')
+    date.day = formatted_date[0]
+    date.date = formatted_date[2]
+    days.value.push(date)
+  }
 }
 
 async function getToDoList(start_date, end_date){
@@ -127,8 +133,9 @@ const setBorderItemColor = (item) => {
 
 const setTextColor = (item) => {
   let item_hour = new Date(item.reminder).getHours()
+  let item_day = new Date(item.reminder).toDateString().split(' ')[2]
 
-  if((item_hour) == currentHour.value){
+  if((item_hour) == currentHour.value && item_day == currentDate.value){
     return colors.white
   }else{
     return colors.black
@@ -154,7 +161,10 @@ const nextWeek = () => {
 }
 
 let isCurrentDay = (day) => {
-  return day == currentDate.value
+  if(currentWeekHasCurrentDay.value){
+    return day == currentDate.value
+  }
+  return false
 }
 
 onMounted(async () => {
@@ -226,11 +236,11 @@ onMounted(async () => {
           <section class="item"
             :style="{
               '--column' : getColumnLocation(todoListitem),
-             '--row': getRowLocation(todoListitem),
+            '--row': getRowLocation(todoListitem),
               '--bg-color': setBackGroundItemColor(todoListitem),
-             '--border-color': setBorderItemColor(todoListitem),
-             '--text-color': setTextColor(todoListitem)
-             }"
+            '--border-color': setBorderItemColor(todoListitem),
+            '--text-color': setTextColor(todoListitem)
+            }"
             v-for="todoListitem in currentWeekTodoList" :key="todoListitem">
               <CalendarItem :todoListitem="todoListitem" />
           </section>
@@ -266,7 +276,7 @@ $total-columns: 7;
 }
 
 .button{
-  background-color: #e1e2e680;
+  background-color: theme("colors.zinc.200");
   justify-content: center;
   display: flex;
   align-items: center;
@@ -285,10 +295,11 @@ ol.headline {
   padding-bottom: 4px;
   grid-template-columns: repeat($total-columns, 1fr);
   box-shadow: 0px 0 3.64752px rgba(0, 0, 0, 0.25);
-  background-color: #e1e2e680;
+  background-color: theme("colors.zinc.200");
   position: sticky;
   top: 0;
   text-align: center;
+  z-index: 100;
 
   .current_day {
     background-color: theme("colors.indigo.500");
@@ -414,7 +425,7 @@ ol.calendar {
   border-width: 1px;
   border-color: var(--border-color);
   border-radius: 3.64752px;
-  width: 100%;
+  width: 90%;
   padding: 10px;
   height: 140px;
   color: var(--text-color);

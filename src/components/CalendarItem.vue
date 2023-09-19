@@ -27,7 +27,7 @@ const closeModal = () => {
     </p>
     <br>
     <p>Time: {{ new Date(todo_item.reminder).toLocaleTimeString('en-US', {hour: '2-digit', minute:'2-digit'})}}</p>
-    <CalendarItemModal v-show="modal_visible" @close="closeModal" :todoListitem="todo_item"/>
+    <CalendarItemModal v-show="modal_visible" @close="closeModal" :todoListItem="todo_item"/>
   </div>
 </template>
 

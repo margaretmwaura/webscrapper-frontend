@@ -44,6 +44,12 @@ export const useNotesStore = defineStore({
     ),
     errorSavingTodoList: useLocalStorage('errorSavingTodoList', ''),
 
+    isUpdateTodoItemSuccessful: useLocalStorage(
+      'isUpdateTodoItemSuccessful',
+      ''
+    ),
+    errorUpdatingTodoItem: useLocalStorage('errorUpdatingTodoItem', ''),
+
     isUpdateNoteSuccessful: useLocalStorage('isUpdateNoteSuccessful', false),
     errorUpdatingNote: useLocalStorage('errorUpdatingNote', ''),
 
@@ -96,18 +102,21 @@ export const useNotesStore = defineStore({
         };
       });
       onError(error => {
+        let error_message = '';
         if (error) {
-          console.log(
-            error.networkError
-              ? error.networkError.result.errors[0].message
-              : error.graphQLErrors[0].message
-          );
+          error_message = error.networkError
+            ? error.networkError.result.errors[0].message
+            : error.graphQLErrors[0].message;
         } else {
-          console.log('No error gotten');
+          error_message =
+            'There was an error when trying to update todo list item';
         }
+        this.errorUpdatingTodoItem = error_message;
+        this.isUpdateTodoItemSuccessful = false;
       });
       onDone(result => {
         console.log(result);
+        this.isUpdateTodoItemSuccessful = true;
       });
       await updateTodoListItem();
     },
@@ -260,6 +269,7 @@ export const useNotesStore = defineStore({
           user_id: user_id,
         },
         updateQuery: (previousResult, { subscriptionData }) => {
+          console.log('The subscription has been triggered');
           let newData = {
             getTodaysToDoList: [],
           };
@@ -268,6 +278,7 @@ export const useNotesStore = defineStore({
         },
       }));
       return onResult(({ data }) => {
+        console.log('On Result for todays data');
         this.todo = data.getTodaysToDoList;
         this.todoList = data.getTodaysToDoList?.todoListItems;
       });
@@ -300,7 +311,12 @@ export const useNotesStore = defineStore({
         }
       });
     },
-
+    async updateCurrentWeekToDoList() {
+      console.log('Update current week to do list');
+      this.currentWeekTodoList = this.currentWeekTodoList.map(
+        obj => this.todoList.find(o => o.id === obj.id) || obj
+      );
+    },
     // https://stackoverflow.com/questions/5915789/how-to-replace-item-in-array
     // https://www.geeksforgeeks.org/remove-elements-from-a-javascript-array/
 
