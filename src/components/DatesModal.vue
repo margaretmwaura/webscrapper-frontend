@@ -11,7 +11,6 @@ const props =  defineProps({
 let reminderDate = ref()
 
 function sendDate(modelData){
-  console.log(modelData)
   reminderDate.value = modelData
   emit('updateSelectedDate', modelData) 
 }

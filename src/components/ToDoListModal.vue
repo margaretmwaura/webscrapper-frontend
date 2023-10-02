@@ -4,7 +4,7 @@ import { useNotesStore } from './../stores/notesStore'
 import { storeToRefs } from 'pinia';
 import { toast } from 'vue3-toastify';
 import { vElementVisibility } from '@vueuse/components'
-
+import ReminderModal from './../components/RemiderModal.vue'
 
 const store = useNotesStore()
 const emit = defineEmits(['closeModal'])
@@ -15,6 +15,7 @@ let previousLength = ref(0);
 let textarea = ref(null)
 let toDoList = ref('')
 let savingTodoList = ref(false)
+let showSetReminderModal = ref(false)
 
 function closeModal(){
   emit('closeModal') 
@@ -22,11 +23,8 @@ function closeModal(){
 
 // https://codepen.io/andrewgarrison/pen/vqqmMv?editors=1010
 function handleInput(event){
-
-  console.log(event)
   const bullet = "\u20DD";
 
-  console.log(bullet)
   const newLength = event.target.value.length;
   const characterCode = event.target.value.substr(-1).charCodeAt(0);
 
@@ -41,6 +39,10 @@ function handleInput(event){
   previousLength.value = newLength;
 }
 
+function closeReminderPSA(){
+  showSetReminderModal.value = false
+}
+
 async function saveToDoList(){
   savingTodoList.value = true
   let todolists = toDoList.value.split("\u20DD")
@@ -53,10 +55,14 @@ async function saveToDoList(){
   if(isCreateTodoListSuccessful){
     toast.success('Your todo list of the day has been added 🎊', {
       autoClose: 1000,
-      onClose: () => {closeModal()},
     });
     toDoList.value = ''
     savingTodoList.value = false
+    showSetReminderModal.value = true
+    setTimeout(() => {
+        showSetReminderModal.value = false
+        closeModal()
+    }, "6000");
   }else{
     toast.error('There was an error when trying to add todo lis 🙍 ' + errorSavingTodoList.value, {
       autoClose: 1000,
@@ -109,6 +115,7 @@ function isModalVisible(state) {
         </div>
       </div>
     </div>
+    <ReminderModal  v-show="showSetReminderModal" @close="closeReminderPSA"/>
 </div>
 </template>
 

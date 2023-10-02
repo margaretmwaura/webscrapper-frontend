@@ -21,7 +21,7 @@ export default{
     QuoteDetails,
     AddTodoItem,
     TodoItem,
-    NoteDetails
+    NoteDetails,
   },
 
   setup(props, context){
@@ -34,7 +34,6 @@ export default{
   let isVisible = ref(false)
   let action = ref("")
   let activity = ref({})
-
 
   let isTodoListAdded = computed(() => (todoList.value == 'undefined'
    || !todoList.value || todoList.value.length <= 0) ? false : true);
@@ -71,7 +70,12 @@ export default{
     action.value = actionType
   }
 
+  function closeReminderPSA(){
+    showSetReminderModal.value = false
+  }
+
   function close(){
+    // https://codepen.io/michaelwyatt/pen/KBYrZN
     isVisible.value = false
   }
 
@@ -160,7 +164,7 @@ export default{
     closeAddTodoItemModal,
     openAddTodoItemModal,
     scrollLeft,
-    scrollRight
+    scrollRight,
   }}
   }
 </script>
@@ -215,8 +219,6 @@ export default{
                       <AddTodoItem v-show="addTodoItem" @close="closeAddTodoItemModal"/>
                     </div>
                   </div>
-                  <!-- style="width: 300px"  -->
-                  <!-- sm:w-32 md:w-32 lg:w-48 xl:w-52 2xl:w-60 -->
                   <div class="flex-1 max-w-sm rounded-lg h-full w-full overflow-y-scoll overflow-x-hidden">
                       <div v-if="isTodoListAdded">
                         <ol v-for="todoListItem in todoList" :key="todoListItem" class="pl-6">

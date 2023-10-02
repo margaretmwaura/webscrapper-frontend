@@ -68,12 +68,12 @@ const updateItemStatus = async (status) =>{
           </p>
       </div>
       <hr>
-      <div class="flex flex-col my-4">
+      <div class="flex flex-col my-4 text-black">
         <p class="font-medium">Description </p>
         <p class="font-thin">{{props.todoListItem.item_name}}</p>
       </div>
       <hr>
-      <div class="mt-4 italic" v-show="isTodoItemEditable">
+      <div class="mt-4 italic text-black" v-show="isTodoItemEditable">
         <p>How are you fairing with this?</p>
       </div>
       <div class="flex flex-row mt-4 space-x-6" v-show="isTodoItemEditable">
@@ -81,7 +81,7 @@ const updateItemStatus = async (status) =>{
             <font-awesome-icon icon="fa-solid fa-check" size="sm"/>
             Complete
         </button>
-        <button class="bg-transparent border border-indigo-600 py-2 px-4 rounded-full text-sm" 
+        <button class="bg-transparent border border-indigo-600 py-2 px-4 rounded-full text-sm text-black" 
            @click="updateItemStatus('in-progress')"
            v-show="!isTodoItemInProgress">
             In Progress
