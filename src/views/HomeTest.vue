@@ -299,7 +299,7 @@ function signIn(){
               </p>
               <div class="flex flex-row space-x-4">
                 <div class="flex relative justify-center overflow-hidden rounded-full w-12 h-12 pt-2 bg-mustard-yellow">
-                      <img src="woman.png" class="object-contain h-full "/>
+                      <img src="/woman.png" class="object-contain h-full "/>
                 </div>
                 <div class="flex flex-col">
                   <p class="font-light">Jessica Andra</p>
