@@ -4,6 +4,8 @@
 
 
 /* https://stackoverflow.com/questions/69276276/why-tailwind-list-style-type-is-not-working */
+/* https://www.magicpattern.design/tools/css-backgrounds */
+
 @layer base {
   ul, ol {
     list-style: circle;
@@ -19,6 +21,10 @@
 /* FIXME: Find out which page was benefiting from us using white */
 body {
   background-color: #f6f6f6;
+  /* background-color: white; */
+  /* opacity: 0.8;
+  background-image: radial-gradient(#444cf7 0.5px, white 0.5px);
+  background-size: 40px 40px; */
 }
 
 .notes {

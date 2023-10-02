@@ -23,13 +23,13 @@ import { getMainDefinition } from '@apollo/client/utilities';
 
 const wsLink = new GraphQLWsLink(
   createClient({
-    url: 'ws://localhost:5000/graphql',
+    url: 'ws://104.248.224.201:5000/graphql',
   })
 );
 
 const httpLink = createHttpLink({
   // You should use an absolute URL here
-  uri: 'http://localhost:5000/graphql',
+  uri: 'http://104.248.224.201:5000/graphql',
 });
 
 const authMiddleware = new ApolloLink((operation, forward) => {
@@ -63,9 +63,4 @@ const cache = new InMemoryCache();
 export const apolloClient = new ApolloClient({
   link: link,
   cache,
-  defaultOptions: {
-    query: {
-      fetchPolicy: 'no-cache',
-    },
-  },
 });

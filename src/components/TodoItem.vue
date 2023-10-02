@@ -21,6 +21,10 @@ let formattedTodoReminderDate = computed(() => {
   return todoReminderDate.value ? moment(todoReminderDate.value).format('MMMM Do YYYY, h:mm a') : ''
 })
 
+let allowedDates = ref([])
+allowedDates.value.push(new Date())
+
+
 const selectReminderDate = () => {
   showDatePicker.value = true
 }
@@ -85,7 +89,7 @@ watch(taskDesc, async (newTaskDesc) =>  {
    <div class="flex flex-row w-full justify-between mt-2">
       <div class="flex"><p>{{taskDesc}}</p></div>
       <div class="flex space-x-2" v-show="props.todoListItem.status_name != 'closed'">
-        <DatesModal v-show="showDatePicker" @updateSelectedDate="updateReminderDate" @close="closeReminderDateModal"/>
+        <DatesModal v-show="showDatePicker" @updateSelectedDate="updateReminderDate" @close="closeReminderDateModal" :allowedDates="allowedDates"/>
         <EditTodoItem v-show="showEditDesc" @close="closeEditTodoItemDes" :desc="taskDesc" :id="props.todoListItem.id"/>
         <!-- v-model="taskDesc" 
         />  -->

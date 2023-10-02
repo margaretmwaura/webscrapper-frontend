@@ -21,7 +21,7 @@ export default{
     QuoteDetails,
     AddTodoItem,
     TodoItem,
-    NoteDetails
+    NoteDetails,
   },
 
   setup(props, context){
@@ -34,7 +34,6 @@ export default{
   let isVisible = ref(false)
   let action = ref("")
   let activity = ref({})
-
 
   let isTodoListAdded = computed(() => (todoList.value == 'undefined'
    || !todoList.value || todoList.value.length <= 0) ? false : true);
@@ -71,7 +70,12 @@ export default{
     action.value = actionType
   }
 
+  function closeReminderPSA(){
+    showSetReminderModal.value = false
+  }
+
   function close(){
+    // https://codepen.io/michaelwyatt/pen/KBYrZN
     isVisible.value = false
   }
 
@@ -124,7 +128,7 @@ export default{
 // FIXME: How can this be done better? The store then function is being called before the onResult function is actually called
 // Is it okay calling on Result from component or just go with the store
   async function getToDoList(){
-    await store.getTheToDoList()  
+    await store.getTodayToDoList()  
   }
 
   async function getNotes(){
@@ -132,7 +136,6 @@ export default{
   }
 
   onMounted(() =>{
-    console.log("mounted")
     getDailyQuotes()
     getToDoList()
     getNotes()
@@ -161,21 +164,23 @@ export default{
     closeAddTodoItemModal,
     openAddTodoItemModal,
     scrollLeft,
-    scrollRight
+    scrollRight,
   }}
   }
 </script>
 
+<!-- https://tailwind-elements.com/docs/standard/components/dropdown/ -->
 <template>
   <div class="flex flex-col w-full mb-10 banner h-full bg-snow-white">
-    <div class="flex flex-col w-full mt-52 h-screen bg-snow-white">
-      <div class="flex flex-row space-x-4 bg-transparent -mt-10 mx-10 h-72">
+    <div class="flex flex-col w-full mt-52 h-full bg-snow-white">
+      <!-- sm:flex-wrap md:flex-wrap lg:flex-nowrap xl:flex-nowrap 2xl:flex-nowrap -->
+       <div class="flex flex-row flex-wrap md:flex-nowrap space-x-4 space-y-4 bg-transparent -mt-10 mx-10 h-full">
           <div class="flex flex-col flex-grow bg-white rounded p-6">
             <div class="flex justify-between">
             <p class="text-2xl font-semibold tracking-wide leading-loose">Daily Growth 🌱 ☀️</p>
             <font-awesome-icon icon="fa-solid fa-ellipsis lg" />
             </div>
-            <div class="grid grid-cols-3 gap-4 mt-4">
+            <div class="grid sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 overflow-auto overflow-x-auto gap-4 mt-4">
               <div v-for="quote in dailyQuotes" :key="quote">
                 <QuoteDetails :quote="quote"/>
               </div>
@@ -199,9 +204,9 @@ export default{
                     📌
                   </button>
                 </p>
-              </div>
-              <div
-                class= "!visible hidden flex flex-col h-full pt-8" 
+            </div>
+            <div
+                class= "!visible hidden flex flex-col pt-8" 
                 data-te-collapse-item
                 data-te-collapse-horizontal
                 id="collapseWidthExample">
@@ -214,7 +219,7 @@ export default{
                       <AddTodoItem v-show="addTodoItem" @close="closeAddTodoItemModal"/>
                     </div>
                   </div>
-                  <div class="flex-1 max-w-sm rounded-lg h-full overflow-y-scoll overflow-x-hidden"  style="width: 300px" >
+                  <div class="flex-1 max-w-sm rounded-lg h-full w-full overflow-y-scoll overflow-x-hidden">
                       <div v-if="isTodoListAdded">
                         <ol v-for="todoListItem in todoList" :key="todoListItem" class="pl-6">
                           <li :class="{open: isOpen(todoListItem.status_name), closed : isClosed(todoListItem.status_name)}">
@@ -223,7 +228,7 @@ export default{
                         </ol>
                       </div>
                   </div>
-              </div>
+            </div>
           </div>
        </div>
        <div class="flex space-x-4 bg-transparent mt-10 mx-10 h-full">
@@ -247,13 +252,12 @@ export default{
                 </div>
             </div>
             <div class="flex justify-end items-end mt-2">
-             <!-- https://tailwind-elements.com/docs/standard/components/dropdown/ -->
               <div class="relative" data-te-dropdown-ref>
                   <button
                     class="flex items-center whitespace-nowrap bg-indigo-700
                     px-6 pb-2 pt-2.5 font-medium  
                     leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca]
-                      transition duration-150 ease-in-out hover:bg-indigo-600 rounded-full w-64
+                      transition duration-150 ease-in-out hover:bg-indigo-600 rounded-full space-x-8
                       "
                     type="button"
                     id="dropdownMenuButton"
@@ -311,7 +315,6 @@ export default{
        </div>
     </div>
     <component :is="action" v-show="isVisible" @closeModal="close" v-bind="activity"></component>
-
   </div>
 </template>
 
