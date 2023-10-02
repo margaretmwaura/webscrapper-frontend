@@ -21,7 +21,7 @@ export default{
     QuoteDetails,
     AddTodoItem,
     TodoItem,
-    NoteDetails
+    NoteDetails,
   },
 
   setup(props, context){
@@ -34,7 +34,6 @@ export default{
   let isVisible = ref(false)
   let action = ref("")
   let activity = ref({})
-
 
   let isTodoListAdded = computed(() => (todoList.value == 'undefined'
    || !todoList.value || todoList.value.length <= 0) ? false : true);
@@ -71,7 +70,12 @@ export default{
     action.value = actionType
   }
 
+  function closeReminderPSA(){
+    showSetReminderModal.value = false
+  }
+
   function close(){
+    // https://codepen.io/michaelwyatt/pen/KBYrZN
     isVisible.value = false
   }
 
@@ -124,7 +128,7 @@ export default{
 // FIXME: How can this be done better? The store then function is being called before the onResult function is actually called
 // Is it okay calling on Result from component or just go with the store
   async function getToDoList(){
-    await store.getTheToDoList()  
+    await store.getTodayToDoList()  
   }
 
   async function getNotes(){
@@ -132,7 +136,6 @@ export default{
   }
 
   onMounted(() =>{
-    console.log("mounted")
     getDailyQuotes()
     getToDoList()
     getNotes()
@@ -161,7 +164,7 @@ export default{
     closeAddTodoItemModal,
     openAddTodoItemModal,
     scrollLeft,
-    scrollRight
+    scrollRight,
   }}
   }
 </script>
@@ -216,8 +219,6 @@ export default{
                       <AddTodoItem v-show="addTodoItem" @close="closeAddTodoItemModal"/>
                     </div>
                   </div>
-                  <!-- style="width: 300px"  -->
-                  <!-- sm:w-32 md:w-32 lg:w-48 xl:w-52 2xl:w-60 -->
                   <div class="flex-1 max-w-sm rounded-lg h-full w-full overflow-y-scoll overflow-x-hidden">
                       <div v-if="isTodoListAdded">
                         <ol v-for="todoListItem in todoList" :key="todoListItem" class="pl-6">
@@ -314,7 +315,6 @@ export default{
        </div>
     </div>
     <component :is="action" v-show="isVisible" @closeModal="close" v-bind="activity"></component>
-
   </div>
 </template>
 

@@ -1,5 +1,6 @@
 # Logs
 logs
+codedump.js
 *.log
 *.env
 npm-debug.log*

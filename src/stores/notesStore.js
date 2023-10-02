@@ -3,9 +3,7 @@ import { provideApolloClient } from '@vue/apollo-composable';
 import { useMutation } from '@vue/apollo-composable';
 import { apolloClient } from './../apolloClient';
 import { useQuery } from '@vue/apollo-composable';
-import { computed, watch } from 'vue';
 import { useLocalStorage } from '@vueuse/core';
-import { useSubscription } from '@vue/apollo-composable';
 import { useAuthStore } from './authStore';
 import {
   CREATE_TODO_LIST_MUTATION,
@@ -17,7 +15,11 @@ import {
   DELETE_NOTE_MUTATION,
 } from './../graphql/mutation';
 
-import { GET_TODO_LIST_QUERY, GET_NOTES_QUERY } from './../graphql/query';
+import {
+  GET_CURRENT_WEEK_TODO_LIST_QUERY,
+  GET_TODAY_TODO_LIST_QUERY,
+  GET_NOTES_QUERY,
+} from './../graphql/query';
 import {
   TODO_LIST_SUBSCRIPTION,
   NOTE_SUBSCRIPTION,
@@ -28,17 +30,25 @@ provideApolloClient(apolloClient);
 export const useNotesStore = defineStore({
   id: 'notesStore',
   state: () => ({
+    notes: useLocalStorage('notes', []),
+    isCreateNoteSuccessful: useLocalStorage('isCreateNoteSuccessful', false),
+    errorCreatingNote: useLocalStorage('errorCreatingNote', ''),
+
     todoList: useLocalStorage('todoList', []),
     todo: useLocalStorage('todo', {}),
-    notes: useLocalStorage('notes', []),
+    currentWeekTodoList: useLocalStorage('currentWeekTodoList', []),
+
     isCreateTodoListSuccessful: useLocalStorage(
       'isCreateTodoListSuccessful',
       false
     ),
     errorSavingTodoList: useLocalStorage('errorSavingTodoList', ''),
 
-    isCreateNoteSuccessful: useLocalStorage('isCreateNoteSuccessful', false),
-    errorCreatingNote: useLocalStorage('errorCreatingNote', ''),
+    isUpdateTodoItemSuccessful: useLocalStorage(
+      'isUpdateTodoItemSuccessful',
+      ''
+    ),
+    errorUpdatingTodoItem: useLocalStorage('errorUpdatingTodoItem', ''),
 
     isUpdateNoteSuccessful: useLocalStorage('isUpdateNoteSuccessful', false),
     errorUpdatingNote: useLocalStorage('errorUpdatingNote', ''),
@@ -92,18 +102,21 @@ export const useNotesStore = defineStore({
         };
       });
       onError(error => {
+        let error_message = '';
         if (error) {
-          console.log(
-            error.networkError
-              ? error.networkError.result.errors[0].message
-              : error.graphQLErrors[0].message
-          );
+          error_message = error.networkError
+            ? error.networkError.result.errors[0].message
+            : error.graphQLErrors[0].message;
         } else {
-          console.log('No error gotten');
+          error_message =
+            'There was an error when trying to update todo list item';
         }
+        this.errorUpdatingTodoItem = error_message;
+        this.isUpdateTodoItemSuccessful = false;
       });
       onDone(result => {
         console.log(result);
+        this.isUpdateTodoItemSuccessful = true;
       });
       await updateTodoListItem();
     },
@@ -238,39 +251,71 @@ export const useNotesStore = defineStore({
         console.log(error);
       }
     },
-    async getTheToDoList() {
+    async getTodayToDoList() {
       let user_id = await this.getCurrentUserId();
       if (typeof user_id == 'undefined' || user_id == '') {
         console.log('You need to authenticate first ');
         return;
       }
-      const { onResult } = useQuery(GET_TODO_LIST_QUERY, {
-        user_id: user_id,
-      });
+      const { onResult, subscribeToMore } = useQuery(
+        GET_TODAY_TODO_LIST_QUERY,
+        {
+          user_id: user_id,
+        }
+      );
+      subscribeToMore(() => ({
+        document: TODO_LIST_SUBSCRIPTION,
+        variables: {
+          user_id: user_id,
+        },
+        updateQuery: (previousResult, { subscriptionData }) => {
+          console.log('The subscription has been triggered');
+          let newData = {
+            getTodaysToDoList: [],
+          };
+          newData.getTodaysToDoList = subscriptionData.data.todoCreated;
+          return newData;
+        },
+      }));
       return onResult(({ data }) => {
+        console.log('On Result for todays data');
         this.todo = data.getTodaysToDoList;
         this.todoList = data.getTodaysToDoList?.todoListItems;
-        this.todoListSubscription();
       });
     },
-    async todoListSubscription() {
+    async getCurrentWeekToDoList(start_date, end_date) {
+      console.log('Getting data');
       let user_id = await this.getCurrentUserId();
       if (typeof user_id == 'undefined' || user_id == '') {
-        console.log('You need to authenticate first ');
         return;
       }
-      const { onResult } = useSubscription(
-        TODO_LIST_SUBSCRIPTION,
-        { user_id: user_id },
+      const { onResult } = useQuery(
+        GET_CURRENT_WEEK_TODO_LIST_QUERY,
+        {
+          input: {
+            user_id: user_id,
+            start_date: start_date,
+            end_date: end_date,
+          },
+        },
         () => ({
           fetchPolicy: 'no-cache',
         })
       );
-
-      onResult(result => {
-        this.todo = result.data.todoCreated;
-        this.todoList = result.data?.todoCreated?.todoListItems;
+      return onResult(({ data }) => {
+        console.log('On Result for the current week data');
+        this.currentWeekTodoList = [];
+        let todolists = data.getThisWeeksToDoList;
+        for (let todolist of todolists) {
+          this.currentWeekTodoList.push(...todolist.todoListItems);
+        }
       });
+    },
+    async updateCurrentWeekToDoList() {
+      console.log('Update current week to do list');
+      this.currentWeekTodoList = this.currentWeekTodoList.map(
+        obj => this.todoList.find(o => o.id === obj.id) || obj
+      );
     },
     // https://stackoverflow.com/questions/5915789/how-to-replace-item-in-array
     // https://www.geeksforgeeks.org/remove-elements-from-a-javascript-array/
@@ -291,7 +336,6 @@ export const useNotesStore = defineStore({
           user_id: user_id,
         },
         updateQuery: (previousResult, { subscriptionData }) => {
-          console.log('We are subscrining');
           let noteSubData = subscriptionData.data.noteSubcription;
           let newData = {
             getNotes: [],
@@ -317,12 +361,10 @@ export const useNotesStore = defineStore({
         },
       }));
       return onResult(({ data }) => {
-        console.log(data.getNotes);
         this.notes = [];
         for (let note of data.getNotes) {
           this.notes.push(note);
         }
-        // this.notes = data.getNotes;
         console.log('Notes');
         console.log(this.notes);
       });
