@@ -11,6 +11,12 @@ import NoteDetails from './../components/NoteDetails.vue'
 import { useNotesStore } from './../stores/notesStore'
 import { storeToRefs } from 'pinia';
 import moment from 'moment';
+import {
+  Dropdown,
+  Collapse,
+  Ripple,
+  initTE,
+} from "tw-elements";
 
 export default{
 
@@ -136,6 +142,7 @@ export default{
   }
 
   onMounted(() =>{
+    initTE({ Collapse, Ripple, Dropdown });
     getDailyQuotes()
     getToDoList()
     getNotes()
