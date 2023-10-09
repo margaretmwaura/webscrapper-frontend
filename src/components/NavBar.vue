@@ -103,7 +103,7 @@ export default{
                 sm:block md:inline-block lg:inline-block xl:inline-block 2xl:inline-block
                 text-teal-lighter hover:text-indigo-700 mr-4 text-base font-medium"
               >
-                Docs
+                About
               </a>
               <a
                 href="#responsive-header"
@@ -111,7 +111,7 @@ export default{
                 sm:block md:inline-block lg:inline-block xl:inline-block 2xl:inline-block
                 text-teal-lighter hover:text-indigo-700 mr-4 text-base font-medium"
               >
-                Examples
+                Testimonials
               </a>
               <a
                 href="#responsive-header"
@@ -119,7 +119,7 @@ export default{
                 sm:block md:inline-block lg:inline-block xl:inline-block 2xl:inline-block
                 text-teal-lighter hover:text-indigo-700 text-base font-medium"
               >
-                Blog
+                Contact
               </a>
             </div>
         </div>
