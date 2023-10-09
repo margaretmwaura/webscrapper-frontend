@@ -5,6 +5,11 @@ import DatesModal from './../components/DatesModal.vue'
 import EditTodoItem from './../components/EditTodoItem.vue'
 import moment from 'moment'
 import { useNotesStore } from './../stores/notesStore'
+import {
+  Dropdown,
+  Ripple,
+  initTE,
+} from "tw-elements";
 
 
 const props =  defineProps({
@@ -82,6 +87,8 @@ watch(taskDesc, async (newTaskDesc) =>  {
       await store.updateToDoListItem(data)
    }    
 });
+
+initTE({ Ripple, Dropdown });
 
 </script>
 
