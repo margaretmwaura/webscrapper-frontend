@@ -34,8 +34,7 @@ function signIn(){
          <div class="flex justify-center items-center">
           <div class="flex flex-col max-w-500">
             <h1 class="font-bold tracking-wide leading-tight">
-                <!-- Online learning you can access anywhere easily -->
-                We are genuinely testing Watchtower, All the setting are in place ooooo aaah
+                Online learning you can access anywhere easily
             </h1>
             <div class="box"></div>
             <!-- Check on how to define horizontal and vertical radius in tailwind -->
