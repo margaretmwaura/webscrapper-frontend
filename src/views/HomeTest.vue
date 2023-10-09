@@ -28,13 +28,14 @@ function signIn(){
 4. The issue on having to specify for each and every responsiveness-->
   <NavBar/>
   <div class="landing">
-    <div class="bg-slate-500 w-full mx-auto h-auto flex flex-wrap mt-4">
+    <div class="bg-slate-50 w-full mx-auto h-auto flex flex-wrap mt-4">
       <div class="sm:w-full md:w-full lg:w-full xl:w-1/2 2xl:w-1/2 
       sm:pt-8 md:pt-24 lg:pt-24 xl:pt-24 2xl:pt-24">
          <div class="flex justify-center items-center">
           <div class="flex flex-col max-w-500">
             <h1 class="font-bold tracking-wide leading-tight">
-                Online learning you can access anywhere easilyyyyyy
+                <!-- Online learning you can access anywhere easily -->
+                We are genuinely testing Watchtower
             </h1>
             <div class="box"></div>
             <!-- Check on how to define horizontal and vertical radius in tailwind -->
