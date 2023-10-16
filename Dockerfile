@@ -33,6 +33,3 @@ COPY --from=build-stage /app/dist /app
 
 ## run nginx
 #CMD ["nginx", "-g", "daemon off;"]
-
-# docker build -t vue-prod -f Dockerfile .
-# docker run -it d -p 5173:80 vue-prod

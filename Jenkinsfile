@@ -4,8 +4,8 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        sh 'docker build -t french-front -f Dockerfile .'
-        sh 'docker tag french-front $DOCKER_FRENCH_FRONT_END_IMAGE'
+        sh 'docker build -t french-front-end -f Dockerfile .'
+        sh 'docker tag french-front-end $DOCKER_FRENCH_FRONT_END_IMAGE'
       }
     }
     // stage('Test') {
