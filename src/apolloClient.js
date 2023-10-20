@@ -23,13 +23,13 @@ import { getMainDefinition } from '@apollo/client/utilities';
 
 const wsLink = new GraphQLWsLink(
   createClient({
-    url: 'ws://51.20.136.216:5000/graphql',
+    url: 'ws://51.20.129.196:5000/graphql',
   })
 );
 
 const httpLink = createHttpLink({
   // You should use an absolute URL here
-  uri: 'http://51.20.136.216:5000/graphql',
+  uri: 'http://51.20.129.196:5000/graphql',
 });
 
 const authMiddleware = new ApolloLink((operation, forward) => {
