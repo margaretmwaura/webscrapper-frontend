@@ -150,6 +150,7 @@ export const useAuthStore = defineStore({
         email: email,
       });
       return onResult(({ data }) => {
+        console.log(data);
         this.user = data.getUser;
         console.log(this.user);
       });

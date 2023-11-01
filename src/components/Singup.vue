@@ -49,13 +49,13 @@ export default{
 
 // Should call await function to register user on db
     function signUp(){
+      isSignupDisabled.value = true
       let data = {
         name: name.value,
         email: email.value,
         password : password.value
       }
       store.registerUser(data).then(async () => {
-        isSignupDisabled.value = true
         localStorage.setItem('authToken', token.value);
         if(authStatus.value === 'Authorized'){
           toast.success('Signup is successful 🎊', {
