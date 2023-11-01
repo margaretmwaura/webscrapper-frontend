@@ -21,6 +21,8 @@ const auth = getAuth(firebaseAdmin);
 
 const ENCRYPTION_KEY = import.meta.env.VITE_ENCRYPTION_KEY;
 
+console.log(ENCRYPTION_KEY);
+
 const registerMutation = gql`
   mutation RegisterUser($input: RegisterUser!) {
     registerUser(input: $input) {
