@@ -9,7 +9,7 @@ pipeline {
         withCredentials([file(credentialsId: 'frontend_env', variable: 'FRONTEND_ENV') ]) {
             script {
               def envFileContents = readFile(env.frontend_env).trim()
-              sh "docker build --build-arg env_file_arg='${dbFileContents}' -t french-front-end -f Dockerfile ."
+              sh "docker build --build-arg env_file_arg='${envFileContents}' -t french-front-end -f Dockerfile ."
               sh 'docker tag french-front-end $DOCKER_FRENCH_FRONT_END_IMAGE'
             }
         }
