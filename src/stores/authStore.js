@@ -146,15 +146,19 @@ export const useAuthStore = defineStore({
     },
     async getUserFromDB(email) {
       console.log('We are getting from DB');
-      const { onResult } = useQuery(
+      const { onResult, onError } = useQuery(
         getUser,
         {
           email: email,
-        },
-        () => ({
-          fetchPolicy: 'no-cache',
-        })
+        }
+        // () => ({
+        //   fetchPolicy: 'cache-and-network',
+        // })
       );
+      onError(error => {
+        console.log(error.graphQLErrors);
+        console.log(error.networkError);
+      });
       return onResult(({ data }) => {
         console.log(data);
         this.user = data.getUser;
