@@ -146,9 +146,15 @@ export const useAuthStore = defineStore({
     },
     async getUserFromDB(email) {
       console.log('We are getting from DB');
-      const { onResult } = useQuery(getUser, {
-        email: email,
-      });
+      const { onResult } = useQuery(
+        getUser,
+        {
+          email: email,
+        },
+        () => ({
+          fetchPolicy: 'no-cache',
+        })
+      );
       return onResult(({ data }) => {
         console.log(data);
         this.user = data.getUser;

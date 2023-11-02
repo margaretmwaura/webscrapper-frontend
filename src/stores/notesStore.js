@@ -261,7 +261,10 @@ export const useNotesStore = defineStore({
         GET_TODAY_TODO_LIST_QUERY,
         {
           user_id: user_id,
-        }
+        },
+        () => ({
+          fetchPolicy: 'no-cache',
+        })
       );
       subscribeToMore(() => ({
         document: TODO_LIST_SUBSCRIPTION,
@@ -327,9 +330,15 @@ export const useNotesStore = defineStore({
         console.log('You need to authenticate first ');
         return;
       }
-      const { onResult, subscribeToMore } = useQuery(GET_NOTES_QUERY, {
-        user_id: user_id,
-      });
+      const { onResult, subscribeToMore } = useQuery(
+        GET_NOTES_QUERY,
+        {
+          user_id: user_id,
+        },
+        () => ({
+          fetchPolicy: 'no-cache',
+        })
+      );
       subscribeToMore(() => ({
         document: NOTE_SUBSCRIPTION,
         variables: {
