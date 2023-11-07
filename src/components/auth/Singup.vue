@@ -2,12 +2,15 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { toast } from 'vue3-toastify';
-import { useAuthStore } from './../stores/authStore'
+import { useAuthStore } from '../../stores/authStore'
 import { storeToRefs } from 'pinia';
+import { useUserManagement } from './../../composables/useUserManagement'
 
 export default{
   name : 'Signup',
   setup(props, context){
+
+    const { registerUser } = useUserManagement()
     const router = useRouter()
     const store = useAuthStore()
     const { authStatus, token, error } = storeToRefs(store);
@@ -55,7 +58,7 @@ export default{
         email: email.value,
         password : password.value
       }
-      store.registerUser(data).then(async () => {
+      registerUser(data).then(async () => {
         localStorage.setItem('authToken', token.value);
         if(authStatus.value === 'Authorized'){
           toast.success('Signup is successful 🎊', {

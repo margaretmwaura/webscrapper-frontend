@@ -1,9 +1,9 @@
 <script setup>
 import { ref, computed, watchEffect, watch } from 'vue';
 import moment from 'moment'
-import { useNotesStore } from './../stores/notesStore'
+import { useNotesStore } from '../../stores/notesStore'
 import NotesModal from './NotesModal.vue';
-import ConfirmDelete from './ConfirmDelete.vue'
+import ConfirmDelete from '../common/ConfirmDelete.vue'
 import { storeToRefs } from 'pinia';
 import { toast } from 'vue3-toastify';
 

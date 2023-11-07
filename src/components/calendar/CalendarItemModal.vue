@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, watch, defineEmits } from 'vue';
-import { useNotesStore } from './../stores/notesStore'
+import { useNotesStore } from '../../stores/notesStore'
 import { storeToRefs } from 'pinia';
 import { toast } from 'vue3-toastify';
 

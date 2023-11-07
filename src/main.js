@@ -18,7 +18,7 @@ import { createPinia } from 'pinia';
 /* import font awesome icon component */
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-import { apolloClient } from './apolloClient';
+import apolloClient from './apolloClient';
 
 import Particles from 'vue3-particles';
 
@@ -29,6 +29,12 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
+
+import {
+  faInstagram,
+  faTwitter,
+  faLinkedin,
+} from '@fortawesome/free-brands-svg-icons';
 
 import {
   faPlay,
@@ -99,7 +105,10 @@ library.add(
   faChevronLeft,
   faDownload,
   faList,
-  faStairs
+  faStairs,
+  faInstagram,
+  faLinkedin,
+  faTwitter
 );
 
 import { DefaultApolloClient } from '@vue/apollo-composable';

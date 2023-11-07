@@ -1,6 +1,6 @@
 <script>
 import { ref, computed, watchEffect, onMounted, watch } from 'vue';
-import MoreQuoteDetails from './../components/MoreQuoteDetails.vue'
+import MoreQuoteDetails from './MoreQuoteDetails.vue'
 export default{
 
   props: ['quote'],

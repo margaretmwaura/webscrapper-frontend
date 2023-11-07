@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, watch, onMounted , onUpdated} from 'vue';
-import CalendarItem from './../components/CalendarItem.vue'
+import CalendarItem from '../components/calendar/CalendarItem.vue'
 import { useNow } from '@vueuse/core'
 import { useNotesStore } from './../stores/notesStore'
 import { storeToRefs } from 'pinia';

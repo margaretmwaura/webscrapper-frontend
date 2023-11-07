@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, watchEffect } from 'vue';
-import Header from './../components/Header.vue'
+import Header from '../components/common/Header.vue'
 
 let collapsed = ref(false)
 

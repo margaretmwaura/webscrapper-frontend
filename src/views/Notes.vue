@@ -2,12 +2,12 @@
 import { ref, computed, watchEffect, onMounted, watch } from 'vue';
 import { CollapseTransition } from "@ivanv/vue-collapse-transition"
 import axios from 'axios'
-import NotesModal from './../components/NotesModal.vue'
-import ToDoListModal from './../components/ToDoListModal.vue'
-import TodoItem from './../components/TodoItem.vue'
-import QuoteDetails from './../components/QuoteDetails.vue'
-import AddTodoItem from './../components/AddTodoItem.vue'
-import NoteDetails from './../components/NoteDetails.vue'
+import NotesModal from '../components/notes/NotesModal.vue'
+import ToDoListModal from '../components/todo/TodoListModal.vue'
+import TodoItem from '../components/todo/TodoItem.vue'
+import QuoteDetails from '../components/notes/QuoteDetails.vue'
+import AddTodoItem from '../components/todo/AddTodoItem.vue'
+import NoteDetails from '../components/notes/NoteDetails.vue'
 import { useNotesStore } from './../stores/notesStore'
 import { storeToRefs } from 'pinia';
 import moment from 'moment';
@@ -142,7 +142,7 @@ export default{
   }
 
   onMounted(() =>{
-    initTE({ Collapse, Ripple, Dropdown });
+    // initTE({ Collapse, Ripple, Dropdown });
     getDailyQuotes()
     getToDoList()
     getNotes()

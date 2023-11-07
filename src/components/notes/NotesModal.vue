@@ -1,9 +1,9 @@
 <script>
 import { computed, ref } from 'vue';
-import { useNotesStore } from './../stores/notesStore'
+import { useNotesStore } from '../../stores/notesStore'
 import { storeToRefs } from 'pinia';
 import { toast } from 'vue3-toastify';
-import { useAuthStore } from '../stores/authStore';
+import { useAuthStore } from '../../stores/authStore';
 
 
 export default{

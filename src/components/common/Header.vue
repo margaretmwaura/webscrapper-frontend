@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, watchEffect } from 'vue';
-import { useAuthStore } from './../../src/stores/authStore'
+import { useAuthStore } from '../../stores/authStore'
 import { storeToRefs } from 'pinia';
 
 defineProps({

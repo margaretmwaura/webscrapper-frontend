@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { provideApolloClient } from '@vue/apollo-composable';
 import { useMutation } from '@vue/apollo-composable';
-import { apolloClient } from './../apolloClient';
+import apolloClient from './../apolloClient';
 import { useQuery } from '@vue/apollo-composable';
 import { useLocalStorage } from '@vueuse/core';
 import { useAuthStore } from './authStore';
@@ -13,13 +13,13 @@ import {
   CREATE_NOTE_MUTATION,
   UPDATE_NOTE_MUTATION,
   DELETE_NOTE_MUTATION,
-} from './../graphql/mutation';
+} from './../graphql/mutations';
 
 import {
   GET_CURRENT_WEEK_TODO_LIST_QUERY,
   GET_TODAY_TODO_LIST_QUERY,
   GET_NOTES_QUERY,
-} from './../graphql/query';
+} from './../graphql/queries';
 import {
   TODO_LIST_SUBSCRIPTION,
   NOTE_SUBSCRIPTION,

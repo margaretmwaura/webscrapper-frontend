@@ -2,11 +2,11 @@
 import { ref, computed, watchEffect } from 'vue';
 import {useQuery} from '@vue/apollo-composable'
 import moment from 'moment'
-import VowelDetails from './../components/VowelDetails.vue'
-import Confetti from './../components/Confetti.vue'
-import Loader from './../components/Loader.vue'
+import VowelDetails from '../components/vowels/VowelDetails.vue'
+import Confetti from '../components/common/Confetti.vue'
+import Loader from '../components/common/Loader.vue'
 import gql from 'graphql-tag'
-import Success from './../components/Success.vue'
+import Success from '../components/common/Success.vue'
 
 let showConfetti = ref(false)
 let showSuccessModal = ref(false)

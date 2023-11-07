@@ -1,10 +1,10 @@
 <script setup>
 import { onMounted, watch, ref , defineEmits} from 'vue';
-import { useNotesStore } from './../stores/notesStore'
+import { useNotesStore } from '../../stores/notesStore'
 import { storeToRefs } from 'pinia';
 import { toast } from 'vue3-toastify';
 import { vElementVisibility } from '@vueuse/components'
-import ReminderModal from './../components/RemiderModal.vue'
+import ReminderModal from './TodoRemiderModal.vue'
 
 const store = useNotesStore()
 const emit = defineEmits(['closeModal'])

@@ -1,10 +1,10 @@
 <script setup>
 import { ref, computed, watchEffect, watch } from 'vue';
 import { toRefs, toRef } from 'vue'
-import DatesModal from './../components/DatesModal.vue'
-import EditTodoItem from './../components/EditTodoItem.vue'
+import DatesModal from '../common/DatesModal.vue'
+import EditTodoItem from './EditTodoItem.vue'
 import moment from 'moment'
-import { useNotesStore } from './../stores/notesStore'
+import { useNotesStore } from '../../stores/notesStore'
 import {
   Dropdown,
   Ripple,

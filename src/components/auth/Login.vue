@@ -2,9 +2,11 @@
 import { ref , defineEmits} from 'vue';
 import { useRouter } from 'vue-router';
 import { toast } from 'vue3-toastify';
-import { useAuthStore } from './../stores/authStore'
+import { useAuthStore } from '../../stores/authStore'
 import { storeToRefs } from 'pinia';
+import { useUserManagement } from './../../composables/useUserManagement'
 
+const {signin} = useUserManagement()
 const router = useRouter()
 const store = useAuthStore()
 const { authStatus, token, error } = storeToRefs(store);
@@ -32,7 +34,8 @@ function closeModal(){
 // FIXME: Only can call login once if the call has already being made
 function logInWithEmailAndPassword() {
   isLoginDisabled.value = true
-  store.signin({email: email.value, password: password.value}).then(() => {
+
+  signin({email: email.value, password: password.value}).then(() => {
     localStorage.setItem('authToken', token.value);
     if(authStatus.value === 'Authorized'){
       toast.success('Login is successful 🎊', {

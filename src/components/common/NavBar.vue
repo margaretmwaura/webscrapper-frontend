@@ -12,8 +12,8 @@
 //   Define this last part outside of setup
 //  props: ['authType']
 import { ref } from 'vue';
-import Signup from './Singup.vue'
-import Login from './Login.vue'
+import Signup from '../auth/Singup.vue'
+import Login from '../auth/Login.vue'
 
 export default{
 
@@ -48,10 +48,33 @@ export default{
     console.log("We will be editting the display value" + value)
   }
 
+
+  // The goal of the below function is to have the navbar collapsed in small screens when one first navigates to small screens
+  function handleScreenSizeChange(mq) {
+  if (mq.matches) {
+    // Execute this code when the screen size matches the media query
+    console.log('Small screen size detected');
+    open.value = false
+    // Call your function here
+  }else{
+    open.value = true
+  }
+}
+
+  // Create a media query that matches small screens
+  const mq = window.matchMedia('(max-width: 639px)');
+
+  // Call the handler function once to check the initial screen size
+  handleScreenSizeChange(mq);
+
+  // Add an event listener to handle changes in screen size
+  mq.addListener(handleScreenSizeChange);
+
   return{
     open,
     isVisible,
     authFunction,
+    toggle,
     showModal,
     close,
     switchAuth
@@ -61,19 +84,18 @@ export default{
 </script>
 
 <template>
-  <div class="font-sans antialiased
-  sm:px-4 md:px-12 lg:px-24 xl:px-24 2xl:px-24">
+  <div class="font-sans antialiased px-4 md:px-12">
     <!-- We have removed flex-wrap -->
     <nav
       class="flex items-center justify-between 
-      sm:flex-wrap md:flex-nowrap lg:flex-nowrap xl:flex-nowrap 2xl:flex-nowrap
+      flex-wrap md:flex-nowrap lg:flex-nowrap xl:flex-nowrap 2xl:flex-nowrap
       pt-6"
     >
       <div class="flex items-center flex-no-shrink text-black mr-6">
         <div class="rounded-full bg-indigo-700 w-6 h-6 flex justify-center"><p class="text-white font-bold">L</p></div>
         <span class="font-semibold text-xl tracking-wider pl-2 text-indigo-700">Bonjour!</span>
       </div>
-      <div class="sm:block md:hidden lg:hidden xl:hidden 2xl:hidden">
+      <div class="block md:hidden lg:hidden xl:hidden 2xl:hidden">
         <button
           v-on:click="toggle"
           class="flex px-3 py-2 border rounded text-teal-lighter border-teal-light hover:text-indigo-700 hover:border-indigo-700"
@@ -91,40 +113,40 @@ export default{
         <!-- class remove is flex-grow -->
 
         <!-- sm:flex sm:items-center" -->
-      <div class="flex w-full sm:flex-wrap md:flex-nowrap lg:flex-nowrap xl:flex-nowrap 2xl:flex-nowrap" :class="open ? 'block' : 'hidden'">
+      <div class="flex w-full flex-wrap md:flex-nowrap lg:flex-nowrap xl:flex-nowrap 2xl:flex-nowrap" :class="open ? 'block' : 'hidden'">
         <div class="w-full flex justify-center">
             <!-- text-sm sm:flex-grow -->
             <div class="text-sm 
-            sm:flex-grow md:flex-none lg:flex-none xl:flex-none 2xl:flex-none
+            flex-grow md:flex-none lg:flex-none xl:flex-none 2xl:flex-none
             space-y-4 pb-2">
               <a
                 href="#responsive-header"
                 class="no-underline mt-4 
-                sm:block md:inline-block lg:inline-block xl:inline-block 2xl:inline-block
-                text-teal-lighter hover:text-indigo-700 mr-4 text-base font-medium"
+                block md:inline-block lg:inline-block xl:inline-block 2xl:inline-block
+                text-teal-lighter hover:text-indigo-700 mr-4 text-base font-medium text-lg"
               >
                 About
               </a>
               <a
                 href="#responsive-header"
                 class="no-underline mt-4 
-                sm:block md:inline-block lg:inline-block xl:inline-block 2xl:inline-block
-                text-teal-lighter hover:text-indigo-700 mr-4 text-base font-medium"
+                block md:inline-block lg:inline-block xl:inline-block 2xl:inline-block
+                text-teal-lighter hover:text-indigo-700 mr-4 text-base font-medium text-lg"
               >
                 Testimonials
               </a>
               <a
                 href="#responsive-header"
                 class="no-underline mt-4 
-                sm:block md:inline-block lg:inline-block xl:inline-block 2xl:inline-block
-                text-teal-lighter hover:text-indigo-700 text-base font-medium"
+                block md:inline-block lg:inline-block xl:inline-block 2xl:inline-block
+                text-teal-lighter hover:text-indigo-700 text-base font-medium text-lg"
               >
                 Contact
               </a>
             </div>
         </div>
-        <div class="flex sm:space-x-0 md:space-x-2 lg:space-x-2 xl:space-x-2 2xl:space-x-2
-          sm:space-y-2 md:space-y-0 lg:space-y-0 xl:space-y-0 2xl:space-y-0 mt-2
+        <div class="flex space-x-0 md:space-x-2 lg:space-x-2 xl:space-x-2 2xl:space-x-2
+          space-y-2 md:space-y-0 lg:space-y-0 xl:space-y-0 2xl:space-y-0 mt-2
           inline-block">
             <!-- FIXME: The block makes it to appear one after another -->
             <!-- sm:block md:inline lg:inline xl:inline 2xl:inline -->
