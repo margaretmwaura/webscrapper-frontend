@@ -285,14 +285,14 @@ function signIn() {
       <!-- FIXME: There is a section removed -->
       <!-- FIXME: This is what is breaking the responsiveness -->
       <!-- 1. relative is to allow for the absolute section of the left circle to prosper -->
-      <div class="flex relative mt-10 w-full">
+      <div class="flex relative mt-24 md:mt-32 w-full">
         <div class="flex absolute mt-24">
           <div class="trapezoid"></div>
           <div class="h-96 w-48 bg-slate-50 left-cirle"></div>
         </div>
         <!-- 4. It being relative allows it to appear on top -->
         <div class="flex flex-wrap px-6 md:px-6 lg:px-10 xl:px-10 2xl:px-24 space-y-12 w-full items-center justify-center relative">
-          <div class="flex w-full lg:w-1/2 items-center justify-center">
+          <div class="flex flex-col w-full lg:w-1/2 items-center justify-center">
             <div class="relative top-4 max-w-md md:max-w-xl">
               <div class="border-solid border border-slate-800 w-full h-5/6 rounded-full absolute top-4"></div>
               <div class="relative justify-center overflow-hidden rounded-full w-full h-5/6">
@@ -304,14 +304,16 @@ function signIn() {
                     <font-awesome-icon icon="fa-solid fa-quote-left" size="2xl" />
                 </div> -->
               <!-- 3. To be returned we are testing responsiveness without them -->
-              <!-- <div class="flex absolute -bottom-3 -right-4 space-x-2">
-                  <div class="flex justify-center items-center text-deep-purple h-12 w-12 bg-zinc-50 rounded-full">
-                    <font-awesome-icon icon="fa-solid fa-arrow-left" size="xl" />
-                  </div>
-                  <div class="flex justify-center items-center text-deep-purple h-12 w-12 bg-zinc-50 rounded-full">
-                    <font-awesome-icon icon="fa-solid fa-arrow-right" size="xl" />
-                  </div>
-                </div> -->
+            </div>
+            <div class="flex justify-center w-full mt-8">
+              <div class="flex space-x-4">
+                <div class="flex justify-center items-center text-deep-purple h-12 w-12 bg-white rounded-full">
+                  <font-awesome-icon icon="fa-solid fa-arrow-left" size="xl" />
+                </div>
+                <div class="flex justify-center items-center text-deep-purple h-12 w-12 bg-white rounded-full">
+                  <font-awesome-icon icon="fa-solid fa-arrow-right" size="xl" />
+                </div>
+              </div>
             </div>
           </div>
           <div class="flex flex-col w-full lg:w-1/2 items-center justify-center">

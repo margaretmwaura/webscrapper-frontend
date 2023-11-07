@@ -13,7 +13,7 @@ const { user } = storeToRefs(store);
 </script>
 
 <template>
-  <div class="mt-20 mb-24 px-12">
+  <div class="mt-16 md:mt-32 mb-24 px-12">
     <hr/>
     <div class="flex flex-wrap md:flex-nowrap w-full mt-10 space-y-4">
       <div class="flex flex-col md:items-center w-full md:w-1/2 space-y-2">
