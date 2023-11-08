@@ -9,6 +9,10 @@ import QuoteDetails from '../components/notes/QuoteDetails.vue'
 import AddTodoItem from '../components/todo/AddTodoItem.vue'
 import NoteDetails from '../components/notes/NoteDetails.vue'
 import { useNotesStore } from './../stores/notesStore'
+import { useTodoListStore } from '../../stores/todoListStore'
+import { useTodoListManagement } from './../composables/useTodoListManagement'
+import { useNotesManagement } from './../composables/useNotesManagement'
+
 import { storeToRefs } from 'pinia';
 import moment from 'moment';
 import {
@@ -32,8 +36,14 @@ export default{
 
   setup(props, context){
 
-  const store = useNotesStore()
-  let { todoList, notes } = storeToRefs(store);
+  const notes_store = useNotesStore()
+  const todolist_store = useTodoListStore()
+
+  let { notes } = storeToRefs(notes_store);
+  let { todoList } = storeToRefs(todolist_store);
+
+  const {getNotes} = useNotesManagement()
+  const {getTodayToDoList} = useTodoListManagement()
 
   let addTodoItem = ref(false)
   let dailyQuotes = ref([])
@@ -134,11 +144,11 @@ export default{
 // FIXME: How can this be done better? The store then function is being called before the onResult function is actually called
 // Is it okay calling on Result from component or just go with the store
   async function getToDoList(){
-    await store.getTodayToDoList()  
+    await getTodayToDoList()  
   }
 
   async function getNotes(){
-    await store.getNotes()
+    await getNotes()
   }
 
   onMounted(() =>{
@@ -149,7 +159,6 @@ export default{
   })
 
   return{
-    store,
     todoList,
     notes,
     dailyQuotes,

@@ -1,11 +1,13 @@
 <script>
 import { computed, ref } from 'vue';
-import { useNotesStore } from '../../stores/notesStore'
 import { storeToRefs } from 'pinia';
 import { toast } from 'vue3-toastify';
 import { useAuthStore } from '../../stores/authStore';
+import { useNotesManagement } from './../../composables/useNotesManagement'
+import { useNotesStore } from '../../stores/notesStore'
 
 
+const {createNote, updateNote} = useNotesManagement()
 export default{
   name : 'NotesModal',
   props: ['currentAction', 'note'],
@@ -43,7 +45,7 @@ export default{
       }
       console.log("Adding note")
       console.log(data)
-      await notesStore.createNoteMutation(data)
+      await createNote(data)
       if(isCreateNoteSuccessful.value){
         toast.success('Your note has been added 🎊', {
           autoClose: 1000,
@@ -69,7 +71,7 @@ export default{
         "id": id.value
       }
 
-      await notesStore.updateNoteMutation(data)
+      await updateNote(data)
       if(isUpdateNoteSuccessful.value){
         toast.success('Your not been editted 🎊', {
           autoClose: 1000,

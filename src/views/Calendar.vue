@@ -2,12 +2,14 @@
 import { ref, computed, watch, onMounted , onUpdated} from 'vue';
 import CalendarItem from '../components/calendar/CalendarItem.vue'
 import { useNow } from '@vueuse/core'
-import { useNotesStore } from './../stores/notesStore'
+import { useTodoListStore } from './../stores/todoListStore'
 import { storeToRefs } from 'pinia';
 import colors from 'tailwindcss/colors'
 import moment from 'moment';
+import { useTodoListManagement } from './../composables/useTodoListManagement'
 
-const store = useNotesStore()
+const store = useTodoListStore()
+const {getCurrentWeekTodoList} = useTodoListManagement()
 let { currentWeekTodoList, todoList } = storeToRefs(store);
 
 const cells = ref((24 * 7 * 12))
@@ -70,7 +72,7 @@ const populateDaysOfTheWeek = async (new_current_w) => {
 }
 
 async function getToDoList(start_date, end_date){
-  await store.getCurrentWeekToDoList(start_date, end_date)  
+  await getCurrentWeekTodoList(start_date, end_date)  
 }
 
 const getColumnLocation = (item) => {

@@ -20,14 +20,9 @@ export const useAuthStore = defineStore({
   },
   actions: {
     resetStoreValues() {
-      this.authStatus = 'UnAuthorized';
-      this.token = '';
-      this.error = '';
-      this.user = '';
+      this.$reset();
     },
     setUser(value) {
-      console.log('Within store');
-      console.log(value);
       this.user = value;
     },
     setError(value) {

@@ -1,14 +1,9 @@
 <script setup>
 import { ref, computed, watchEffect } from 'vue';
-import { useAuthStore } from '../../stores/authStore'
-import { storeToRefs } from 'pinia';
 
 defineProps({
   msg: String,
 });
-
-const store = useAuthStore()
-const { user } = storeToRefs(store);
 
 </script>
 

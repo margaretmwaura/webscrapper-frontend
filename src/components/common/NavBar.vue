@@ -145,8 +145,7 @@ export default{
               </a>
             </div>
         </div>
-        <div class="flex space-x-0 md:space-x-2 lg:space-x-2 xl:space-x-2 2xl:space-x-2
-          space-y-2 md:space-y-0 lg:space-y-0 xl:space-y-0 2xl:space-y-0 mt-2
+        <div class="flex space-x-2 mt-2
           inline-block">
             <!-- FIXME: The block makes it to appear one after another -->
             <!-- sm:block md:inline lg:inline xl:inline 2xl:inline -->

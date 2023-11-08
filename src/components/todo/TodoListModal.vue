@@ -1,13 +1,15 @@
 <script setup>
 import { onMounted, watch, ref , defineEmits} from 'vue';
-import { useNotesStore } from '../../stores/notesStore'
+import { useTodoListStore } from '../../stores/todoListStore'
+import { useTodoListManagement } from './../../composables/useTodoListManagement'
 import { storeToRefs } from 'pinia';
 import { toast } from 'vue3-toastify';
 import { vElementVisibility } from '@vueuse/components'
 import ReminderModal from './TodoRemiderModal.vue'
 
-const store = useNotesStore()
+const store = useTodoListStore()
 const emit = defineEmits(['closeModal'])
+const {createToDoList} = useTodoListManagement()
 
 let { isCreateTodoListSuccessful, errorSavingTodoList } = storeToRefs(store);
 
@@ -51,7 +53,7 @@ async function saveToDoList(){
       return {"item_name": toDoListItem.trim().replace(/(\r\n|\n|\r)/gm,"")}
   })
 
-  await store.createToDoList(formattedToDoList)
+  await createToDoList(formattedToDoList)
   if(isCreateTodoListSuccessful){
     toast.success('Your todo list of the day has been added 🎊', {
       autoClose: 1000,

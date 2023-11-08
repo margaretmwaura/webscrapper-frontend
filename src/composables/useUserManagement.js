@@ -21,8 +21,8 @@ export function useUserManagement() {
   const ENCRYPTION_KEY = import.meta.env.VITE_ENCRYPTION_KEY;
 
   const registerUser = async input => {
-    // TODO: Call an action in the store
-    // this.resetStoreValues();
+    // FIXME: Seriously test the rest call
+    store.resetStoreValues();
     let input_data = {
       first_name: CryptoJS.AES.encrypt(input.name, ENCRYPTION_KEY).toString(),
       last_name: CryptoJS.AES.encrypt(input.name, ENCRYPTION_KEY).toString(),
@@ -91,10 +91,7 @@ export function useUserManagement() {
       });
   };
   const signin = async data => {
-    // this.resetStoreValues();
-    let token = '';
-    let authStatus = '';
-    let error = '';
+    // FIXME: What if the user is already signed in what happens next,?
     await signInWithEmailAndPassword(auth, data.email, data.password)
       .then(async userCredential => {
         token = userCredential.user.accessToken;

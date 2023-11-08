@@ -6,7 +6,10 @@ import NotesModal from './NotesModal.vue';
 import ConfirmDelete from '../common/ConfirmDelete.vue'
 import { storeToRefs } from 'pinia';
 import { toast } from 'vue3-toastify';
+import { useNotesManagement } from './../../composables/useNotesManagement'
 
+
+const {deleteNote} = useNotesManagement()
 
 let props =  defineProps({
   note: Object,
@@ -30,9 +33,9 @@ const confirmDelete = () => {
   showDeleteModal.value = true
 }
 
-const deleteNote = async () => {
+const deleteNoteInstance = async () => {
   console.log("delete")
-  await store.deleteNoteMutation(props.note?.id)
+  await deleteNote(props.note?.id)
   if(isDeleteNoteSuccessful.value){
     toast.success('Your not been deleted 🎊', {
       autoClose: 1000,
@@ -50,7 +53,7 @@ const closeEditModal = () => {
 
 const closeDeleteModal = (consent) => {
   if(consent && consent == 'Yes'){
-    deleteNote()
+    deleteNoteInstance()
   }
   showDeleteModal.value = false
 }
