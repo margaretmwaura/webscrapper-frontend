@@ -32,10 +32,10 @@ const todaysDate = moment(new Date()).format('MMMM Do YYYY, h:mm a');
 
 const showConfettiComponent = (score) => {
   if(score > 50){
-    showConfetti.value = true
+    // showConfetti.value = true
     showSuccessModal.value = true
     setTimeout(() => {
-      showConfetti.value = false
+      // showConfetti.value = false
       showSuccessModal.value = false
     }, 3000)
   }else{

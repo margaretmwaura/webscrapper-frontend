@@ -1,6 +1,9 @@
 <script setup>
-import { ref, computed, watchEffect } from 'vue';
+import { ref, computed, watchEffect, onMounted } from 'vue';
 import Header from '../components/common/Header.vue'
+import { useTodoListManagement } from './../composables/useTodoListManagement'
+
+const {getTodayToDoList } = useTodoListManagement()
 
 let collapsed = ref(false)
 
@@ -74,6 +77,9 @@ const menu = [
           },
 ]
 
+onMounted(() => {
+  getTodayToDoList()
+})
 
 </script>
 

@@ -7,11 +7,11 @@ import moment from 'moment'
 import { useTodoListStore } from '../../stores/todoListStore'
 import { useTodoListManagement } from './../../composables/useTodoListManagement'
 
-import {
-  Dropdown,
-  Ripple,
-  initTE,
-} from "tw-elements";
+// import {
+//   Dropdown,
+//   Ripple,
+//   initTE,
+// } from "tw-elements";
 
 
 const props =  defineProps({
@@ -90,7 +90,7 @@ watch(taskDesc, async (newTaskDesc) =>  {
    }    
 });
 
-initTE({ Ripple, Dropdown });
+// initTE({ Ripple, Dropdown });
 
 </script>
 

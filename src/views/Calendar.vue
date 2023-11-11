@@ -9,7 +9,7 @@ import moment from 'moment';
 import { useTodoListManagement } from './../composables/useTodoListManagement'
 
 const store = useTodoListStore()
-const {getCurrentWeekTodoList} = useTodoListManagement()
+const {getCurrentWeekTodoList } = useTodoListManagement()
 let { currentWeekTodoList, todoList } = storeToRefs(store);
 
 const cells = ref((24 * 7 * 12))
@@ -38,7 +38,7 @@ watch(current_w, async (new_current_w) => {
    if(!new_current_w || new_current_w.length == 0){
     return;
    }
-   await getToDoList(current_w.value[0], current_w.value[6]);
+   await getWeeklyToDoList(current_w.value[0], current_w.value[6]);
    await populateDaysOfTheWeek(new_current_w)
    currentWeekHasCurrentDay.value = new_current_w[6] == curr.toISOString().split('T')[0] ? true : false
    isNextWeek.value = curr.toISOString().split('T')[0] == new_current_w[6] ? false : true;
@@ -71,7 +71,7 @@ const populateDaysOfTheWeek = async (new_current_w) => {
   }
 }
 
-async function getToDoList(start_date, end_date){
+async function getWeeklyToDoList(start_date, end_date){
   await getCurrentWeekTodoList(start_date, end_date)  
 }
 

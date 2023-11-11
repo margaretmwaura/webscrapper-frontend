@@ -16,7 +16,10 @@ const props = defineProps({
 });
 
 const closeModal = (e) => {
-  e.stopPropagation();
+  // FIXME: Why do we actually need this?
+  if(e){
+    e.stopPropagation();
+  }
   emit('close') 
 }
 

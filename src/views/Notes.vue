@@ -9,18 +9,18 @@ import QuoteDetails from '../components/notes/QuoteDetails.vue'
 import AddTodoItem from '../components/todo/AddTodoItem.vue'
 import NoteDetails from '../components/notes/NoteDetails.vue'
 import { useNotesStore } from './../stores/notesStore'
-import { useTodoListStore } from '../../stores/todoListStore'
+import { useTodoListStore } from './../stores/todoListStore'
 import { useTodoListManagement } from './../composables/useTodoListManagement'
 import { useNotesManagement } from './../composables/useNotesManagement'
 
 import { storeToRefs } from 'pinia';
 import moment from 'moment';
-import {
-  Dropdown,
-  Collapse,
-  Ripple,
-  initTE,
-} from "tw-elements";
+// import {
+//   Dropdown,
+//   Collapse,
+//   Ripple,
+//   initTE,
+// } from "tw-elements";
 
 export default{
 
@@ -43,7 +43,6 @@ export default{
   let { todoList } = storeToRefs(todolist_store);
 
   const {getNotes} = useNotesManagement()
-  const {getTodayToDoList} = useTodoListManagement()
 
   let addTodoItem = ref(false)
   let dailyQuotes = ref([])
@@ -72,7 +71,6 @@ export default{
     axios.get('https://zenquotes.io/api/quotes/')
     .then(function (response) {
       dailyQuotes.value = response.data.slice(0, 3)
-      console.log(dailyQuotes)
     }).catch((err) => {
       console.log("An error tyring to get quotes")
     })
@@ -141,21 +139,14 @@ export default{
       }
   }
 
-// FIXME: How can this be done better? The store then function is being called before the onResult function is actually called
-// Is it okay calling on Result from component or just go with the store
-  async function getToDoList(){
-    await getTodayToDoList()  
-  }
-
-  async function getNotes(){
+  async function getUserNotes(){
     await getNotes()
   }
 
   onMounted(() =>{
     // initTE({ Collapse, Ripple, Dropdown });
     getDailyQuotes()
-    getToDoList()
-    getNotes()
+    getUserNotes()
   })
 
   return{
@@ -174,7 +165,6 @@ export default{
     getDailyQuotes,
     showModal,
     close,
-    getToDoList,
     isOpen,
     isClosed,
     closeAddTodoItemModal,

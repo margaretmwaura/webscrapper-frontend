@@ -56,23 +56,18 @@ export function useUserManagement() {
   const getUserFromDB = async email => {
     // When the query is globally defined it is being called every time we load the composable
     const { onResult: onGetUserResult } = useQuery(GET_USER, { email });
-
-    let user = '';
     try {
-      const { data } = onGetUserResult();
-      if (data) {
-        user = data.getUser;
-      }
-      store.setUser(user);
+      onGetUserResult(({ data }) => {
+        console.log(data);
+        if (data) {
+          const user = data.getUser;
+          store.setUser(user);
+        }
+      });
     } catch (error) {
-      let err = '';
-      if (err) {
-        err = error.networkError
-          ? error.networkError.result.errors[0].message
-          : error.graphQLErrors[0].message;
-      } else {
-        err = 'Signup was not successful! Please try again later';
-      }
+      let err = error.networkError
+        ? error.networkError.result.errors[0].message
+        : error.graphQLErrors[0].message;
       store.setError(err);
     }
   };
@@ -92,6 +87,9 @@ export function useUserManagement() {
   };
   const signin = async data => {
     // FIXME: What if the user is already signed in what happens next,?
+    let error = '';
+    let token = '';
+    let authStatus = '';
     await signInWithEmailAndPassword(auth, data.email, data.password)
       .then(async userCredential => {
         token = userCredential.user.accessToken;

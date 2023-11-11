@@ -1,6 +1,6 @@
 import { useMutation } from '@vue/apollo-composable';
 import { useQuery } from '@vue/apollo-composable';
-import { useAuthStore } from './authStore';
+import { useAuthStore } from './../stores/authStore';
 import { useTodoListStore } from '../stores/todoListStore';
 
 import {
@@ -19,6 +19,7 @@ import { TODO_LIST_SUBSCRIPTION } from '../graphql/subscriptions';
 export function useTodoListManagement() {
   const authStore = useAuthStore();
   const todoListStore = useTodoListStore();
+
   const { mutate: createTodoListMutation } = useMutation(
     CREATE_TODO_LIST_MUTATION
   );
@@ -33,7 +34,7 @@ export function useTodoListManagement() {
   );
 
   const createToDoList = async data => {
-    let user_id = await this.getCurrentUserId();
+    let user_id = getCurrentUserId();
     if (typeof user_id == 'undefined' || user_id == '') {
       todoListStore.setErrorSavingTodoList(
         'You need to authenticate first, you are not authenticated'
@@ -57,13 +58,10 @@ export function useTodoListManagement() {
     }
   };
 
-  const updateToDoListItem = async data => {
-    let input_data = {
-      input: data,
-    };
+  const updateToDoListItem = async input => {
     try {
       const { data } = await updateTodoListItemMutation({
-        input: input_data,
+        input: input,
       });
       // FIXME: How do we check if the mutation was successful
       todoListStore.setIsUpdateTodoItemSuccessful(true);
@@ -82,39 +80,33 @@ export function useTodoListManagement() {
     }
   };
 
-  const addToDoListItem = async data => {
-    data.id = todoListStore.getTodo().id;
-    let input_data = {
-      input: data,
-    };
+  const addToDoListItem = async input => {
+    input.id = todoListStore.getTodo.id;
     try {
       const { data } = await addTodoListItemMutation({
-        input: input_data,
+        input: input,
       });
       // FIXME: How do we check if the mutation was successful
-      console.log(data);
     } catch (error) {
       if (error) {
-        console.log(
-          error.networkError
-            ? error.networkError.result.errors[0].message
-            : error.graphQLErrors[0].message
-        );
+        error instanceof ReferenceError
+          ? console.log(error.message)
+          : console.log(
+              error.networkError
+                ? error.networkError.result.errors[0].message
+                : error.graphQLErrors[0].message
+            );
       } else {
         console.log('No error gotten');
       }
     }
   };
 
-  const deleteTodoListItem = async data => {
-    let input_data = {
-      input: data,
-    };
+  const deleteTodoListItem = async input => {
     try {
       const { data } = await deleteTodoListItemMutation({
-        input: input_data,
+        input: input,
       });
-      console.log(data);
     } catch (error) {
       if (error) {
         console.log(
@@ -129,20 +121,20 @@ export function useTodoListManagement() {
   };
 
   const getTodayToDoList = async () => {
-    let user_id = await this.getCurrentUserId();
+    let user_id = getCurrentUserId();
     // FIXME: Include error handling
     if (typeof user_id == 'undefined' || user_id == '') {
-      console.log('You need to authenticate first ');
       return;
     }
     const { onResult, subscribeToMore } = useQuery(
       GET_TODAY_TODO_LIST_QUERY,
       {
         user_id: user_id,
-      },
-      () => ({
-        fetchPolicy: 'no-cache',
-      })
+      }
+      // FIXME: Test this in prod , because at the moment it does not work in localhost
+      // () => ({
+      //   fetchPolicy: 'no-cache',
+      // })
     );
     subscribeToMore(() => ({
       document: TODO_LIST_SUBSCRIPTION,
@@ -166,8 +158,7 @@ export function useTodoListManagement() {
   };
 
   const getCurrentWeekTodoList = async (start_date, end_date) => {
-    console.log('Getting data');
-    let user_id = await this.getCurrentUserId();
+    let user_id = getCurrentUserId();
     if (typeof user_id == 'undefined' || user_id == '') {
       return;
     }
@@ -186,17 +177,18 @@ export function useTodoListManagement() {
     );
 
     try {
-      const { data } = onGetCurrentWeekTodoList();
-      if (data) {
-        console.log('On Result for the current week data');
-        todoListStore.setCurrentWeekTodoList([]);
-        let fetchedTodoList = [];
-        let todolists = data.getThisWeeksToDoList;
-        for (let todolist of todolists) {
-          fetchedTodoList.push(...todolist.todoListItems);
+      onGetCurrentWeekTodoList(({ data }) => {
+        if (data) {
+          console.log('On Result for the current week data');
+          todoListStore.setCurrentWeekTodoList([]);
+          let fetchedTodoList = [];
+          let todolists = data.getThisWeeksToDoList;
+          for (let todolist of todolists) {
+            fetchedTodoList.push(...todolist.todoListItems);
+          }
+          todoListStore.setCurrentWeekTodoList(fetchedTodoList);
         }
-        todoListStore.setCurrentWeekTodoList(fetchedTodoList);
-      }
+      });
     } catch (error) {
       let err = '';
       if (err) {
@@ -210,7 +202,7 @@ export function useTodoListManagement() {
   };
 
   const getCurrentUserId = () => {
-    let user = authStore.getUser();
+    let user = authStore.getUser;
     let user_id = '';
     if (user && typeof user != 'undefined') {
       user_id = user.id;

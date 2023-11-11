@@ -6,6 +6,7 @@ import App from './App.vue';
 import './index.css';
 
 import * as te from 'tw-elements';
+// import 'tw-elements';
 
 import 'vue3-toastify/dist/index.css';
 

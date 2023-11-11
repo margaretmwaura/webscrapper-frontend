@@ -1,6 +1,7 @@
 import { useMutation } from '@vue/apollo-composable';
 import { useQuery } from '@vue/apollo-composable';
 import { useNotesStore } from './../stores/notesStore';
+import { useAuthStore } from './../stores/authStore';
 
 import {
   CREATE_NOTE_MUTATION,
@@ -17,6 +18,7 @@ export function useNotesManagement() {
   const { mutate: deleteNoteMutation } = useMutation(DELETE_NOTE_MUTATION);
 
   const notesStore = useNotesStore();
+  const authStore = useAuthStore();
 
   const createNote = async data => {
     let input_data = {
@@ -85,7 +87,7 @@ export function useNotesManagement() {
   };
 
   const getNotes = async () => {
-    let user_id = await this.getCurrentUserId();
+    let user_id = getCurrentUserId();
     if (typeof user_id == 'undefined' || user_id == '') {
       console.log('You need to authenticate first ');
       return;
@@ -141,7 +143,7 @@ export function useNotesManagement() {
   };
 
   const getCurrentUserId = () => {
-    let user = authStore.getUser();
+    let user = authStore.getUser;
     let user_id = '';
     if (user && typeof user != 'undefined') {
       user_id = user.id;
