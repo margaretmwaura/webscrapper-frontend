@@ -31,11 +31,11 @@ On cloning the application the following files need to be filled with their resp
 
 To build the image run 
 
-docker build -t vue-prod -f Dockerfile .
+```docker build -t vue-prod -f Dockerfile . ```
 
 To run the container
 
-docker run --network=french-network -it -p 5173:80 vue-prod
+``` docker run --network=french-network -it -p 5173:80 vue-prod ```
 
 NB: Please also ensure to create a network that will be used by all the containers of the project (frontend, backend, db)
 
