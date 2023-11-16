@@ -8,10 +8,12 @@ import {
   getAuth,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
+  signOut,
 } from 'firebase/auth';
 import { firebaseAdmin } from './../firebase';
 import CryptoJS from 'crypto-js';
 import { useAuthStore } from '../stores/authStore';
+import { useRouter } from 'vue-router';
 
 export function useUserManagement() {
   const { mutate: registerUserMutation } = useMutation(REGISTER_USER_MUTATION);
@@ -20,6 +22,8 @@ export function useUserManagement() {
   const auth = getAuth(firebaseAdmin);
   const ENCRYPTION_KEY = import.meta.env.VITE_ENCRYPTION_KEY;
 
+  const router = useRouter();
+
   const registerUser = async input => {
     // FIXME: Seriously test the rest call
     store.resetStoreValues();
@@ -27,7 +31,6 @@ export function useUserManagement() {
       first_name: CryptoJS.AES.encrypt(input.name, ENCRYPTION_KEY).toString(),
       last_name: CryptoJS.AES.encrypt(input.name, ENCRYPTION_KEY).toString(),
       email: CryptoJS.AES.encrypt(input.email, ENCRYPTION_KEY).toString(),
-      password: CryptoJS.AES.encrypt(input.password, ENCRYPTION_KEY).toString(),
     };
     try {
       const { data } = await registerUserMutation({
@@ -104,9 +107,20 @@ export function useUserManagement() {
     store.setAuthStatus(authStatus);
     store.setToken(token);
   };
+  const logOut = async => {
+    signOut(auth)
+      .then(() => {
+        store.resetStoreValues();
+        router.push({ path: '/' });
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
 
   return {
     registerUser,
     signin,
+    logOut,
   };
 }

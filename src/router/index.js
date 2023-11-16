@@ -17,11 +17,6 @@ const routes = [
       {
         path: '',
         name: 'home',
-        component: () => import('./../views/Dashboard.vue'),
-      },
-      {
-        path: '/learning',
-        name: 'learning',
         component: () => import('./../views/LearningPage.vue'),
       },
       {

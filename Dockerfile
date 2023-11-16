@@ -15,7 +15,7 @@ RUN npm install
 # add app
 COPY . /app
 
-# RUN echo "$env_file_arg" > ./.env
+RUN echo "$env_file_arg" > ./.env
 
 ## generate build
 RUN npm run build

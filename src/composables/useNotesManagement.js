@@ -20,13 +20,10 @@ export function useNotesManagement() {
   const notesStore = useNotesStore();
   const authStore = useAuthStore();
 
-  const createNote = async data => {
-    let input_data = {
-      input: data,
-    };
+  const createNote = async input => {
     try {
       const { data } = await createNoteMutation({
-        input: input_data,
+        input: input,
       });
       notesStore.seIisCreateNoteSuccessful(true);
     } catch (error) {
@@ -43,13 +40,10 @@ export function useNotesManagement() {
     }
   };
 
-  const updateNote = async data => {
-    let input_data = {
-      input: data,
-    };
+  const updateNote = async input => {
     try {
       const { data } = await updateNoteMutation({
-        input: input_data,
+        input: input,
       });
       notesStore.setIsUpdateNoteSuccessful(true);
     } catch (error) {
@@ -67,9 +61,11 @@ export function useNotesManagement() {
   };
 
   const deleteNote = async note_id => {
+    console.log('Deleting note');
+    console.log(note_id);
     try {
       const { data } = await deleteNoteMutation({
-        input: note_id,
+        id: note_id,
       });
       notesStore.setIsDeleteNoteSuccessful(true);
     } catch (error) {
@@ -79,7 +75,7 @@ export function useNotesManagement() {
           ? error.networkError.result.errors[0].message
           : error.graphQLErrors[0].message;
       } else {
-        err = 'There was an error when trying to create the note';
+        err = 'There was an error when trying to delete the note';
       }
       notesStore.setIsDeleteNoteSuccessful(false);
       notesStore.setErrorDeletingNote(err);
@@ -92,21 +88,17 @@ export function useNotesManagement() {
       console.log('You need to authenticate first ');
       return;
     }
-    const { onResult, subscribeToMore } = useQuery(
-      GET_NOTES_QUERY,
-      {
-        user_id: user_id,
-      },
-      () => ({
-        fetchPolicy: 'no-cache',
-      })
-    );
+    const { onResult, subscribeToMore } = useQuery(GET_NOTES_QUERY, {
+      user_id: user_id,
+    });
     subscribeToMore(() => ({
       document: NOTE_SUBSCRIPTION,
       variables: {
         user_id: user_id,
       },
       updateQuery: (previousResult, { subscriptionData }) => {
+        console.log('Old notes');
+        console.log(previousResult);
         let noteSubData = subscriptionData.data.noteSubcription;
         let newData = {
           getNotes: [],

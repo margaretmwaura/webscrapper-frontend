@@ -58,7 +58,8 @@ const closeModal = () => {
     <img src="/abc.png" class="object-contain h-10 w-10 "/>
     <p class="text-3xl font-semibold tracking-wide leading-loose">The Alphabets Dashboard</p>
     <p class="text-xl font-normal"> <font-awesome-icon icon="fa-regular fa-clock" size="sm"/> {{ todaysDate }}</p>
-    <div class="grid grid-cols-3 gap-4 mt-10" v-show="isDataFetched">
+    <hr>
+    <div class="grid grid-cols-1 md:grid-cols-3 2xl:md:grid-cols-4 gap-4 mt-10" v-show="isDataFetched">
       <div v-for="vowel in vowels" :key="vowel" >
           <VowelDetails :vowel="vowel" @throwConfetti="showConfettiComponent"/>
       </div>

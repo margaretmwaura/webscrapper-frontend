@@ -62,6 +62,9 @@ import {
   faDownload,
   faList,
   faStairs,
+  faLinesLeaning,
+  faGlasses,
+  faArrowRightFromBracket,
 } from '@fortawesome/free-solid-svg-icons';
 
 import {
@@ -72,6 +75,7 @@ import {
   faBarChart,
   faClock,
   faEdit,
+  faNoteSticky,
 } from '@fortawesome/free-regular-svg-icons';
 
 /* add icons to the library */
@@ -109,7 +113,11 @@ library.add(
   faStairs,
   faInstagram,
   faLinkedin,
-  faTwitter
+  faTwitter,
+  faLinesLeaning,
+  faNoteSticky,
+  faGlasses,
+  faArrowRightFromBracket
 );
 
 import { DefaultApolloClient } from '@vue/apollo-composable';

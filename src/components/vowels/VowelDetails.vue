@@ -29,7 +29,7 @@ function throwConfetti(score){
 </script>
 
 <template>
-  <div class="bg-light-blue p-4 rounded-md relative">
+  <div class="bg-white p-4 rounded-md relative">
     <div class="flex flex-col space-y-2">
       <div class="flex justify-between w-full">
           <p class="font-bold text-2xl text-slate-700">{{vowel.name}} 

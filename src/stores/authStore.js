@@ -20,7 +20,11 @@ export const useAuthStore = defineStore({
   },
   actions: {
     resetStoreValues() {
-      this.$reset();
+      // We cannot use $reset since we are persisting with useLocalStorage
+      this.token = '';
+      this.authStatus = '';
+      this.error = '';
+      this.user = '';
     },
     setUser(value) {
       this.user = value;

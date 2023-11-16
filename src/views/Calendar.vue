@@ -370,7 +370,7 @@ ol.calendar {
     // FIXME: The height is controlling the height of the one cell in the calendar
     grid-column: var(--column);
     grid-row: var(--row);
-    background-color: theme('colors.zinc.100');
+    background-color: theme('colors.white');
   }
 
 
@@ -398,9 +398,9 @@ ol.calendar {
   grid-column: 1 / span 7;
   background-color: theme("colors.indigo.500");
   border-radius: 3.64752px;
-  --indent: calc(var(--overlap-count, 0) * 8px);
-  margin: 1px 1px 1px -20px;
-  text-align: center
+  // --indent: calc(var(--overlap-count, 0) * 8px);
+  // margin: 1px 1px 1px -20px;
+  margin-left: -3.8%;
 }
 
 .current_time::after {
@@ -416,10 +416,11 @@ ol.calendar {
   position: absolute;
   border-radius: 25px;
   margin-top: -10px;
-  margin-left: -53vw;
+  text-align: center;
   padding-top: 4px;
 }
 
+// TODO: Specifying height and width is runing the display of the items
 .item {
   grid-column: var(--column);
   grid-row: var(--row) / span 12 ;
@@ -427,9 +428,7 @@ ol.calendar {
   border-width: 1px;
   border-color: var(--border-color);
   border-radius: 3.64752px;
-  width: 90%;
   padding: 10px;
-  height: 140px;
   color: var(--text-color);
   p {
     font-size: 14px;
