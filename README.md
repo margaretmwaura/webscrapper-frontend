@@ -47,7 +47,7 @@ The project utilizes firebase auth for authentication.
 We have also utilized docker for containeraization and Jenkins for CI/CD.
 
 
-### CI/CD and Hosting
+### Deployment
 
 The app is hosted on AWS EC2 instance on docker. 
 There is a CI/CD pipeline setup using jenkins and github webhooks in place.
