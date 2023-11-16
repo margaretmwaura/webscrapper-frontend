@@ -1,22 +1,24 @@
 <script setup>
 import { ref, computed, watchEffect, watch } from 'vue';
 import { toRefs, toRef } from 'vue'
-import DatesModal from './../components/DatesModal.vue'
-import EditTodoItem from './../components/EditTodoItem.vue'
+import DatesModal from '../common/DatesModal.vue'
+import EditTodoItem from './EditTodoItem.vue'
 import moment from 'moment'
-import { useNotesStore } from './../stores/notesStore'
-import {
-  Dropdown,
-  Ripple,
-  initTE,
-} from "tw-elements";
+import { useTodoListStore } from '../../stores/todoListStore'
+import { useTodoListManagement } from './../../composables/useTodoListManagement'
+
+// import {
+//   Dropdown,
+//   Ripple,
+//   initTE,
+// } from "tw-elements";
 
 
 const props =  defineProps({
   todoListItem: Object,
 });
-
-const store = useNotesStore()
+const {updateToDoListItem, deleteTodoListItem} = useTodoListManagement()
+const store = useTodoListStore()
 
 let taskDesc = ref(props.todoListItem.item_name);
 let showDatePicker = ref(false)
@@ -51,7 +53,7 @@ const markItemAsComplete = async () => {
       status_name : "closed",
       id: props.todoListItem.id
     }
-    await store.updateToDoListItem(data)
+    await updateToDoListItem(data)
 }
 
 const updateReminderDate = async (reminderDate) => {
@@ -64,7 +66,7 @@ const updateReminderDate = async (reminderDate) => {
         reminder: todoReminderDate.value,
         id: props.todoListItem.id
       }
-      await store.updateToDoListItem(data)
+      await updateToDoListItem(data)
     }
 }
 
@@ -75,7 +77,7 @@ const deleteItem = async () => {
       key_name: props.todoListItem.key_name,
       id: props.todoListItem.id
   }
-  await store.deleteTodoItem(data)
+  await deleteTodoListItem(data)
 }
 
 watch(taskDesc, async (newTaskDesc) =>  {
@@ -84,11 +86,11 @@ watch(taskDesc, async (newTaskDesc) =>  {
         item_name: newTaskDesc,
         id: props.todoListItem.id
       }
-      await store.updateToDoListItem(data)
+      await updateToDoListItem(data)
    }    
 });
 
-initTE({ Ripple, Dropdown });
+// initTE({ Ripple, Dropdown });
 
 </script>
 

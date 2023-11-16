@@ -20,6 +20,7 @@ import {
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws';
 import { getMainDefinition } from '@apollo/client/utilities';
+import { provideApolloClient } from '@vue/apollo-composable';
 
 let base_url = import.meta.env.VITE_BASE_URL;
 
@@ -64,7 +65,11 @@ const link = split(
 const cache = new InMemoryCache();
 
 // Create the apollo client
-export const apolloClient = new ApolloClient({
+const apolloClient = new ApolloClient({
   link: link,
   cache,
 });
+
+provideApolloClient(apolloClient);
+
+export default apolloClient;

@@ -1,13 +1,15 @@
 <script setup>
 import { ref, computed, watch, onMounted , onUpdated} from 'vue';
-import CalendarItem from './../components/CalendarItem.vue'
+import CalendarItem from '../components/calendar/CalendarItem.vue'
 import { useNow } from '@vueuse/core'
-import { useNotesStore } from './../stores/notesStore'
+import { useTodoListStore } from './../stores/todoListStore'
 import { storeToRefs } from 'pinia';
 import colors from 'tailwindcss/colors'
 import moment from 'moment';
+import { useTodoListManagement } from './../composables/useTodoListManagement'
 
-const store = useNotesStore()
+const store = useTodoListStore()
+const {getCurrentWeekTodoList } = useTodoListManagement()
 let { currentWeekTodoList, todoList } = storeToRefs(store);
 
 const cells = ref((24 * 7 * 12))
@@ -36,7 +38,7 @@ watch(current_w, async (new_current_w) => {
    if(!new_current_w || new_current_w.length == 0){
     return;
    }
-   await getToDoList(current_w.value[0], current_w.value[6]);
+   await getWeeklyToDoList(current_w.value[0], current_w.value[6]);
    await populateDaysOfTheWeek(new_current_w)
    currentWeekHasCurrentDay.value = new_current_w[6] == curr.toISOString().split('T')[0] ? true : false
    isNextWeek.value = curr.toISOString().split('T')[0] == new_current_w[6] ? false : true;
@@ -69,8 +71,8 @@ const populateDaysOfTheWeek = async (new_current_w) => {
   }
 }
 
-async function getToDoList(start_date, end_date){
-  await store.getCurrentWeekToDoList(start_date, end_date)  
+async function getWeeklyToDoList(start_date, end_date){
+  await getCurrentWeekTodoList(start_date, end_date)  
 }
 
 const getColumnLocation = (item) => {
@@ -368,7 +370,7 @@ ol.calendar {
     // FIXME: The height is controlling the height of the one cell in the calendar
     grid-column: var(--column);
     grid-row: var(--row);
-    background-color: theme('colors.zinc.100');
+    background-color: theme('colors.white');
   }
 
 
@@ -396,9 +398,9 @@ ol.calendar {
   grid-column: 1 / span 7;
   background-color: theme("colors.indigo.500");
   border-radius: 3.64752px;
-  --indent: calc(var(--overlap-count, 0) * 8px);
-  margin: 1px 1px 1px -20px;
-  text-align: center
+  // --indent: calc(var(--overlap-count, 0) * 8px);
+  // margin: 1px 1px 1px -20px;
+  margin-left: -3.8%;
 }
 
 .current_time::after {
@@ -414,10 +416,11 @@ ol.calendar {
   position: absolute;
   border-radius: 25px;
   margin-top: -10px;
-  margin-left: -53vw;
+  text-align: center;
   padding-top: 4px;
 }
 
+// TODO: Specifying height and width is runing the display of the items
 .item {
   grid-column: var(--column);
   grid-row: var(--row) / span 12 ;
@@ -425,9 +428,7 @@ ol.calendar {
   border-width: 1px;
   border-color: var(--border-color);
   border-radius: 3.64752px;
-  width: 90%;
   padding: 10px;
-  height: 140px;
   color: var(--text-color);
   p {
     font-size: 14px;
