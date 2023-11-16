@@ -2,11 +2,11 @@
 import { ref, computed, watchEffect } from 'vue';
 import {useQuery} from '@vue/apollo-composable'
 import moment from 'moment'
-import VowelDetails from './../components/VowelDetails.vue'
-import Confetti from './../components/Confetti.vue'
-import Loader from './../components/Loader.vue'
+import VowelDetails from '../components/vowels/VowelDetails.vue'
+import Confetti from '../components/common/Confetti.vue'
+import Loader from '../components/common/Loader.vue'
 import gql from 'graphql-tag'
-import Success from './../components/Success.vue'
+import Success from '../components/common/Success.vue'
 
 let showConfetti = ref(false)
 let showSuccessModal = ref(false)
@@ -32,10 +32,10 @@ const todaysDate = moment(new Date()).format('MMMM Do YYYY, h:mm a');
 
 const showConfettiComponent = (score) => {
   if(score > 50){
-    showConfetti.value = true
+    // showConfetti.value = true
     showSuccessModal.value = true
     setTimeout(() => {
-      showConfetti.value = false
+      // showConfetti.value = false
       showSuccessModal.value = false
     }, 3000)
   }else{
@@ -58,7 +58,8 @@ const closeModal = () => {
     <img src="/abc.png" class="object-contain h-10 w-10 "/>
     <p class="text-3xl font-semibold tracking-wide leading-loose">The Alphabets Dashboard</p>
     <p class="text-xl font-normal"> <font-awesome-icon icon="fa-regular fa-clock" size="sm"/> {{ todaysDate }}</p>
-    <div class="grid grid-cols-3 gap-4 mt-10" v-show="isDataFetched">
+    <hr>
+    <div class="grid grid-cols-1 md:grid-cols-3 2xl:md:grid-cols-4 gap-4 mt-10" v-show="isDataFetched">
       <div v-for="vowel in vowels" :key="vowel" >
           <VowelDetails :vowel="vowel" @throwConfetti="showConfettiComponent"/>
       </div>

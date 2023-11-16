@@ -34,3 +34,20 @@ export const DELETE_NOTE_MUTATION = gql`
     deleteNote(id: $id)
   }
 `;
+
+export const REGISTER_USER_MUTATION = gql`
+  mutation RegisterUser($input: RegisterUser!) {
+    registerUser(input: $input) {
+      ... on CreateError {
+        message
+      }
+      ... on RegisterSuccessful {
+        user {
+          id
+          first_name
+          email
+        }
+      }
+    }
+  }
+`;

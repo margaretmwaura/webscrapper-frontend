@@ -7,7 +7,7 @@ const routes = [
   {
     path: '/',
     name: 'Landing',
-    component: () => import('./../views/HomeTest.vue'),
+    component: () => import('./../views/Home.vue'),
   },
   {
     path: '/home',
@@ -17,11 +17,6 @@ const routes = [
       {
         path: '',
         name: 'home',
-        component: () => import('./../views/Dashboard.vue'),
-      },
-      {
-        path: '/learning',
-        name: 'learning',
         component: () => import('./../views/LearningPage.vue'),
       },
       {

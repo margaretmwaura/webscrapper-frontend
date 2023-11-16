@@ -2,21 +2,25 @@
 import { ref, computed, watchEffect, onMounted, watch } from 'vue';
 import { CollapseTransition } from "@ivanv/vue-collapse-transition"
 import axios from 'axios'
-import NotesModal from './../components/NotesModal.vue'
-import ToDoListModal from './../components/ToDoListModal.vue'
-import TodoItem from './../components/TodoItem.vue'
-import QuoteDetails from './../components/QuoteDetails.vue'
-import AddTodoItem from './../components/AddTodoItem.vue'
-import NoteDetails from './../components/NoteDetails.vue'
+import NotesModal from '../components/notes/NotesModal.vue'
+import ToDoListModal from '../components/todo/TodoListModal.vue'
+import TodoItem from '../components/todo/TodoItem.vue'
+import QuoteDetails from '../components/notes/QuoteDetails.vue'
+import AddTodoItem from '../components/todo/AddTodoItem.vue'
+import NoteDetails from '../components/notes/NoteDetails.vue'
 import { useNotesStore } from './../stores/notesStore'
+import { useTodoListStore } from './../stores/todoListStore'
+import { useTodoListManagement } from './../composables/useTodoListManagement'
+import { useNotesManagement } from './../composables/useNotesManagement'
+
 import { storeToRefs } from 'pinia';
 import moment from 'moment';
-import {
-  Dropdown,
-  Collapse,
-  Ripple,
-  initTE,
-} from "tw-elements";
+// import {
+//   Dropdown,
+//   Collapse,
+//   Ripple,
+//   initTE,
+// } from "tw-elements";
 
 export default{
 
@@ -32,8 +36,13 @@ export default{
 
   setup(props, context){
 
-  const store = useNotesStore()
-  let { todoList, notes } = storeToRefs(store);
+  const notes_store = useNotesStore()
+  const todolist_store = useTodoListStore()
+
+  let { notes } = storeToRefs(notes_store);
+  let { todoList } = storeToRefs(todolist_store);
+
+  const {getNotes} = useNotesManagement()
 
   let addTodoItem = ref(false)
   let dailyQuotes = ref([])
@@ -62,7 +71,6 @@ export default{
     axios.get('https://zenquotes.io/api/quotes/')
     .then(function (response) {
       dailyQuotes.value = response.data.slice(0, 3)
-      console.log(dailyQuotes)
     }).catch((err) => {
       console.log("An error tyring to get quotes")
     })
@@ -86,7 +94,7 @@ export default{
   }
 
   function isOpen(status){
-     if(status != 'closed') {
+     if(status == 'not-started') {
       return true
      } else{
       return false
@@ -95,6 +103,14 @@ export default{
 
   function isClosed(status){
      if(status == 'closed') {
+      return true
+     } else{
+      return false
+     }
+  }
+
+  function isInProgress(status){
+     if(status == 'in-progress') {
       return true
      } else{
       return false
@@ -114,7 +130,7 @@ export default{
 // ,element%20assigned%20to%20the%20ref.&text=We%20have%20the%20scroll%20to%20last%20button%20that%20calls%20scrollToElement%20.
   function scrollLeft(){
       // notes_section.value[notes[1]].scrollIntoView({ behavior: "smooth" });
-      const el = document.getElementById(1);
+      const el = document.getElementById(0);
 
       if (el) {
         el.scrollIntoView({ behavior: "smooth" });
@@ -131,25 +147,17 @@ export default{
       }
   }
 
-// FIXME: How can this be done better? The store then function is being called before the onResult function is actually called
-// Is it okay calling on Result from component or just go with the store
-  async function getToDoList(){
-    await store.getTodayToDoList()  
-  }
-
-  async function getNotes(){
-    await store.getNotes()
+  async function getUserNotes(){
+    await getNotes()
   }
 
   onMounted(() =>{
-    initTE({ Collapse, Ripple, Dropdown });
+    // initTE({ Collapse, Ripple, Dropdown });
     getDailyQuotes()
-    getToDoList()
-    getNotes()
+    getUserNotes()
   })
 
   return{
-    store,
     todoList,
     notes,
     dailyQuotes,
@@ -165,23 +173,23 @@ export default{
     getDailyQuotes,
     showModal,
     close,
-    getToDoList,
     isOpen,
     isClosed,
     closeAddTodoItemModal,
     openAddTodoItemModal,
     scrollLeft,
     scrollRight,
+    isInProgress
   }}
   }
 </script>
 
 <!-- https://tailwind-elements.com/docs/standard/components/dropdown/ -->
 <template>
-  <div class="flex flex-col w-full mb-10 banner h-full bg-snow-white">
-    <div class="flex flex-col w-full mt-52 h-full bg-snow-white">
-      <!-- sm:flex-wrap md:flex-wrap lg:flex-nowrap xl:flex-nowrap 2xl:flex-nowrap -->
-       <div class="flex flex-row flex-wrap md:flex-nowrap space-x-4 space-y-4 bg-transparent -mt-10 mx-10 h-full">
+<!-- mb-10 -->
+  <div class="flex flex-col w-full h-full bg-snow-white">
+    <div class="flex flex-col w-full h-full bg-snow-white">
+       <div class="flex flex-row flex-wrap md:flex-nowrap space-x-4 space-y-4 bg-transparent mx-10 h-full mt-10">
           <div class="flex flex-col flex-grow bg-white rounded p-6">
             <div class="flex justify-between">
             <p class="text-2xl font-semibold tracking-wide leading-loose">Daily Growth 🌱 ☀️</p>
@@ -193,9 +201,7 @@ export default{
               </div>
             </div>
           </div>
-          <!-- sm:w-full md:w-full lg:w-full xl:w-2/3 2xl:w-2/3 -->
-          <!-- sm:w-full md:w-full lg:w-full xl:w-1/3 2xl:w-1/3  -->
-          <div class="flex rounded p-4 pb-6 bg-millenial-pink">
+          <div class="flex rounded p-4 pb-6 bg-white">
             <div class="flex justify-end mt-2">
                 <p class="mb-4">
                   <!-- <span class="animate-ping absolute h-4 w-4 rounded-full bg-sky-400 opacity-75"></span> -->
@@ -228,8 +234,13 @@ export default{
                   </div>
                   <div class="flex-1 max-w-sm rounded-lg h-full w-full overflow-y-scoll overflow-x-hidden">
                       <div v-if="isTodoListAdded">
-                        <ol v-for="todoListItem in todoList" :key="todoListItem" class="pl-6">
-                          <li :class="{open: isOpen(todoListItem.status_name), closed : isClosed(todoListItem.status_name)}">
+                        <ol v-for="todoListItem in todoList" :key="todoListItem" class="pl-5">
+                          <li class='list-outside list-disc'
+                           :class="{
+                           'marker:text-yellow-500' : isInProgress(todoListItem.status_name),
+                           'marker:text-lime-700' : isClosed(todoListItem.status_name),
+                           'marker:text-rose-700': isOpen(todoListItem.status_name), 
+                           }">
                             <TodoItem :todoListItem="todoListItem"></TodoItem>
                           </li>
                         </ol>
@@ -246,7 +257,7 @@ export default{
                 <font-awesome-icon icon="fa-solid fa-chevron-left lg" @click="scrollLeft"/>
                 <font-awesome-icon icon="fa-solid fa-chevron-right lg" @click="scrollRight" v-show="lastCrollPosition > 1"/>
               </div>
-              <div class="space-x-4">
+              <div class="space-x-4 hidden md:block">
                 <font-awesome-icon icon="fa-regular fa-calendar lg" />
                 <font-awesome-icon icon="fa-solid fa-ellipsis lg" />
               </div>
@@ -326,13 +337,9 @@ export default{
 </template>
 
 <style scoped lang="scss">
-.banner {
- background-image: url('/banner.webp');
- background-repeat: no-repeat;
- background-size: cover
+li::marker {
+  font-size: 1.8em;
 }
-li.open {list-style: circle;}
-li.closed {list-style: disc;}
 
 body {
   background-color: #f6f6f6;

@@ -1,10 +1,12 @@
 <script setup>
 
 import { ref, computed, watch, defineEmits } from 'vue';
-import { useNotesStore } from './../stores/notesStore'
-const emit = defineEmits(['close'])
+import { useTodoListStore } from '../../stores/todoListStore'
+import { useTodoListManagement } from './../../composables/useTodoListManagement'
 
-const store = useNotesStore()
+const emit = defineEmits(['close'])
+const store = useTodoListStore()
+const {updateToDoListItem} = useTodoListManagement()
 
 const props =  defineProps({
   desc: String,
@@ -27,7 +29,7 @@ const saveToDoItem =async () => {
       item_name: todoItemDesc.value,
       id: props.id
     }
-    await store.updateToDoListItem(data)
+    await updateToDoListItem(data)
 }
 
 </script>

@@ -37,15 +37,25 @@ body {
   padding-left: 8px;
 }
 
+
+@media only screen and (min-width: 1535px) {
+  .landing {
+    /* margin: 0px 50px 0px 50px; */
+  }
+  .smallhidden {
+    display: block !important;
+  }
+  .expanded {
+    padding-left: 280px;
+  }
+  .collapsed {
+    padding-left: 60px;
+  }
+}
+
 @media only screen and (max-width: 1535px) {
   .landing {
-    margin: 0px 50px 0px 50px;
-  }
-  h1 {
-    font-size: 60px;
-  }
-  h3 {
-    font-size: 48px;
+    /* margin: 0px 50px 0px 50px; */
   }
   .smallhidden {
     display: block !important;
@@ -59,13 +69,7 @@ body {
 }
 @media only screen and (max-width: 1279px) {
   .landing {
-    margin: 0px 10px 0px 10px;
-  }
-  h1 {
-    font-size: 60px;
-  }
-  h3 {
-    font-size: 48px;
+    /* margin: 0px 10px 0px 10px; */
   }
   .smallhidden {
     display: block !important;
@@ -79,13 +83,7 @@ body {
 }
 @media only screen and (max-width: 1023px) {
   .landing {
-    margin: 0px 30px 0px 30px;
-  }
-  h1 {
-    font-size: 60px;
-  }
-  h3 {
-    font-size: 48px;
+    /* margin: 0px 30px 0px 30px; */
   }
   .smallhidden {
     display: block !important;
@@ -99,13 +97,7 @@ body {
 }
 @media only screen and (max-width: 767px) {
   .landing {
-    margin: 0px 10px 0px 10px;
-  }
-  h1 {
-    font-size: 60px;
-  }
-  h3 {
-    font-size: 48px;
+    /* margin: 0px 10px 0px 10px; */
   }
   .smallhidden {
     display: block !important;
@@ -119,13 +111,7 @@ body {
 }
 @media only screen and (max-width: 639px) {
   .landing {
-    margin: 0px 5px 0px 5px;
-  }
-  h1 {
-    font-size: 42px;
-  }
-  h3 {
-    font-size: 30px;
+    /* margin: 0px 5px 0px 5px; */
   }
   .smallhidden {
     display: none !important;
@@ -140,7 +126,7 @@ body {
 
 /* https://stackoverflow.com/questions/632100/apply-css-style-to-child-elements */
 div.vsm_expanded li.vsm--item {
-  margin-top: 20px;
+  margin-top: 15px;
   margin-left: 30px;
   width: 80%;
 }
@@ -151,20 +137,30 @@ div.vsm_collapsed li.vsm--item {
 }
 
 .v-sidebar-menu.vsm_white-theme .vsm--link {
-  color: #808080 !important;
+  color: #000 !important;
+  font-weight: 300 !important;
 }
 
 .v-sidebar-menu.vsm_white-theme .vsm--link_hover {
-  color: #262626 !important;
+  color: #000 !important;
+  font-weight: 300 !important;
 }
 
 .v-sidebar-menu.vsm_white-theme .vsm--link_level-1 .vsm--icon {
-  background-color: #ffffff !important;
+  background-color: transparent !important;
   height: 20px;
   width: 20px;
 }
 .v-sidebar-menu.vsm_white-theme .vsm--link_level-1.vsm--link_active .vsm--icon {
-  color: #262626 !important;}
+  color: #262626 !important;
+  background-color: transparent !important;
+}
+
+.v-sidebar-menu.vsm_white-theme .vsm--link_level-1.vsm--link_active{
+  background-color: #AFDBF595 !important;
+  border-radius: 25px;
+  /* color: #3F8CC6 !important ; */
+}
 /* 
 .v-sidebar-menu.vsm--link_level-1 {
   margin-left: 50px !important;

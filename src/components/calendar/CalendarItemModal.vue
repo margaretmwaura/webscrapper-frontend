@@ -1,11 +1,13 @@
 <script setup>
 import { ref, computed, watch, defineEmits } from 'vue';
-import { useNotesStore } from './../stores/notesStore'
+import { useTodoListStore } from '../../stores/todoListStore'
 import { storeToRefs } from 'pinia';
 import { toast } from 'vue3-toastify';
+import { useTodoListManagement } from '../../composables/useTodoListManagement'
 
+const {updateToDoListItem} = useTodoListManagement()
 const emit = defineEmits(['close'])
-const store = useNotesStore()
+const store = useTodoListStore()
 
 let { isUpdateTodoItemSuccessful, errorUpdatingTodoItem } = storeToRefs(store);
 
@@ -14,7 +16,10 @@ const props = defineProps({
 });
 
 const closeModal = (e) => {
-  e.stopPropagation();
+  // FIXME: Why do we actually need this?
+  if(e){
+    e.stopPropagation();
+  }
   emit('close') 
 }
 
@@ -34,7 +39,7 @@ const updateItemStatus = async (status) =>{
     status_name : status,
     id: props.todoListItem.id
   }
-  await store.updateToDoListItem(data)
+  await updateToDoListItem(data)
   if(isUpdateTodoItemSuccessful.value){
     toast.success('Your item has been updated successfully 🎊', {
       autoClose: 1000,

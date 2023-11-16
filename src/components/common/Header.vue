@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, watchEffect } from 'vue';
-import { useAuthStore } from './../../src/stores/authStore'
+import { useAuthStore } from '../../stores/authStore'
 import { storeToRefs } from 'pinia';
 
 defineProps({
@@ -17,7 +17,7 @@ const { user } = storeToRefs(store);
     <div class="mt-16 flex justify-center">
       <img src="/woman_avatar.png" class="object-contain h-24 w-24 "/>
     </div>
-      <p class="font-semibold italic text-base text-center"> {{user.first_name}}</p>
+      <p class="font-semibold text-base text-center">Ahoy @{{user.first_name}} !!!</p>
   </div>
 </template>
 

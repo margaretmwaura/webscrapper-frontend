@@ -40,3 +40,13 @@ export const GET_CURRENT_WEEK_TODO_LIST_QUERY = gql`
     }
   }
 `;
+
+export const GET_USER = gql`
+  query ($email: String!) {
+    getUser(email: $email) {
+      id
+      first_name
+      email
+    }
+  }
+`;
