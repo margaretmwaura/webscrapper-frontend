@@ -20,7 +20,7 @@ Some of the images used were gotten from Flaticon
 
 ### Getting Started
 
-##### Requirements
+#### Requirements
 - Ensure you have docker installed and running in your local machine
    
 On cloning the application the following files need to be filled with their respective data
