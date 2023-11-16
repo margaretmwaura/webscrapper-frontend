@@ -1,16 +1,10 @@
 # French Learning Pronouniciation App
 
-This app gives students a chance to practice their french pronouniciation. The students can use the audio in the learning section to practice their french. The audio being played has been scraped from https://www.rocketlanguages.com/french/lessons/french-alphabet in the backend. The audio offers good pronouniciation that the students can gauge themselves against.
+This app gives students a chance to practice their french pronouniciation. The students can use the audio in the learning section to practice their french. The audio being played has been scraped from https://www.rocketlanguages.com/french/lessons/french-alphabet in the backend. The audio offers good pronouniciation that the students can use to gauge their pronounciation.
 
 Since the platform serves as a learning plarform, there is a section that allows users to add their todo lists and also notes of what they have learnt so far. As students they are meant to complete their tasks at given time, hence they are encouraged to set reminders for their tasks. If they do not set reminders, reminders are automatically set for the todo list items 20 minutes apart.
 
 The calendar section shows their list of tasks mapped throught their day.
-
-### Technologies used
-
-The app is built on vuejs3 , Vite , Tailwind , Pinia for the store, ApolloClient and vuejs3 composables.
-For Authentication the project utilizes firebase auth.
-We have also utilized docker for containeraization and Jenkins for CI/CD.
 
 ### Design Inspo
 
@@ -26,18 +20,31 @@ Some of the images used were gotten from Flaticon
 
 ### Getting Started
 
+##### Requirements
+- Ensure you have docker installed and running in your local machine
+   
 On cloning the application the following files need to be filled with their respective data
 - The env file will need a base url and a crytpojs encryption key. The encryption key is necessary when encrypting data to send to the backend
 
-To build the image run 
+To build the image run:
 
 ```docker build -t vue-prod -f Dockerfile . ```
 
-To run the container
+To create a container from the image and run it: 
 
 ``` docker run --network=french-network -it -p 5173:80 vue-prod ```
 
 NB: Please also ensure to create a network that will be used by all the containers of the project (frontend, backend, db)
+
+Creating a network:
+
+``` docker network create french-network ```
+
+### Technologies used
+
+The app is built on vuejs3 , Vite , Tailwind , Pinia for the store, ApolloClient and vuejs3 composables.
+The project utilizes firebase auth for authentication.
+We have also utilized docker for containeraization and Jenkins for CI/CD.
 
 
 ### CI/CD and Hosting
@@ -54,3 +61,4 @@ The env file is saved in the jenkins credentials and it is added to the docker i
 As much as students can play the sounds of the vowels in french, they are not able to gauge whether they are pronouning well or not.
 The remaining portion of the project is to come up with a machine learning model to compare the students pronounciation and the teachers (the played vowel) pronounication.
 
+Bug reports and Pull Requests are welcomed.
