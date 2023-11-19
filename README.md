@@ -24,7 +24,9 @@ Some of the images used were gotten from Flaticon
 - Ensure you have docker installed and running in your local machine
    
 On cloning the application the following files need to be filled with their respective data
-- The env file will need a base url and a crytpojs encryption key. The encryption key is necessary when encrypting data to send to the backend
+- The env file will need a base url and a crytpojs encryption key. The encryption key is necessary when encrypting data to send to the backend. Fill the .env with the correct values
+
+``` cp .env.example .env ```
 
 To build the image run:
 
@@ -50,11 +52,12 @@ We have also utilized docker for containeraization and Jenkins for CI/CD.
 ### Deployment
 
 The app is hosted on AWS EC2 instance on docker. 
+
+The env file is saved in the jenkins credentials and it is added to the docker image during the build stage in jenkins
+
 There is a CI/CD pipeline setup using jenkins and github webhooks in place.
 Once changes are made and merged to the dev branch, the image is rebuilt and pushed to the docker hub repository using jenkins.
 There is a watchtower container in the AWS EC2 instance that checks for changes in the docker images of the container every hour and if there are changes it brings down the container and brings it back up with the new image from the docker hub repository.
-
-The env file is saved in the jenkins credentials and it is added to the docker image during the build stage in jenkins
 
 ### Contribution
 
