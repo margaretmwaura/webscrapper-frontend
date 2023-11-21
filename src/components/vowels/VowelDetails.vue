@@ -42,12 +42,11 @@ function throwConfetti(score){
           <VowelSound v-show="playSound" @close="closeModal" :vowel="vowel"/>
       </div>   
       <div class="flex w-full flex-row font-thin text-base text-slate-700 space-x-2">
-        <div class="flex"> 
-          <!-- <font-awesome-icon icon="fa-solid fa-arrow-up" size="sm" class="flex items-end"/>  -->
+        <!-- <div class="flex"> 
           <p> <span class="font-normal"> highest </span> is <span class="underline underline-offset-8"> 90% </span>  || </p></div>
         <div class="flex">
-          <!-- <font-awesome-icon icon="fa-solid fa-wave-square" size="sm"/>  -->
-          <p> <span class="font-normal"> ave </span> is <span class="underline underline-offset-8"> 24% </span>  </p></div>
+          <p> <span class="font-normal"> ave </span> is <span class="underline underline-offset-8"> 24% </span>  </p>
+        </div> -->
       </div> 
     </div>
 

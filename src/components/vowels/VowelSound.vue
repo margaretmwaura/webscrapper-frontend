@@ -1,6 +1,7 @@
-<script setup>
+<script setup >
 import { ref, computed, watch, defineEmits } from 'vue';
 import numberToWords from 'number-to-words';
+import { audioRecorder } from './../../util/audioRecorder'
 
 const emit = defineEmits(['close'])
 
@@ -8,8 +9,12 @@ const props = defineProps({
   vowel: Object
 });
 
-let click = ref(false)
+const recordedAudio = ref()
+
+let playing = ref(false)
+let recording = ref(false)
 let count = ref(0)
+let audio_files = ref([])
 
 // let showSuccessModal = computed(() => {
 //   return count.value > 2
@@ -27,25 +32,53 @@ function sleep (time) {
 }
 
 const playSound = () => {
-  click.value = true
   if(props.vowel.filename) {
     var audio = new Audio(props.vowel.filename);
     audio.play();
     // Usage!
-    sleep(500).then(() => {
+    sleep(1000).then(() => {
     // Do something after the sleep!
-     click.value = false
+     playing.value = true
     });
     
   }
+}
+
+const startRecordingPronounciation = async () => {
+  recording.value = true
+  await audioRecorder.start()
+}
+
+const stopRecordingPronounciation = async () => {
   count.value++
+
+  let audio = await audioRecorder.stop()
+  let url = URL.createObjectURL(audio)
+ 
+  let file_name = "take" + count.value + ".mp3"
+  let file = new File([audio], file_name);
+  audio_files.value.push(file)
+
+  playing.value = false
+  recording.value = false
+}
+ 
+const cancelRecordingPronounciation = async () => {
+  count.value++
+
+  await audioRecorder.cancel()
+  playing.value = false
+  recording.value = false
 }
 
 watch(count, (newCount) => {
-   if(newCount >= 3)
-    setTimeout(() => {
-      close()
-    }, 700)
+   if(newCount >= 3){
+      console.log(audio_files.value)
+      setTimeout(() => {
+        close()
+      }, 1000)
+   }
+      
 });
 </script>
 
@@ -76,17 +109,32 @@ watch(count, (newCount) => {
             <font-awesome-icon icon="fa-solid fa-times" size="xl"  @click="close()"/>
         </button>
       </div>
-      <div className="flex justify-between w-full text-indigo-700">
+      <div className="flex justify-between  w-full text-indigo-700">
         <div class="flex items-end">
           <p class="font-bold text-2xl text-slate-700">{{vowel.name}} 
             <span class="italic font-light text-base text-slate-700">({{vowel.description.split(' ')[0]}})</span>
           </p>
         </div>
-        <button class="flex justify-center items-end text-indigo-700" 
-          @click="playSound">
-          <font-awesome-icon icon="fa-solid fa-play" size="xl" v-show="!click" />
-          <font-awesome-icon icon="fa-solid fa-volume-up" size="xl" v-show="click" />
-        </button>
+        <div class="flex space-x-2">
+          <button class="flex justify-center items-end text-indigo-700" 
+            @click="playSound" v-show="!playing">
+            <font-awesome-icon icon="fa-solid fa-play" size="xl" />
+          </button>
+          <button class="flex justify-center items-end text-indigo-700" 
+            @click="startRecordingPronounciation" v-show="playing && !recording">
+            <font-awesome-icon icon="fa-solid fa-microphone-lines" size="xl" />
+          </button>
+          <button class="flex justify-center items-end text-green-700" 
+            @click="stopRecordingPronounciation" v-show="recording">
+            <font-awesome-icon icon="fa-regular fa-circle-stop" size="xl" />
+          </button>
+          <button class="flex justify-center items-end text-rose-700" 
+            @click="cancelRecordingPronounciation" v-show="recording">
+            <font-awesome-icon icon="fa-solid fa-ban" size="xl" />
+          </button>
+          <div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

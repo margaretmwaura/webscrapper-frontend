@@ -65,6 +65,8 @@ import {
   faLinesLeaning,
   faGlasses,
   faArrowRightFromBracket,
+  faMicrophoneLines,
+  faBan
 } from '@fortawesome/free-solid-svg-icons';
 
 import {
@@ -76,6 +78,7 @@ import {
   faClock,
   faEdit,
   faNoteSticky,
+  faCircleStop,
 } from '@fortawesome/free-regular-svg-icons';
 
 /* add icons to the library */
@@ -117,7 +120,10 @@ library.add(
   faLinesLeaning,
   faNoteSticky,
   faGlasses,
-  faArrowRightFromBracket
+  faArrowRightFromBracket,
+  faMicrophoneLines,
+  faCircleStop,
+  faBan
 );
 
 import { DefaultApolloClient } from '@vue/apollo-composable';
