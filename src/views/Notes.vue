@@ -21,7 +21,7 @@ import {
   Dropdown,
   Collapse,
   Ripple,
-  initTWE
+  initTE
 } from "tw-elements";
 
 export default{
@@ -154,7 +154,7 @@ export default{
   }
 
   onMounted(() =>{
-    initTWE({ Collapse, Ripple, Dropdown });
+    initTE({ Collapse, Ripple, Dropdown });
     getDailyQuotes()
     getUserNotes()
   })
@@ -209,10 +209,10 @@ export default{
                   <!-- <span class="animate-ping absolute h-4 w-4 rounded-full bg-sky-400 opacity-75"></span> -->
                   <button
                     type="button"
-                    data-twe-collapse-init
-                    data-twe-target="#collapseWidthExample"
-                    data-twe-ripple-init
-                    data-twe-ripple-color="light"
+                    data-te-collapse-init
+                    data-te-target="#collapseWidthExample"
+                    data-te-ripple-init
+                    data-te-ripple-color="light"
                     aria-expanded="false"
                     class="text-2xl animate-bounce"
                     aria-controls="collapseWidthExample">
@@ -222,8 +222,8 @@ export default{
             </div>
             <div
                 class= "!visible hidden flex flex-col pt-8" 
-                data-twe-collapse-item
-                data-twe-collapse-horizontal
+                data-te-collapse-item
+                data-te-collapse-horizontal
                 id="collapseWidthExample">
                   <div class="flex w-full justify-between">
                     <p class="-mt-4 pl-4 font-semibold underline underline-offset-4">Todo List : {{moment().format('dddd')}}</p>
