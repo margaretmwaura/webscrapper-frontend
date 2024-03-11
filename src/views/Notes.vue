@@ -15,12 +15,12 @@ import { useNotesManagement } from './../composables/useNotesManagement'
 
 import { storeToRefs } from 'pinia';
 import moment from 'moment';
-// import {
-//   Dropdown,
-//   Collapse,
-//   Ripple,
-//   initTE,
-// } from "tw-elements";
+import {
+  Dropdown,
+  Collapse,
+  Ripple,
+  initTE,
+} from "tw-elements";
 
 export default{
 
