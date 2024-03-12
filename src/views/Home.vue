@@ -176,180 +176,180 @@ function signIn() {
         </div>
       </div>
     </div>
-    <div class="flex flex-wrap w-full">
-      <div class="flex relative w-full mt-20">
-        <div class="flex absolute h-96 w-48 bg-slate-50 left-cirle"></div>
-        <div class="flex flex-wrap w-full relative mt-10 pt-24 items-center justify-center space-y-6">
-          <div class="flex flex-col w-full md:w-1/3 lg:w-1/3 xl:w-1/3 2xl:w-1/3 px-6 md:px-6 lg:px-10 xl:px-16 2xl:px-24
-             space-y-6 hidden md:hidden lg:hidden xl:block 2xl:block max-w-md md:max-w-xl">
-            <p
-              class="text-5xl font-medium pr-6 tracking-normal leading-tight font-['Gill_Sans']"
-            >
-              Why online learning method
-            </p>
-            <p class="font-light">
-              Study online teaches important time management skills which makes
-              it easier to find a good work-study balance
-            </p>
-            <div class="flex flex-row pt-4">
-              <button
-                class="bg-indigo-700 text-white rounded-full px-16 py-4"
-                @click="signIn()"
-              >
-                Get Started
-              </button>
-            </div>
-          </div>
-          <div class="flex flex-col w-full md:w-full lg:w-full xl:w-1/3 2xl:w-1/3 px-6 md:px-6 lg:px-10 xl:px-16 2xl:px-24 space-y-6 max-w-md md:max-w-xl">
-            <div>
-              <div
-                class="flex justify-center items-center bg-deep-purple-100 h-20 w-20 rounded-[50%]">
-                <img src="/clock.png" class="object-contain h-12 w-12" />
-              </div>
+    <div class="flex flex-wrap w-full" >
+        <div class="flex relative w-full mt-20 scroll-smooth" id="about">
+          <div class="flex absolute h-96 w-48 bg-slate-50 left-cirle"></div>
+          <div class="flex flex-wrap w-full relative mt-10 pt-24 items-center justify-center space-y-6">
+            <div class="flex flex-col w-full md:w-1/3 lg:w-1/3 xl:w-1/3 2xl:w-1/3 px-6 md:px-6 lg:px-10 xl:px-16 2xl:px-24
+              space-y-6 hidden md:hidden lg:hidden xl:block 2xl:block max-w-md md:max-w-xl">
               <p
-                class="text-3xl font-normal tracking-normal leading-tight font-['Gill_Sans']"
+                class="text-5xl font-medium pr-6 tracking-normal leading-tight font-['Gill_Sans']"
               >
-                Flexible time
-              </p>
-              <p class="font-thin">
-                Online education allow teachers and students to set their own
-                pace of learning and there is added flexibility in setting a
-                schedule that fits everyone's agenda
-              </p>
-            </div>
-            <div>
-              <div
-                class="flex justify-center items-center bg-deep-purple-100 h-20 w-20 rounded-[50%]"
-              >
-                <img src="/clock.png" class="object-contain h-12 w-12" />
-              </div>
-              <p
-                class="text-3xl font-normal tracking-normal leading-tight font-['Gill_Sans']"
-              >
-                Flexible time
-              </p>
-              <p class="font-thin">
-                Online education allow teachers and students to set their own
-                pace of learning and there is added flexibility in setting a
-                schedule that fits everyone's agenda
-              </p>
-            </div>
-          </div>
-          <div class="flex flex-col w-full md:w-full lg:w-full xl:w-1/3 2xl:w-1/3 px-6 md:px-6 lg:px-10 xl:px-16 2xl:px-24 space-y-6 max-w-md md:max-w-xl">
-            <div>
-              <div
-                class="flex justify-center items-center bg-deep-purple-100 h-20 w-20 rounded-[50%]"
-              >
-                <img
-                  src="/protactor.png"
-                  class="object-contain h-12 w-12 rotate-90"
-                />
-              </div>
-              <p
-                class="text-3xl font-normal tracking-normal leading-tight font-['Gill_Sans']"
-              >
-                Certificate
-              </p>
-              <p class="font-thin">
-                Online education allow teachers and students to set their own
-                pace of learning and there is added flexibility in setting a
-                schedule that fits everyone's agenda
-              </p>
-            </div>
-            <div>
-              <div
-                class="flex justify-center items-center bg-deep-purple-100 h-20 w-20 rounded-[50%]"
-              >
-                <img
-                  src="/protactor.png"
-                  class="object-contain h-12 w-12 rotate-90"
-                />
-              </div>
-              <p
-                class="text-3xl font-normal tracking-normal leading-tight font-['Gill_Sans']"
-              >
-                Certificate
-              </p>
-              <p class="font-thin">
-                Online education allow teachers and students to set their own
-                pace of learning and there is added flexibility in setting a
-                schedule that fits everyone's agenda
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- FIXME: There is a section removed -->
-      <!-- FIXME: This is what is breaking the responsiveness -->
-      <!-- 1. relative is to allow for the absolute section of the left circle to prosper -->
-      <!-- FIXME: There is a section removed -->
-      <!-- FIXME: This is what is breaking the responsiveness -->
-      <!-- 1. relative is to allow for the absolute section of the left circle to prosper -->
-      <div class="flex relative mt-24 md:mt-32 w-full">
-        <div class="flex absolute mt-24">
-          <div class="trapezoid"></div>
-          <div class="h-96 w-48 bg-slate-50 left-cirle"></div>
-        </div>
-        <!-- 4. It being relative allows it to appear on top -->
-        <div class="flex flex-wrap px-6 md:px-6 lg:px-10 xl:px-10 2xl:px-24 space-y-12 w-full items-center justify-center relative">
-          <div class="flex flex-col w-full lg:w-1/2 items-center justify-center">
-            <div class="relative top-4 max-w-md md:max-w-xl">
-              <div class="border-solid border border-slate-800 w-full h-5/6 rounded-full absolute top-4"></div>
-              <div class="relative justify-center overflow-hidden rounded-full w-full h-5/6">
-                <img src="/greenery.jpeg" class="object-contain h-full" />
-              </div>
-              <!-- 2. This will be moved to the words side -->
-              <!-- <div class="flex absolute justify-center items-center text-white
-                h-28 w-28 bg-deep-purple rounded-full -top-2 -right-12">
-                    <font-awesome-icon icon="fa-solid fa-quote-left" size="2xl" />
-                </div> -->
-              <!-- 3. To be returned we are testing responsiveness without them -->
-            </div>
-            <div class="flex justify-center w-full mt-8">
-              <div class="flex space-x-4">
-                <div class="flex justify-center items-center text-deep-purple h-12 w-12 bg-white rounded-full">
-                  <font-awesome-icon icon="fa-solid fa-arrow-left" size="xl" />
-                </div>
-                <div class="flex justify-center items-center text-deep-purple h-12 w-12 bg-white rounded-full">
-                  <font-awesome-icon icon="fa-solid fa-arrow-right" size="xl" />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="flex flex-col w-full lg:w-1/2 items-center justify-center">
-            <div class=" space-y-6 lg:pl-12 max-w-md md:max-w-xl">
-              <h3 class="font-medium pr-6 tracking-normal leading-tight font-['Gill_Sans'] text-[30px] md:text-[38px]">
-                What students say about us
-              </h3>
-              <p
-                class="text-3xl font-normal tracking-normal leading-tight font-['Gill_Sans']"
-              >
-                Help me and improve my productivity activities
+                Why online learning method
               </p>
               <p class="font-light">
-                One of the advantages of online learning at home is that the
-                learning process cam be accessed easily just by using a
-                smartphone, computer or laptop that is connected to the internet
-                network
+                Study online teaches important time management skills which makes
+                it easier to find a good work-study balance
               </p>
-              <div class="flex flex-row space-x-4">
-                <div
-                  class="flex relative justify-center overflow-hidden rounded-full w-12 h-12 pt-2 bg-mustard-yellow"
+              <div class="flex flex-row pt-4">
+                <button
+                  class="bg-indigo-700 text-white rounded-full px-16 py-4"
+                  @click="signIn()"
                 >
-                  <img src="/woman.png" class="object-contain h-full" />
+                  Get Started
+                </button>
+              </div>
+            </div>
+            <div class="flex flex-col w-full md:w-full lg:w-full xl:w-1/3 2xl:w-1/3 px-6 md:px-6 lg:px-10 xl:px-16 2xl:px-24 space-y-6 max-w-md md:max-w-xl">
+              <div>
+                <div
+                  class="flex justify-center items-center bg-deep-purple-100 h-20 w-20 rounded-[50%]">
+                  <img src="/clock.png" class="object-contain h-12 w-12" />
                 </div>
-                <div class="flex flex-col">
-                  <p class="font-light">Jessica Andra</p>
-                  <p class="font-thin">Student</p>
+                <p
+                  class="text-3xl font-normal tracking-normal leading-tight font-['Gill_Sans']"
+                >
+                  Flexible time
+                </p>
+                <p class="font-thin">
+                  Online education allow teachers and students to set their own
+                  pace of learning and there is added flexibility in setting a
+                  schedule that fits everyone's agenda
+                </p>
+              </div>
+              <div>
+                <div
+                  class="flex justify-center items-center bg-deep-purple-100 h-20 w-20 rounded-[50%]"
+                >
+                  <img src="/clock.png" class="object-contain h-12 w-12" />
+                </div>
+                <p
+                  class="text-3xl font-normal tracking-normal leading-tight font-['Gill_Sans']"
+                >
+                  Flexible time
+                </p>
+                <p class="font-thin">
+                  Online education allow teachers and students to set their own
+                  pace of learning and there is added flexibility in setting a
+                  schedule that fits everyone's agenda
+                </p>
+              </div>
+            </div>
+            <div class="flex flex-col w-full md:w-full lg:w-full xl:w-1/3 2xl:w-1/3 px-6 md:px-6 lg:px-10 xl:px-16 2xl:px-24 space-y-6 max-w-md md:max-w-xl">
+              <div>
+                <div
+                  class="flex justify-center items-center bg-deep-purple-100 h-20 w-20 rounded-[50%]"
+                >
+                  <img
+                    src="/protactor.png"
+                    class="object-contain h-12 w-12 rotate-90"
+                  />
+                </div>
+                <p
+                  class="text-3xl font-normal tracking-normal leading-tight font-['Gill_Sans']"
+                >
+                  Certificate
+                </p>
+                <p class="font-thin">
+                  Online education allow teachers and students to set their own
+                  pace of learning and there is added flexibility in setting a
+                  schedule that fits everyone's agenda
+                </p>
+              </div>
+              <div>
+                <div
+                  class="flex justify-center items-center bg-deep-purple-100 h-20 w-20 rounded-[50%]"
+                >
+                  <img
+                    src="/protactor.png"
+                    class="object-contain h-12 w-12 rotate-90"
+                  />
+                </div>
+                <p
+                  class="text-3xl font-normal tracking-normal leading-tight font-['Gill_Sans']"
+                >
+                  Certificate
+                </p>
+                <p class="font-thin">
+                  Online education allow teachers and students to set their own
+                  pace of learning and there is added flexibility in setting a
+                  schedule that fits everyone's agenda
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      <!-- FIXME: There is a section removed -->
+      <!-- FIXME: This is what is breaking the responsiveness -->
+      <!-- 1. relative is to allow for the absolute section of the left circle to prosper -->
+      <!-- FIXME: There is a section removed -->
+      <!-- FIXME: This is what is breaking the responsiveness -->
+      <!-- 1. relative is to allow for the absolute section of the left circle to prosper -->
+        <div class="flex relative mt-24 md:mt-32 w-full scroll-smooth" id="testimonials">
+          <div class="flex absolute mt-24">
+            <div class="trapezoid"></div>
+            <div class="h-96 w-48 bg-slate-50 left-cirle"></div>
+          </div>
+          <!-- 4. It being relative allows it to appear on top -->
+          <div class="flex flex-wrap px-6 md:px-6 lg:px-10 xl:px-10 2xl:px-24 space-y-12 w-full items-center justify-center relative">
+            <div class="flex flex-col w-full lg:w-1/2 items-center justify-center">
+              <div class="relative top-4 max-w-md md:max-w-xl">
+                <div class="border-solid border border-slate-800 w-full h-5/6 rounded-full absolute top-4"></div>
+                <div class="relative justify-center overflow-hidden rounded-full w-full h-5/6">
+                  <img src="/greenery.jpeg" class="object-contain h-full" />
+                </div>
+                <!-- 2. This will be moved to the words side -->
+                <!-- <div class="flex absolute justify-center items-center text-white
+                  h-28 w-28 bg-deep-purple rounded-full -top-2 -right-12">
+                      <font-awesome-icon icon="fa-solid fa-quote-left" size="2xl" />
+                  </div> -->
+                <!-- 3. To be returned we are testing responsiveness without them -->
+              </div>
+              <div class="flex justify-center w-full mt-8">
+                <div class="flex space-x-4">
+                  <div class="flex justify-center items-center text-deep-purple h-12 w-12 bg-white rounded-full">
+                    <font-awesome-icon icon="fa-solid fa-arrow-left" size="xl" />
+                  </div>
+                  <div class="flex justify-center items-center text-deep-purple h-12 w-12 bg-white rounded-full">
+                    <font-awesome-icon icon="fa-solid fa-arrow-right" size="xl" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="flex flex-col w-full lg:w-1/2 items-center justify-center">
+              <div class=" space-y-6 lg:pl-12 max-w-md md:max-w-xl">
+                <h3 class="font-medium pr-6 tracking-normal leading-tight font-['Gill_Sans'] text-[30px] md:text-[38px]">
+                  What students say about us
+                </h3>
+                <p
+                  class="text-3xl font-normal tracking-normal leading-tight font-['Gill_Sans']"
+                >
+                  Help me and improve my productivity activities
+                </p>
+                <p class="font-light">
+                  One of the advantages of online learning at home is that the
+                  learning process cam be accessed easily just by using a
+                  smartphone, computer or laptop that is connected to the internet
+                  network
+                </p>
+                <div class="flex flex-row space-x-4">
+                  <div
+                    class="flex relative justify-center overflow-hidden rounded-full w-12 h-12 pt-2 bg-mustard-yellow"
+                  >
+                    <img src="/woman.png" class="object-contain h-full" />
+                  </div>
+                  <div class="flex flex-col">
+                    <p class="font-light">Jessica Andra</p>
+                    <p class="font-thin">Student</p>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
     </div>
   </div>
-  <Footer />
+  <Footer id="contact"/>
 </template>
 
 <style scoped>
@@ -429,4 +429,5 @@ function signIn() {
   /* border-radius: 0 12rem 12rem 0; */
   /* width: 10px */
 }
+
 </style>

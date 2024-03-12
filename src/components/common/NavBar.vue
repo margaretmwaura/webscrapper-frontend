@@ -120,7 +120,7 @@ export default{
             flex-grow md:flex-none lg:flex-none xl:flex-none 2xl:flex-none
             space-y-4 pb-2">
               <a
-                href="#responsive-header"
+                href="#about"
                 class="no-underline mt-4 
                 block md:inline-block lg:inline-block xl:inline-block 2xl:inline-block
                 text-teal-lighter hover:text-indigo-700 mr-4 text-base font-medium text-lg"
@@ -128,7 +128,7 @@ export default{
                 About
               </a>
               <a
-                href="#responsive-header"
+                href="#testimonials"
                 class="no-underline mt-4 
                 block md:inline-block lg:inline-block xl:inline-block 2xl:inline-block
                 text-teal-lighter hover:text-indigo-700 mr-4 text-base font-medium text-lg"
@@ -136,7 +136,7 @@ export default{
                 Testimonials
               </a>
               <a
-                href="#responsive-header"
+                href="#contact"
                 class="no-underline mt-4 
                 block md:inline-block lg:inline-block xl:inline-block 2xl:inline-block
                 text-teal-lighter hover:text-indigo-700 text-base font-medium text-lg"
