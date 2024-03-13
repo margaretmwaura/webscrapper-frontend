@@ -1,10 +1,13 @@
 <script setup>
-import { ref , defineEmits} from 'vue';
+import { ref , defineEmits, computed, reactive} from 'vue';
 import { useRouter } from 'vue-router';
 import { toast } from 'vue3-toastify';
 import { useAuthStore } from '../../stores/authStore'
 import { storeToRefs } from 'pinia';
 import { useUserManagement } from './../../composables/useUserManagement'
+import useVuelidate from '@vuelidate/core'
+import { required, email, minLength, sameAs } from '@vuelidate/validators'
+
 
 const {signin} = useUserManagement()
 const router = useRouter()
@@ -16,8 +19,26 @@ const emit = defineEmits(['switchAction', 'closeModal'])
 let showPassword = ref(false)
 let passwordType = ref("password")
 let isLoginDisabled = ref(false)
-let email = ref('')
-let password = ref('')
+
+
+const rules = computed(() => {
+  return{  
+    email:{
+      required,
+      email
+    },
+    password: {
+      required
+    },
+  }
+});
+
+const state = reactive({
+  email: " ",
+  password: " "
+});
+    
+const v$ = useVuelidate(rules, state);
 
 function shouldShowPassword(condition){
   showPassword.value = condition
@@ -32,10 +53,20 @@ function closeModal(){
 }
 
 // FIXME: Only can call login once if the call has already being made
-function logInWithEmailAndPassword() {
+async function logInWithEmailAndPassword() {
+
+  const isFormCorrect = await this.v$.$validate()
+
+  if (!isFormCorrect) {
+    return 
+  }
+
   isLoginDisabled.value = true
 
-  signin({email: email.value, password: password.value}).then(() => {
+  console.log("Signing in")
+  console.log({email: state.email, password: state.password})
+
+  signin({email: state.email, password: state.password}).then(() => {
     localStorage.setItem('authToken', token.value);
     if(authStatus.value === 'Authorized'){
       toast.success('Login is successful 🎊', {
@@ -72,22 +103,41 @@ function logInWithEmailAndPassword() {
           <div className="flex flex-col space-y-4">
               <p class="font-bold text-3xl">Welcome Back Partner</p>
               <p class="font-light">Pick up from where you left</p>
-              <div className="flex border-b border-teal-500 py-1 text-teal-500">
-                <input v-model="email" placeholder="John@gmail.com" type="text" 
+
+              <div className="flex flex-col w-full">
+
+                <div class="flex w-full border-b border-teal-500 py-1 text-teal-500">
+                  <input v-model="v$.email.$model" placeholder="John@gmail.com" type="email" 
                   className="appearance-none bg-transparent border-none w-full 
-                  text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none">
-                  <font-awesome-icon icon="fa-regular fa-envelope" />
+                    text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" required >
+                  <font-awesome-icon icon="fa-regular fa-envelope" class="justify-end"/>
+                </div>
+
+                <div class="flex w-full justify-center italic text-red text-sm">
+                  <p v-if="v$.email.$error">{{ v$.email.$errors[0].$message }}</p>
+                </div>
               </div>
-              <!-- TODO: Add toggle icons and functionality for the passwords -->
-              <div className="flex border-b border-teal-500 py-1 text-teal-500">
-                <input v-model="password" placeholder="..." :type="passwordType"
+
+              <div className="flex flex-col w-full">
+
+                <div class="flex w-full border-b border-teal-500 py-1 text-teal-500">
+                  <input v-model="v$.password.$model" placeholder="..." :type="passwordType" required 
                   className="appearance-none bg-transparent border-none w-full 
-                  text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none">
-                <font-awesome-icon  v-if="showPassword" icon="fa-regular fa-eye-slash"
-                 v-on:click="shouldShowPassword(false)"/>
-                <font-awesome-icon v-else icon="fa-regular fa-eye" 
-                v-on:click="shouldShowPassword(true)"/>
-              </div>
+                    text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"/>
+
+                  <font-awesome-icon  v-if="showPassword" icon="fa-regular fa-eye-slash"
+                    v-on:click="shouldShowPassword(false)" class="justify-end"/>
+                  <font-awesome-icon v-else icon="fa-regular fa-eye" 
+                  v-on:click="shouldShowPassword(true)" class="justify-end"/>
+
+                </div>
+
+                <div class="flex w-full justify-center italic text-red text-sm">
+                  <p v-if="v$.password.$error">{{ v$.password.$errors[0].$message }}</p>
+                </div>
+
+            </div>
+            
           </div>
           <button class="mt-12 bg-indigo-700 text-white rounded-full px-16 py-2 disabled:opacity-25" 
           @click="logInWithEmailAndPassword()"
