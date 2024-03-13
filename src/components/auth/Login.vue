@@ -55,7 +55,7 @@ function closeModal(){
 // FIXME: Only can call login once if the call has already being made
 async function logInWithEmailAndPassword() {
 
-  const isFormCorrect = await this.v$.$validate()
+  const isFormCorrect = await v$.$validate()
 
   if (!isFormCorrect) {
     return 
