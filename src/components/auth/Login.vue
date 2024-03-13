@@ -1,4 +1,4 @@
-<script setup>
+<script>
 import { ref , defineEmits, computed, reactive} from 'vue';
 import { useRouter } from 'vue-router';
 import { toast } from 'vue3-toastify';
@@ -8,78 +8,101 @@ import { useUserManagement } from './../../composables/useUserManagement'
 import useVuelidate from '@vuelidate/core'
 import { required, email, minLength, sameAs } from '@vuelidate/validators'
 
+export default{
+  name : 'Login',
+  setup(props, context){
 
-const {signin} = useUserManagement()
-const router = useRouter()
-const store = useAuthStore()
-const { authStatus, token, error } = storeToRefs(store);
+    const {signin} = useUserManagement()
+    const router = useRouter()
+    const store = useAuthStore()
+    const { authStatus, token, error } = storeToRefs(store);
 
-const emit = defineEmits(['switchAction', 'closeModal'])
+    const emit = defineEmits(['switchAction', 'closeModal'])
 
-let showPassword = ref(false)
-let passwordType = ref("password")
-let isLoginDisabled = ref(false)
+    let showPassword = ref(false)
+    let passwordType = ref("password")
+    let isLoginDisabled = ref(false)
 
 
-const rules = computed(() => {
-  return{  
-    email:{
-      required,
-      email
-    },
-    password: {
-      required
-    },
-  }
-});
+    const rules = computed(() => {
+      return{  
+        email:{
+          required,
+          email
+        },
+        password: {
+          required
+        },
+      }
+    });
 
-const state = reactive({
-  email: " ",
-  password: " "
-});
-    
-const v$ = useVuelidate(rules, state);
+    const state = reactive({
+      email: " ",
+      password: " "
+    });
+        
+    const v$ = useVuelidate(rules, state);
 
-function shouldShowPassword(condition){
-  showPassword.value = condition
-  passwordType.value = condition ? "text" :  "password"
-}
-function switchToSignup(){
-  console.log("switch to signup")
-  emit('switchAction', "Signup")
-}
-function closeModal(){
-  emit('closeModal') 
-}
-
-// FIXME: Only can call login once if the call has already being made
-async function logInWithEmailAndPassword() {
-
-  const isFormCorrect = await v$.$validate()
-
-  if (!isFormCorrect) {
-    return 
-  }
-
-  isLoginDisabled.value = true
-
-  console.log("Signing in")
-  console.log({email: state.email, password: state.password})
-
-  signin({email: state.email, password: state.password}).then(() => {
-    localStorage.setItem('authToken', token.value);
-    if(authStatus.value === 'Authorized'){
-      toast.success('Login is successful 🎊', {
-        autoClose: 1000,
-        onClose: () => {isLoginDisabled.value = false, router.push({ path: 'home' })},
-      });
-    }else{
-      toast.error('Login failed 🙍' + error.value, {
-        autoClose: 1000,
-        onClose: () => {isLoginDisabled.value = false},
-      });
+    function shouldShowPassword(condition){
+      showPassword.value = condition
+      passwordType.value = condition ? "text" :  "password"
     }
-  })
+    function switchToSignup(){
+      console.log("switch to signup")
+      emit('switchAction', "Signup")
+    }
+    function closeModal(){
+      emit('closeModal') 
+    }
+
+    // FIXME: Only can call login once if the call has already being made
+    async function logInWithEmailAndPassword() {
+
+      const isFormCorrect = await this.v$.$validate()
+
+      if (!isFormCorrect) {
+        return 
+      }
+
+      isLoginDisabled.value = true
+
+      console.log("Signing in")
+      console.log({email: state.email, password: state.password})
+
+      signin({email: state.email, password: state.password}).then(() => {
+        localStorage.setItem('authToken', token.value);
+        if(authStatus.value === 'Authorized'){
+          toast.success('Login is successful 🎊', {
+            autoClose: 1000,
+            onClose: () => {isLoginDisabled.value = false, router.push({ path: 'home' })},
+          });
+        }else{
+          toast.error('Login failed 🙍' + error.value, {
+            autoClose: 1000,
+            onClose: () => {isLoginDisabled.value = false},
+          });
+        }
+      })
+    }
+
+
+    return{
+      showPassword,
+      passwordType,
+      isLoginDisabled,
+
+      rules,
+      state,
+      v$,
+
+      shouldShowPassword,
+      switchToSignup,
+      closeModal,
+      logInWithEmailAndPassword
+
+    }
+
+  }
 }
 
 </script>
